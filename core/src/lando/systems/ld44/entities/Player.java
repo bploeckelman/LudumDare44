@@ -9,6 +9,8 @@ import lando.systems.ld44.utils.Assets;
 
 public class Player {
 
+    public enum JumpState {ONGROUND, JUMP, POUND}
+
     public Vector2 position;
     public Vector2 velocity;
     public float horizontalSpeed = 200;
@@ -16,13 +18,13 @@ public class Player {
     public float width = 90;
     public float height = 60;
     public Assets assets;
-    public boolean onGround;
+    public JumpState jumpState;
 
     public Player(Assets assets, float x, float y){
         this.position = new Vector2(x, y);
         this.velocity = new Vector2();
         this.assets = assets;
-        this.onGround = true;
+        this.jumpState = JumpState.ONGROUND;
     }
 
     public void update(float dt) {
@@ -38,8 +40,15 @@ public class Player {
         velocity.x = MathUtils.clamp(velocity.x, -300, 300);
 //        velocity.clamp(-200, 200);
 
-        if (onGround && jumpPressed){
-            velocity.y = jumpVelocity;
+        if  (jumpPressed){
+            if (jumpState == JumpState.ONGROUND){
+                velocity.y = jumpVelocity;
+                jumpState = JumpState.JUMP;
+            } else if (jumpState == JumpState.JUMP){
+                velocity.y = - 3000;
+                velocity.x = 0;
+                jumpState = JumpState.POUND;
+            }
         }
         velocity.y -= 3000 * dt;
 
@@ -48,11 +57,10 @@ public class Player {
 
         // TODO make this based on geometry of the world
         if (position.y <= 0) {
-            onGround = true;
+            jumpState = JumpState.ONGROUND;
             position.y = 0;
             velocity.y = 0;
         } else {
-            onGround = false;
         }
     }
 

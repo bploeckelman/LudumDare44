@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 public class Assets implements Disposable {
@@ -34,6 +35,8 @@ public class Assets implements Disposable {
     public TextureRegion testTexture;
     public TextureRegion whitePixel;
     public TextureRegion whiteCircle;
+
+    public Animation<TextureRegion> nickelAnimation;
 
     public NinePatch ninePatch;
 
@@ -78,6 +81,9 @@ public class Assets implements Disposable {
         testTexture = atlas.findRegion("dogsuit");
         whitePixel = atlas.findRegion("white-pixel");
         whiteCircle = atlas.findRegion("white-circle");
+
+        Array nickels = atlas.findRegions("nickel_walk");
+        nickelAnimation = new Animation<TextureRegion>(0.1f, nickels, Animation.PlayMode.LOOP);
 
         titleTexture = mgr.get(titleTextureAsset);
         pixelTexture = mgr.get(pixelTextureAsset);

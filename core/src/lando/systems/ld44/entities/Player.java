@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 
 public class Player {
@@ -19,8 +20,10 @@ public class Player {
     public float height = 60;
     public Assets assets;
     public JumpState jumpState;
+    public GameScreen screen;
 
-    public Player(Assets assets, float x, float y){
+    public Player(GameScreen screen, Assets assets, float x, float y){
+        this.screen = screen;
         this.position = new Vector2(x, y);
         this.velocity = new Vector2();
         this.assets = assets;
@@ -57,6 +60,9 @@ public class Player {
 
         // TODO make this based on geometry of the world
         if (position.y <= 0) {
+            if (jumpState == JumpState.POUND){
+                screen.shaker.addDamage(.5f);
+            }
             jumpState = JumpState.ONGROUND;
             position.y = 0;
             velocity.y = 0;

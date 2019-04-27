@@ -11,16 +11,20 @@ import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.Nickel;
 import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
 
 public class GameScreen extends BaseScreen {
     Player player;
 
     Array<GameEntity> gameEntities = new Array<GameEntity>();
 
+    public ScreenShakeCameraController shaker;
+
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
-        player = new Player(assets, 30, 100);
+        player = new Player(this, assets, 30, 100);
         gameEntities.add(new Nickel(assets));
+        shaker = new ScreenShakeCameraController(worldCamera);
     }
 
     @Override
@@ -33,13 +37,14 @@ public class GameScreen extends BaseScreen {
         for (GameEntity ge : gameEntities) {
             ge.update(dt);
         }
+        shaker.update(dt);
     }
 
     @Override
     public void render(SpriteBatch batch) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.setProjectionMatrix(worldCamera.combined);
+        batch.setProjectionMatrix(shaker.getCombinedMatrix());
         batch.begin();
         {
             for(GameEntity ge : gameEntities) {

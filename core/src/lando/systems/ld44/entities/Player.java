@@ -26,6 +26,7 @@ public class Player {
     }
 
     public void update(float dt) {
+        boolean jumpPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched();
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)){
             velocity.add(-horizontalSpeed, 0);
@@ -37,7 +38,7 @@ public class Player {
         velocity.x = MathUtils.clamp(velocity.x, -300, 300);
 //        velocity.clamp(-200, 200);
 
-        if (onGround && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        if (onGround && jumpPressed){
             velocity.y = jumpVelocity;
         }
         velocity.y -= 3000 * dt;

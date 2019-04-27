@@ -1,7 +1,6 @@
 package lando.systems.ld44.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import lando.systems.ld44.utils.Assets;
 
@@ -13,12 +12,17 @@ public class Nickel extends GameEntity {
     public Nickel(Assets assets) {
         super(assets);
         setAnimation(assets.nickelAnimation);
+
+        // temp
         velocity.x = 50;
+        position.x = 100;
+        position.y = 100;
     }
 
     protected void setAnimation(Animation<TextureRegion> animation) {
         this.setAnimation(animation, -1, -1);
     }
+
     protected void setAnimation(Animation<TextureRegion> animation, float width, float height) {
         this.animation = animation;
         this.width = (width > 0) ? width : animation.getKeyFrame(0).getRegionWidth();
@@ -30,21 +34,18 @@ public class Nickel extends GameEntity {
         super.update(dt);
         updateDirection();
         anim += dt;
+        if (velocity.x == 0) {
+            anim = 0;
+        }
+
         image = animation.getKeyFrame(anim, true);
     }
 
     private void updateDirection() {
-        if (velocity.x > 0 && position.x >= 100 || velocity.x < 0 && position.x <= 0) {
+        if (velocity.x > 0 && position.x >= 300 || velocity.x < 0 && position.x <= 100) {
             velocity.x = -velocity.x;
+            direction = velocity.x > 0 ? Direction.RIGHT : Direction.LEFT;
+            jump();
         }
     }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        float scaleX = (velocity.x >= 0) ? 1 : -1;
-        if (image != null) {
-            batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, 1, 0);
-        }
-    }
-
 }

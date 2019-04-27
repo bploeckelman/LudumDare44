@@ -3,14 +3,15 @@ package lando.systems.ld44.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import lando.systems.ld44.LudumDare44;
+import lando.systems.ld44.Game;
+import lando.systems.ld44.utils.Config;
 
 public class HtmlLauncher extends GwtApplication {
 
         // USE THIS CODE FOR A FIXED SIZE APPLICATION
         @Override
         public GwtApplicationConfiguration getConfig () {
-                return new GwtApplicationConfiguration(480, 320);
+                return new GwtApplicationConfiguration(Config.window_width, Config.window_height);
         }
         // END CODE FOR FIXED SIZE APPLICATION
 
@@ -46,6 +47,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener createApplicationListener () {
-                return new LudumDare44();
+                return new Game();
         }
 }

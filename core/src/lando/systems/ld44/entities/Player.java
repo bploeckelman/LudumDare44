@@ -2,27 +2,17 @@ package lando.systems.ld44.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld44.screens.GameScreen;
-import lando.systems.ld44.utils.Assets;
 
 public class Player extends GameEntity {
     public float horizontalSpeed = 200;
-    public float jumpVelocity = 1000;
-
-    public GameScreen screen;
 
     public Player(GameScreen screen, float x, float y) {
         super(screen);
 
-        this.screen = screen;
-
         this.position.set(x, y);
-        width = 90;
-        height = 60;
-        image = assets.whitePixel;
+        setImage(assets.player);
     }
 
     public void update(float dt) {
@@ -40,7 +30,6 @@ public class Player extends GameEntity {
         boolean jumpPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched();
         if (jumpPressed){
             jump();
-
         }
     }
 }

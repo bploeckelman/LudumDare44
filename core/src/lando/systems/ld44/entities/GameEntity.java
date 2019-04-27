@@ -29,7 +29,12 @@ public class GameEntity {
     public GameEntity(GameScreen screen){
         this.assets = screen.assets;
         this.screen = screen;
-        this.position = new Vector2();
+    }
+
+    public void setImage(TextureRegion image) {
+        this.image = image;
+        width = image.getRegionWidth();
+        height = image.getRegionHeight();
     }
 
     public void jump() {

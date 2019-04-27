@@ -75,7 +75,7 @@ public class Assets implements Disposable {
 
         // Cache TextureRegions from TextureAtlas in fields for quicker access
         atlas = mgr.get(atlasAsset);
-        testTexture = atlas.findRegion("badlogic");
+        testTexture = atlas.findRegion("dogsuit");
         whitePixel = atlas.findRegion("white-pixel");
         whiteCircle = atlas.findRegion("white-circle");
 

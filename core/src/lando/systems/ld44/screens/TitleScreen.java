@@ -27,6 +27,10 @@ public class TitleScreen extends BaseScreen {
             Gdx.app.exit();
         }
 
+        if (Gdx.input.justTouched()) {
+            game.setScreen(new GameScreen(game, assets));
+        }
+
         mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0f);
         hudCamera.unproject(mousePos);
     }

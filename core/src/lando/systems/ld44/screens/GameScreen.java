@@ -67,7 +67,7 @@ public class GameScreen extends BaseScreen {
         }
         batch.end();
 
-        level.render(worldCamera);
+        level.render(shaker.getViewCamera());
     }
 
 }

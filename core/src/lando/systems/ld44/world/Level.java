@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.Nickel;
+import lando.systems.ld44.entities.Penny;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 
@@ -84,10 +85,17 @@ public class Level {
                 String name = object.getName().toLowerCase();
 
                 GameEntity enemy = null;
-                if ("nickel".equals(name)) {
-                    enemy = new Nickel(screen);
+                if (name.equals("penny")) {
+                    enemy = new Penny(screen);
+                } else if (name.equals("nickel")) {
+                    if (Math.random() > 0.8) {
+                        enemy = new Penny(screen);
+                    } else {
+                        enemy = new Nickel(screen);
+                    }
                 } else {
                     Gdx.app.log("Map", "Unknown enemy type for spawnEnemy entity: '" + name + "'");
+                    break;
                 }
 
                 if (enemy != null) {

@@ -36,6 +36,7 @@ public class Assets implements Disposable {
     public TextureRegion whitePixel;
     public TextureRegion whiteCircle;
 
+    public Animation<TextureRegion> pennyAnimation;
     public Animation<TextureRegion> nickelAnimation;
 
     public NinePatch ninePatch;
@@ -81,6 +82,9 @@ public class Assets implements Disposable {
         testTexture = atlas.findRegion("dogsuit");
         whitePixel = atlas.findRegion("white-pixel");
         whiteCircle = atlas.findRegion("white-circle");
+
+        Array pennies = atlas.findRegions("penny_walk");
+        pennyAnimation = new Animation<TextureRegion>(0.1f, pennies, Animation.PlayMode.LOOP);
 
         Array nickels = atlas.findRegions("nickel_walk");
         nickelAnimation = new Animation<TextureRegion>(0.1f, nickels, Animation.PlayMode.LOOP);

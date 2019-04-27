@@ -6,12 +6,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lando.systems.ld44.Game;
+import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.utils.Assets;
 
 public class GameScreen extends BaseScreen {
+    Player player;
 
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
+        player = new Player(assets);
     }
 
     @Override
@@ -20,6 +23,7 @@ public class GameScreen extends BaseScreen {
          && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }
+        player.update(dt);
     }
 
     @Override
@@ -29,9 +33,7 @@ public class GameScreen extends BaseScreen {
         batch.setProjectionMatrix(worldCamera.combined);
         batch.begin();
         {
-            batch.draw(assets.testTexture,
-                       worldCamera.viewportWidth / 2f - assets.testTexture.getRegionWidth() / 2f,
-                       worldCamera.viewportHeight / 2f - assets.testTexture.getRegionHeight() / 2f);
+            player.render(batch);
         }
         batch.end();
     }

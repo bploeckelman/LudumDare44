@@ -18,8 +18,8 @@ public class Player {
     public Assets assets;
     public boolean onGround;
 
-    public Player(Assets assets){
-        this.position = new Vector2();
+    public Player(Assets assets, float x, float y){
+        this.position = new Vector2(x, y);
         this.velocity = new Vector2();
         this.assets = assets;
         this.onGround = true;

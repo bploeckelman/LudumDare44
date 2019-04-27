@@ -14,7 +14,7 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
-        player = new Player(assets);
+        player = new Player(assets, 30, 100);
     }
 
     @Override

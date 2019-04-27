@@ -17,7 +17,7 @@ import lando.systems.ld44.world.Level;
 public class GameScreen extends BaseScreen {
 
     Player player;
-    Level level;
+    public Level level;
 
     Array<GameEntity> gameEntities = new Array<GameEntity>();
 
@@ -25,10 +25,11 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
-        player = new Player(this, assets, 30, 100);
-        gameEntities.add(new Nickel(assets));
+        gameEntities.add(new Nickel(this));
         shaker = new ScreenShakeCameraController(worldCamera);
         level = new Level("maps/demo.tmx", assets);
+        player = new Player(this, level.spawn.pos.x, level.spawn.pos.y);
+
     }
 
     @Override

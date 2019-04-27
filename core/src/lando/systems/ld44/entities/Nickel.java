@@ -2,6 +2,7 @@ package lando.systems.ld44.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 
 public class Nickel extends GameEntity {
@@ -9,8 +10,8 @@ public class Nickel extends GameEntity {
     public Animation<TextureRegion> animation;
     private float anim;
 
-    public Nickel(Assets assets) {
-        super(assets);
+    public Nickel(GameScreen screen) {
+        super(screen);
         setAnimation(assets.nickelAnimation);
 
         // temp

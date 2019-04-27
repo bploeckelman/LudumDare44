@@ -3,13 +3,16 @@ package lando.systems.ld44.entities;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 
 public class GameEntity {
     public enum Direction {RIGHT, LEFT}
+
     public enum JumpState {ONGROUND, JUMP, POUND}
 
     public Assets assets;
+    public GameScreen screen;
 
     public float width;
     public float height;
@@ -24,8 +27,9 @@ public class GameEntity {
 
     public TextureRegion image;
 
-    public GameEntity(Assets assets){
-        this.assets = assets;
+    public GameEntity(GameScreen screen){
+        this.assets = screen.assets;
+        this.screen = screen;
     }
 
     public void jump() {
@@ -52,6 +56,7 @@ public class GameEntity {
         }
         position.add(velocity.x * dt, velocity.y * dt);
     }
+
 
 
     public void render(SpriteBatch batch) {

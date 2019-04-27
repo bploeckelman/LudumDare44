@@ -14,8 +14,8 @@ public class Player extends GameEntity {
 
     public GameScreen screen;
 
-    public Player(GameScreen screen, Assets assets, float x, float y) {
-        super(assets);
+    public Player(GameScreen screen, float x, float y) {
+        super(screen);
 
         this.screen = screen;
 
@@ -40,6 +40,7 @@ public class Player extends GameEntity {
         boolean jumpPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched();
         if (jumpPressed){
             jump();
+
         }
     }
 }

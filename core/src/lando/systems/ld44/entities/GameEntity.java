@@ -8,7 +8,8 @@ import lando.systems.ld44.utils.Assets;
 public class GameEntity {
 
     public Assets assets;
-    public Vector2 position;
+    public Vector2 position = new Vector2();
+    public Vector2 velocity = new Vector2();
 
     public float width;
     public float height;
@@ -16,15 +17,16 @@ public class GameEntity {
     public TextureRegion image;
 
     public GameEntity(Assets assets){
-        this.position = new Vector2();
         this.assets = assets;
     }
 
-    public void update(float dt) { }
+    public void update(float dt) {
+        position.add(velocity.x * dt, velocity.y * dt);
+    }
 
     public void render(SpriteBatch batch) {
         if (image != null) {
-            batch.draw(image, position.x, position.y, width, height);
+            batch.draw(image, position.x, position.y);
         }
     }
 }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import lando.systems.ld44.entities.Dime;
 import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.Nickel;
 import lando.systems.ld44.entities.Penny;
@@ -90,6 +91,8 @@ public class Level {
                 } else if (name.equals("nickel")) {
                     if (Math.random() > 0.8) {
                         enemy = new Penny(screen);
+                    } else if (Math.random() > 0.8) {
+                        enemy = new Dime(screen);
                     } else {
                         enemy = new Nickel(screen);
                     }

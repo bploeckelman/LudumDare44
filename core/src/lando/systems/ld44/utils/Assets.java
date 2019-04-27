@@ -38,6 +38,7 @@ public class Assets implements Disposable {
 
     public Animation<TextureRegion> pennyAnimation;
     public Animation<TextureRegion> nickelAnimation;
+    public Animation<TextureRegion> dimeAnimation;
 
     public NinePatch ninePatch;
 
@@ -88,6 +89,9 @@ public class Assets implements Disposable {
 
         Array nickels = atlas.findRegions("nickel_walk");
         nickelAnimation = new Animation<TextureRegion>(0.1f, nickels, Animation.PlayMode.LOOP);
+
+        Array dimes = atlas.findRegions("dime_walk");
+        dimeAnimation = new Animation<TextureRegion>(0.1f, dimes, Animation.PlayMode.LOOP);
 
         titleTexture = mgr.get(titleTextureAsset);
         pixelTexture = mgr.get(pixelTextureAsset);

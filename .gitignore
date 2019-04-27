@@ -1,3 +1,6 @@
+## Project specific
+core/out/
+
 ## Java
 
 *.class

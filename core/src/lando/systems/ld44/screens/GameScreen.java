@@ -12,9 +12,12 @@ import lando.systems.ld44.entities.Nickel;
 import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
+import lando.systems.ld44.world.Level;
 
 public class GameScreen extends BaseScreen {
+
     Player player;
+    Level level;
 
     Array<GameEntity> gameEntities = new Array<GameEntity>();
 
@@ -25,6 +28,7 @@ public class GameScreen extends BaseScreen {
         player = new Player(this, assets, 30, 100);
         gameEntities.add(new Nickel(assets));
         shaker = new ScreenShakeCameraController(worldCamera);
+        level = new Level("maps/demo.tmx", assets);
     }
 
     @Override
@@ -38,6 +42,15 @@ public class GameScreen extends BaseScreen {
             ge.update(dt);
         }
         shaker.update(dt);
+        level.update(dt);
+
+        // TEMP
+        float speed = 350f;
+        if      (Gdx.input.isKeyPressed(Input.Keys.LEFT))  worldCamera.translate(-speed * dt, 0f);
+        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) worldCamera.translate( speed * dt, 0f);
+        if      (Gdx.input.isKeyPressed(Input.Keys.DOWN))  worldCamera.translate(0f, -speed * dt);
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP))    worldCamera.translate(0f,  speed * dt);
+        worldCamera.update();
     }
 
     @Override
@@ -53,6 +66,8 @@ public class GameScreen extends BaseScreen {
             player.render(batch);
         }
         batch.end();
+
+        level.render(worldCamera);
     }
 
 }

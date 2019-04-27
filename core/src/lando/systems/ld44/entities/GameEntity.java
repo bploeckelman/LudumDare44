@@ -8,7 +8,6 @@ import lando.systems.ld44.utils.Assets;
 
 public class GameEntity {
     public enum Direction {RIGHT, LEFT}
-
     public enum JumpState {ONGROUND, JUMP, POUND}
 
     public Assets assets;
@@ -30,6 +29,7 @@ public class GameEntity {
     public GameEntity(GameScreen screen){
         this.assets = screen.assets;
         this.screen = screen;
+        this.position = new Vector2();
     }
 
     public void jump() {
@@ -56,8 +56,6 @@ public class GameEntity {
         }
         position.add(velocity.x * dt, velocity.y * dt);
     }
-
-
 
     public void render(SpriteBatch batch) {
         if (image != null) {

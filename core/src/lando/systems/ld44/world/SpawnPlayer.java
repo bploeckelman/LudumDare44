@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld44.utils.Assets;
 
-public class Spawn {
+public class SpawnPlayer {
 
     public Vector2 pos;
     public float size = 32f;
     public TextureRegion texture;
 
-    public Spawn(float x, float y, Assets assets) {
+    public SpawnPlayer(float x, float y, Assets assets) {
         this.pos = new Vector2(x, y);
         this.texture = assets.whitePixel;
     }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.entities.GameEntity;
-import lando.systems.ld44.entities.Nickel;
 import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
@@ -16,20 +15,17 @@ import lando.systems.ld44.world.Level;
 
 public class GameScreen extends BaseScreen {
 
-    Player player;
     public Level level;
-
-    Array<GameEntity> gameEntities = new Array<GameEntity>();
-
+    public Player player;
+    public Array<GameEntity> gameEntities = new Array<GameEntity>();
     public ScreenShakeCameraController shaker;
 
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
-        gameEntities.add(new Nickel(this));
         shaker = new ScreenShakeCameraController(worldCamera);
-        level = new Level("maps/demo.tmx", assets);
-        player = new Player(this, level.spawn.pos.x, level.spawn.pos.y);
-
+        level = new Level("maps/demo.tmx", assets, this);
+        player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
+        shaker = new ScreenShakeCameraController(worldCamera);
     }
 
     @Override

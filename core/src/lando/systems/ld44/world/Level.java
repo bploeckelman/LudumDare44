@@ -3,7 +3,6 @@ package lando.systems.ld44.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -15,27 +14,31 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import lando.systems.ld44.entities.GameEntity;
+import lando.systems.ld44.entities.Nickel;
+import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 
 public class Level {
 
     private Assets assets;
+    private GameScreen screen;
 
     public String name;
     public TiledMap map;
     public TiledMapRenderer mapRenderer;
     public TiledMapTileLayer collisionLayer;
     public MapLayer objectsLayer;
-    public Spawn spawn;
+    public SpawnPlayer spawnPlayer;
     public Exit exit;
-
     public Array<Rectangle> tileRects;
     public Pool<Rectangle> rectPool;
 
-    public Level(String mapFileName, Assets assets) {
+    public Level(String mapFileName, Assets assets, GameScreen screen) {
         Gdx.app.log("Map", "Loading map: '" + mapFileName + "'");
 
         this.assets = assets;
+        this.screen = screen;
 
         tileRects = new Array<Rectangle>();
         rectPool = Pools.get(Rectangle.class);
@@ -70,20 +73,38 @@ public class Level {
                 continue;
             }
 
-            if (type.equalsIgnoreCase("spawn")) {
-                spawn = new Spawn(
-                        props.get("x", Float.class),
-                        props.get("y", Float.class), assets);
+            if ("spawnPlayer".equalsIgnoreCase(type)) {
+                float x = props.get("x", Float.class);
+                float y = props.get("y", Float.class);
+                spawnPlayer = new SpawnPlayer(x, y, assets);
             }
-            else if (type.equalsIgnoreCase("exit")) {
-                exit = new Exit(
-                        props.get("x", Float.class),
-                        props.get("y", Float.class), assets);
+            else if ("spawnEnemy".equalsIgnoreCase(type)) {
+                float x = props.get("x", Float.class);
+                float y = props.get("y", Float.class);
+                String name = object.getName().toLowerCase();
+
+                GameEntity enemy = null;
+                if ("nickel".equals(name)) {
+                    enemy = new Nickel(screen);
+                } else {
+                    Gdx.app.log("Map", "Unknown enemy type for spawnEnemy entity: '" + name + "'");
+                }
+
+                if (enemy != null) {
+                    enemy.position.set(x, y);
+                    enemy.direction = GameEntity.Direction.LEFT;
+                    screen.gameEntities.add(enemy);
+                }
+            }
+            else if ("exit".equalsIgnoreCase(type)) {
+                float x = props.get("x", Float.class);
+                float y = props.get("y", Float.class);
+                exit = new Exit(x, y, assets);
             }
         }
         // Validate that we have at least a start and goal object
-        if (spawn == null) {
-            throw new GdxRuntimeException("Missing required map object: 'spawn'");
+        if (spawnPlayer == null) {
+            throw new GdxRuntimeException("Missing required map object: 'spawnPlayer'");
         } else if (exit == null) {
             throw new GdxRuntimeException("Missing required map object: 'exit'");
         }
@@ -122,7 +143,6 @@ public class Level {
                 }
             }
         }
-
     }
 
 }

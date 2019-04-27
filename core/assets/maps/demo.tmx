@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="50" height="36" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="4">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="50" height="36" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="7">
  <tileset firstgid="1" source="tileset.tsx"/>
  <objectgroup id="3" name="objects">
-  <object id="2" type="spawn" gid="183" x="192" y="992" width="32" height="32"/>
+  <object id="2" type="spawnPlayer" gid="183" x="192" y="992" width="32" height="32"/>
   <object id="3" type="exit" gid="184" x="1408" y="1040" width="32" height="32"/>
+  <object id="4" name="nickel" type="spawnEnemy" gid="185" x="416" y="1056" width="32" height="32"/>
+  <object id="5" name="nickel" type="spawnEnemy" gid="185" x="544" y="1056" width="32" height="32"/>
+  <object id="6" name="nickel" type="spawnEnemy" gid="185" x="480" y="1056" width="32" height="32"/>
  </objectgroup>
  <layer id="4" name="collision" width="50" height="36">
   <data encoding="base64">

@@ -70,12 +70,20 @@ public class GroundPound extends GameEntity {
         }
 
         for (GameEntity ge : screen.gameEntities) {
-            if (!ge.poundable || ge.stunned) { continue; }
-            // same level
-            if (ge.position.y == bounds.y && ge.position.x >= bounds.x && ge.position.x <= (bounds.x + bounds.width)) {
+            if (ge.poundable && !ge.stunned && isInStunRange(ge.bounds)) {
                 ge.stun();
             }
         }
+    }
+
+    private boolean isInStunRange(Rectangle entityBounds) {
+        // needs to be on same level
+        if (entityBounds.y != bounds.y) {
+            return false;
+        }
+
+        float x = entityBounds.x + entityBounds.width / 2;
+        return x >= bounds.x && x <= bounds.x + bounds.width;
     }
 
     @Override

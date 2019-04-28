@@ -35,6 +35,7 @@ public class GameEntity {
 
     public TextureRegion image;
     public Array<Rectangle> tiles;
+    public Rectangle bounds = new Rectangle();
 
     public GameEntity(GameScreen screen){
         this.assets = screen.assets;
@@ -141,6 +142,7 @@ public class GameEntity {
         if (pounded) {
             groundPound(tempPos);
         }
+        bounds.set(position.x, position.y, width, height);
     }
 
     protected void groundPound(Vector2 poundPosition) {
@@ -165,6 +167,7 @@ public class GameEntity {
                 scaleY = 1 - groundPoundDelay/3f;
             }
             batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
+            assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
         }
     }
 }

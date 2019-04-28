@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.Audio;
 
 public class TitleScreen extends BaseScreen {
 
@@ -18,6 +19,7 @@ public class TitleScreen extends BaseScreen {
         super(game, assets);
         this.mousePos = new Vector3();
         Gdx.input.setInputProcessor(this);
+        audio.playMusic(Audio.Musics.Title);
     }
 
     @Override

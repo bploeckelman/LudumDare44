@@ -2,7 +2,6 @@ package lando.systems.ld44.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld44.screens.GameScreen;
 
 public class Enemy extends AnimationGameEntity {
@@ -29,8 +28,9 @@ public class Enemy extends AnimationGameEntity {
         setDirection(direction);
     }
 
+    @Override
     public void kill() {
-        remove = true;
+        super.kill();
         if (coin != null) {
             Coin spawnCoin = new Coin(screen, coin, value);
             float x = position.x + width / 2 - spawnCoin.width / 2;

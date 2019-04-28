@@ -104,6 +104,7 @@ public class Level {
                 else if ("nickel"  .equals(name)) enemyType = EnemySpawner.EnemyType.nickel;
                 else if ("dime"    .equals(name)) enemyType = EnemySpawner.EnemyType.dime;
                 else if ("chicken" .equals(name)) enemyType = EnemySpawner.EnemyType.chicken;
+                else if ("bunny"   .equals(name)) enemyType = EnemySpawner.EnemyType.bunny;
                 else Gdx.app.log("Map", "Unknown enemy type for spawnEnemy entity: '" + name + "'");
 
                 if (enemyType != null) {

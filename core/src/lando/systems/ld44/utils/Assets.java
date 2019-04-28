@@ -49,6 +49,7 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> dimeAnimation;
     public Animation<TextureRegion> quarterAnimation;
     public Animation<TextureRegion> chickenAnimation;
+    public Animation<TextureRegion> dustBunnyAnimation;
     public Animation<TextureRegion> pennyPickupAnimation;
     public Animation<TextureRegion> nickelPickupAnimation;
     public Animation<TextureRegion> dimePickupAnimation;
@@ -146,6 +147,9 @@ public class Assets implements Disposable {
 
         Array chickenFrames = atlas.findRegions("chicken");
         chickenAnimation = new Animation<TextureRegion>(0.2f, chickenFrames, Animation.PlayMode.LOOP);
+
+        Array dustBunnyFrames = atlas.findRegions("bunny");
+        dustBunnyAnimation = new Animation<TextureRegion>(0.2f, dustBunnyFrames, Animation.PlayMode.LOOP);
 
         Array springUp    = atlas.findRegions("spring-up");
         Array springDown  = atlas.findRegions("spring-down");

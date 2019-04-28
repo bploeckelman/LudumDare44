@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import javafx.scene.layout.Background;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.GroundPound;
@@ -17,8 +18,11 @@ import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.particles.ParticleManager;
 import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.Config;
+import lando.systems.ld44.utils.Utils;
 import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
 import lando.systems.ld44.world.Level;
+import lando.systems.ld44.world.backgrounds.ParallaxBackground;
+import lando.systems.ld44.world.backgrounds.TextureRegionParallaxLayer;
 
 public class GameScreen extends BaseScreen {
 
@@ -28,9 +32,11 @@ public class GameScreen extends BaseScreen {
     public Array<GameEntity> gameEntities = new Array<GameEntity>();
     public ScreenShakeCameraController shaker;
     public ParticleManager particleManager;
+    public ParallaxBackground background;
 
     private float cameraHorMargins = 100;
     private float cameraVertMargins = 20;
+    private float cameraVertJumpMargin = 150;
 
     private float tempStateTime = 0f;
 
@@ -40,6 +46,8 @@ public class GameScreen extends BaseScreen {
         level = new Level("maps/demo.tmx", assets, this);
         player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
         this.particleManager = new ParticleManager(assets);
+        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.arcadeTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
+        background = new ParallaxBackground(layer);
     }
 
     @Override
@@ -72,6 +80,7 @@ public class GameScreen extends BaseScreen {
         batch.setProjectionMatrix(shaker.getCombinedMatrix());
         batch.begin();
         {
+            background.draw(shaker.getViewCamera(), batch);
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
             }
@@ -107,6 +116,8 @@ public class GameScreen extends BaseScreen {
         if (playerY < cameraTargetPos.y - cameraVertMargins) cameraTargetPos.y = playerY + cameraVertMargins;
         if (player.grounded) {
             if (playerY > cameraTargetPos.y + cameraVertMargins) cameraTargetPos.y = playerY - cameraVertMargins;
+        } else {
+            if (playerY > cameraTargetPos.y + cameraVertJumpMargin) cameraTargetPos.y = playerY - cameraVertJumpMargin;
         }
 
 

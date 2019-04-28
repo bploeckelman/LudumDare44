@@ -14,6 +14,7 @@ public class Assets implements Disposable {
 
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
     private final AssetDescriptor<Texture> titleTextureAsset = new AssetDescriptor<Texture>("images/title.png", Texture.class);
+    private final AssetDescriptor<Texture> arcadeTextureAsset = new AssetDescriptor<Texture>("images/arcade.png", Texture.class);
     private final AssetDescriptor<Texture> pixelTextureAsset = new AssetDescriptor<Texture>("images/pixel.png", Texture.class);
 
     private final AssetDescriptor<BitmapFont> pixelFont16Asset = new AssetDescriptor<BitmapFont>("fonts/emulogic-16pt.fnt", BitmapFont.class);
@@ -30,6 +31,7 @@ public class Assets implements Disposable {
 
     public TextureAtlas atlas;
     public Texture titleTexture;
+    public Texture arcadeTexture;
     public Texture pixelTexture;
 
     public TextureRegion testTexture;
@@ -74,6 +76,7 @@ public class Assets implements Disposable {
         mgr = new AssetManager();
         mgr.load(atlasAsset);
         mgr.load(titleTextureAsset);
+        mgr.load(arcadeTextureAsset);
         mgr.load(pixelTextureAsset);
         mgr.load(pixelFont16Asset);
 
@@ -124,6 +127,8 @@ public class Assets implements Disposable {
         springAnimationRight = new Animation<TextureRegion>(0.075f, springRight, Animation.PlayMode.NORMAL);
 
         titleTexture = mgr.get(titleTextureAsset);
+        arcadeTexture = mgr.get(arcadeTextureAsset);
+        arcadeTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         pixelTexture = mgr.get(pixelTextureAsset);
 
         ninePatch = new NinePatch(atlas.findRegion("ninepatch-screws"), 6, 6, 6, 6);

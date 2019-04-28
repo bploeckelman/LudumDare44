@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 public class Audio implements Disposable {
 
-    public static final float MUSIC_VOLUME = 1f;
+    public static final float MUSIC_VOLUME = .5f;
     public static final float SOUNDSCALE3D = 800;
     public static final float SOUNDPANSCLAE = 900;
     public static final boolean shutUpYourFace = false;
@@ -31,6 +31,7 @@ public class Audio implements Disposable {
     }
 
     public enum Musics {
+        Title, Level1, Level2, Level3, Level4
     }
 
     public HashMap<Sounds, SoundContainer> sounds = new HashMap<Sounds, SoundContainer>();
@@ -71,11 +72,15 @@ public class Audio implements Disposable {
 //        musics.put(Musics.SillySpaceDrumsWithMaster, Gdx.audio.newMusic(Gdx.files.internal("audio/SillySpaceDrumsWithMaster.mp3")));
 //        musics.put(Musics.XmenKnockersWithMaster, Gdx.audio.newMusic(Gdx.files.internal("audio/XmenKnockersWithMaster.mp3")));
 //        musics.put(Musics.SpaceFanfareWithMaster, Gdx.audio.newMusic(Gdx.files.internal("audio/SpaceFanfareWithMaster.mp3")));
-
+        musics.put(Musics.Title, Gdx.audio.newMusic(Gdx.files.internal("sounds/titlescreen.mp3")));
+        musics.put(Musics.Level1, Gdx.audio.newMusic(Gdx.files.internal("sounds/level1.mp3")));
+        musics.put(Musics.Level2, Gdx.audio.newMusic(Gdx.files.internal("sounds/level2.mp3")));
+        musics.put(Musics.Level3, Gdx.audio.newMusic(Gdx.files.internal("sounds/level3.mp3")));
+        musics.put(Musics.Level4, Gdx.audio.newMusic(Gdx.files.internal("sounds/level4.mp3")));
 
         musicVolume = new MutableFloat(MUSIC_VOLUME);
         if (playMusic) {
-//            currentMusic = musics.get(Musics.SpaceAmbWithMaster);
+//            currentMusic = musics.get(Musics.Title);
 //            eCurrentMusic = Musics.SpaceAmbWithMaster;
 //            currentMusic.setLooping(true);
 //            currentMusic.setVolume(0f);

@@ -16,6 +16,7 @@ import lando.systems.ld44.entities.GroundPound;
 import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.particles.ParticleManager;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.Audio;
 import lando.systems.ld44.utils.Utils;
 import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
 import lando.systems.ld44.world.Level;
@@ -45,6 +46,7 @@ public class GameScreen extends BaseScreen {
         this.particleManager = new ParticleManager(assets);
         TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.arcadeTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
         background = new ParallaxBackground(layer);
+        audio.playMusic(Audio.Musics.Level1);
     }
 
     @Override

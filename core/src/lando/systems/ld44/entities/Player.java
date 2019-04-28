@@ -60,8 +60,10 @@ public class Player extends GameEntity {
         this.value = MathUtils.clamp(this.value + value, 0, this.maxValue);
 
         float invWeightRatio = 1 - getWeightRatio();
-        horizontalSpeed = 20 + (180 * invWeightRatio);
+        horizontalSpeed = 30 + (170 * invWeightRatio);
         jumpVelocity = 600 + (400 * invWeightRatio);
+
+
     }
 
     @Override

@@ -50,8 +50,12 @@ public class GameEntity {
     }
 
     public void jump() {
+        jump(1f);
+    }
+
+    public void jump(float velocityMultiplier) {
         if (grounded){
-            velocity.y = jumpVelocity;
+            velocity.y = jumpVelocity * velocityMultiplier;
             jumpState = JumpState.JUMP;
         } else if (jumpState == JumpState.JUMP){
             velocity.y = -1000;
@@ -129,6 +133,8 @@ public class GameEntity {
                 velocity.y = 0;
             }
         }
+
+        screen.level.handleObjectInteractions(this);
 
         screen.level.rectPool.free(entityRect);
         position.set(tempPos);

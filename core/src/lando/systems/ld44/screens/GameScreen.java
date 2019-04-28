@@ -72,6 +72,12 @@ public class GameScreen extends BaseScreen {
         batch.end();
 
         level.render(shaker.getViewCamera());
+
+        batch.begin();
+        {
+            level.renderObjects(batch, shaker.getViewCamera());
+        }
+        batch.end();
     }
 
     public void handleCameraConstraints() {

@@ -3,6 +3,7 @@ package lando.systems.ld44.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -14,10 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import lando.systems.ld44.entities.Dime;
-import lando.systems.ld44.entities.GameEntity;
-import lando.systems.ld44.entities.Nickel;
-import lando.systems.ld44.entities.Penny;
+import lando.systems.ld44.entities.*;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 
@@ -33,6 +31,7 @@ public class Level {
     public MapLayer objectsLayer;
     public SpawnPlayer spawnPlayer;
     public Exit exit;
+    public Array<Spring> springs;
     public Array<Rectangle> tileRects;
     public Pool<Rectangle> rectPool;
 
@@ -66,6 +65,7 @@ public class Level {
         }
 
         // Load map objects
+        springs = new Array<Spring>();
         MapObjects objects = objectsLayer.getObjects();
         for (MapObject object : objects) {
             MapProperties props = object.getProperties();
@@ -102,6 +102,12 @@ public class Level {
                 float y = props.get("y", Float.class);
                 exit = new Exit(x, y, assets);
             }
+            else if ("spring".equalsIgnoreCase(type)) {
+                float x = props.get("x", Float.class);
+                float y = props.get("y", Float.class);
+                Spring spring = new Spring(x, y, assets);
+                springs.add(spring);
+            }
         }
         // Validate that we have at least a start and goal object
         if (spawnPlayer == null) {
@@ -112,13 +118,41 @@ public class Level {
     }
 
     public void update(float dt) {
+        for (Spring spring : springs) {
+            spring.update(dt);
+        }
+    }
 
+    // TODO: game entity should have its own rect or some other collision region for using Intersector here
+    Rectangle bounds = new Rectangle();
+    public void handleObjectInteractions(GameEntity entity) {
+        for (Spring spring : springs) {
+            if (spring.springing) continue;
+
+            bounds.set(entity.position.x, entity.position.y, entity.width, entity.height);
+            if (spring.bounds.overlaps(bounds)) {
+                spring.trigger();
+                float multiplier = 1.5f;
+                if (entity.groundPoundDelay > 0f) {
+                    entity.groundPoundDelay = 0f;
+                    multiplier = 1.75f;
+                }
+                entity.jump(multiplier);
+            }
+        }
     }
 
     // TODO: break out drawing of different layers into different calls
     public void render(OrthographicCamera camera) {
         mapRenderer.setView(camera);
         mapRenderer.render();
+    }
+
+    public void renderObjects(SpriteBatch batch, OrthographicCamera camera) {
+        // TODO: only render if within current view...
+        for (Spring spring : springs) {
+            spring.render(batch);
+        }
     }
 
     public void getTiles(float startX, float startY, float endX, float endY, Array<Rectangle> tiles) {

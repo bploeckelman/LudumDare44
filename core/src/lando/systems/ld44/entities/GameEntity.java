@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.Config;
 import lando.systems.ld44.world.Spring;
 
 public class GameEntity {
@@ -51,6 +52,14 @@ public class GameEntity {
         this.image = image;
         width = image.getRegionWidth();
         height = image.getRegionHeight();
+    }
+
+    public void changeDirection() {
+        setDirection((direction == Direction.LEFT) ? Direction.RIGHT : Direction.LEFT);
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public void jump() {
@@ -111,7 +120,7 @@ public class GameEntity {
             entityRect.set(tempPos.x, position.y, width, height);
             if (entityRect.overlaps(tile)){
                 tempPos.x = position.x;
-//                velocity.x *= -.5f;
+                changeDirection();
                 break;
             }
         }
@@ -196,7 +205,7 @@ public class GameEntity {
             }
             batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
 
-            if (screen.debug) {
+            if (Config.debug) {
                 assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
             }
         }

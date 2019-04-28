@@ -2,10 +2,8 @@ package lando.systems.ld44.entities;
 
 import lando.systems.ld44.screens.GameScreen;
 
-public class Nickel extends AnimationGameEntity {
-
+public class Nickel extends Enemy {
     public Nickel(GameScreen screen) {
-        super(screen, screen.assets.nickelAnimation);
-        setVelocityX(20 + ((float)Math.random()*20));
+        super(screen, screen.assets.nickelAnimation, 30);
     }
 }

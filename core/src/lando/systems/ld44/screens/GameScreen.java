@@ -16,7 +16,6 @@ import lando.systems.ld44.entities.GroundPound;
 import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.particles.ParticleManager;
 import lando.systems.ld44.utils.Assets;
-import lando.systems.ld44.utils.Config;
 import lando.systems.ld44.utils.Utils;
 import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
 import lando.systems.ld44.world.Level;
@@ -25,7 +24,6 @@ import lando.systems.ld44.world.backgrounds.TextureRegionParallaxLayer;
 
 public class GameScreen extends BaseScreen {
 
-    public boolean debug = Config.debug;
     public Level level;
     public Player player;
     public Array<GameEntity> gameEntities = new Array<GameEntity>();

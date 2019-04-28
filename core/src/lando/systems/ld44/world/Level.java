@@ -35,6 +35,7 @@ public class Level {
     public TiledMapTileLayer collisionLayer;
     public MapLayer objectsLayer;
     public SpawnPlayer spawnPlayer;
+    public Array<EnemySpawner> enemySpawners;
     public Exit exit;
     public Array<Spring> springs;
     public Array<Rectangle> tileRects;
@@ -71,6 +72,7 @@ public class Level {
 
         // Load map objects
         springs = new Array<Spring>();
+        enemySpawners = new Array<EnemySpawner>();
         MapObjects objects = objectsLayer.getObjects();
         for (MapObject object : objects) {
             MapProperties props = object.getProperties();
@@ -88,18 +90,24 @@ public class Level {
             else if ("spawnEnemy".equalsIgnoreCase(type)) {
                 float x = props.get("x", Float.class);
                 float y = props.get("y", Float.class);
-                String name = object.getName().toLowerCase();
 
-                GameEntity enemy = null;
-                if      ("penny" .equals(name)) enemy = new Penny(screen);
-                else if ("nickel".equals(name)) enemy = new Nickel(screen);
-                else if ("dime"  .equals(name)) enemy = new Dime(screen);
+                String directionProp = props.get("direction", "left", String.class).toLowerCase();
+                GameEntity.Direction direction = GameEntity.Direction.LEFT;
+                if ("left".equals(directionProp)) direction = GameEntity.Direction.LEFT;
+                else if ("right".equals(directionProp)) direction = GameEntity.Direction.RIGHT;
+                else Gdx.app.log("Map", "Unknown direction for spawnEnemy: '" + directionProp + "'");
+
+                String name = object.getName().toLowerCase();
+                EnemySpawner.EnemyType enemyType = null;
+                if      ("penny" .equals(name)) enemyType = EnemySpawner.EnemyType.penny;
+                else if ("nickel".equals(name)) enemyType = EnemySpawner.EnemyType.nickel;
+                else if ("dime"  .equals(name)) enemyType = EnemySpawner.EnemyType.dime;
                 else Gdx.app.log("Map", "Unknown enemy type for spawnEnemy entity: '" + name + "'");
 
-                if (enemy != null) {
-                    enemy.position.set(x, y);
-                    enemy.direction = GameEntity.Direction.LEFT;
-                    screen.gameEntities.add(enemy);
+                if (enemyType != null) {
+                    EnemySpawner spawner = new EnemySpawner(x, y, enemyType, direction);
+                    enemySpawners.add(spawner);
+                    spawner.spawnEnemy(screen);
                 }
             }
             else if ("exit".equalsIgnoreCase(type)) {

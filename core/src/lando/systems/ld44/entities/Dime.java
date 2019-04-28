@@ -2,9 +2,8 @@ package lando.systems.ld44.entities;
 
 import lando.systems.ld44.screens.GameScreen;
 
-public class Dime extends AnimationGameEntity {
+public class Dime extends Enemy {
     public Dime(GameScreen screen) {
-        super(screen, screen.assets.dimeAnimation);
-        setVelocityX(30 + (float)Math.random()*5);
+        super(screen, screen.assets.dimeAnimation, 75);
     }
 }

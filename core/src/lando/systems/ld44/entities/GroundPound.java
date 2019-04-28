@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.screens.GameScreen;
+import lando.systems.ld44.utils.Config;
 
 public class GroundPound extends GameEntity {
 
@@ -90,7 +91,7 @@ public class GroundPound extends GameEntity {
 
     @Override
     public void render(SpriteBatch batch) {
-        if (screen.debug) {
+        if (Config.debug) {
             assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
         }
     }

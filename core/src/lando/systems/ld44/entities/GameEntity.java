@@ -35,12 +35,9 @@ public class GameEntity {
     public GameEntity(GameScreen screen){
         this.assets = screen.assets;
         this.screen = screen;
-        this.position = new Vector2();
-        this.tempPos = new Vector2();
         this.tiles = new Array<Rectangle>();
         grounded = true;
     }
-
 
     public void setImage(TextureRegion image) {
         this.image = image;
@@ -57,6 +54,10 @@ public class GameEntity {
             velocity.x = 0;
             jumpState = JumpState.POUND;
         }
+    }
+
+    public void stun() {
+        position.y += 20;
     }
 
     public void update(float dt) {
@@ -101,6 +102,7 @@ public class GameEntity {
         endX = entityRect.x + entityRect.width;
 
         grounded = false;
+        boolean pounded = false;
         screen.level.getTiles(startX, startY, endX, endY, tiles);
         for (Rectangle tile : tiles) {
             entityRect.set(tempPos.x, tempPos.y, width, height);
@@ -109,15 +111,14 @@ public class GameEntity {
                 if (velocity.y > 0) {
                     tempPos.y = Math.min(tempPos.y, tile.y - height);
                 } else {
+                    tempPos.y = Math.max(tempPos.y, tile.y + tile.height);
                     if (jumpState == JumpState.POUND) {
-                        // TODO groundpound
-                        screen.shaker.addDamage(.8f);
                         groundPoundDelay = .5f;
                         velocity.x = 0;
+                        pounded = true;
                     }
                     jumpState = JumpState.NONE;
                     grounded = true;
-                    tempPos.y = Math.max(tempPos.y, tile.y + tile.height);
                 }
                 velocity.y = 0;
             }
@@ -125,7 +126,13 @@ public class GameEntity {
 
         screen.level.rectPool.free(entityRect);
         position.set(tempPos);
+        if (pounded) {
+            groundPound(tempPos);
+        }
+    }
 
+    protected void groundPound(Vector2 poundPosition) {
+        screen.shaker.addDamage(.5f);
     }
 
     public void render(SpriteBatch batch) {

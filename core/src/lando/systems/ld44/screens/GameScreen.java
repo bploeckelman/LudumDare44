@@ -6,6 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.entities.GameEntity;
@@ -59,6 +61,11 @@ public class GameScreen extends BaseScreen {
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
             }
+
+            if (pound != null) {
+                assets.ninePatch.draw(batch, pound.x, pound.y, pound.width, pound.height);
+            }
+
             player.render(batch);
         }
         batch.end();
@@ -66,27 +73,40 @@ public class GameScreen extends BaseScreen {
         level.render(shaker.getViewCamera());
     }
 
-    public void handleCameraConstraints(){
-        float playerX = player.position.x + player.width/2f;
+    public void handleCameraConstraints() {
+        float playerX = player.position.x + player.width / 2f;
         if (playerX < cameraTargetPos.x - cameraHorMargins) cameraTargetPos.x = playerX + cameraHorMargins;
         if (playerX > cameraTargetPos.x + cameraHorMargins) cameraTargetPos.x = playerX - cameraHorMargins;
 
-        float playerY = player.position.y + player.height/2f;
+        float playerY = player.position.y + player.height / 2f;
         if (playerY < cameraTargetPos.y - cameraVertMargins) cameraTargetPos.y = playerY + cameraVertMargins;
         if (player.grounded) {
             if (playerY > cameraTargetPos.y + cameraVertMargins) cameraTargetPos.y = playerY - cameraVertMargins;
         }
 
 
-        float cameraLeftEdge = worldCamera.viewportWidth/2f;
+        float cameraLeftEdge = worldCamera.viewportWidth / 2f;
         cameraTargetPos.x = MathUtils.clamp(cameraTargetPos.x, cameraLeftEdge, level.collisionLayer.getWidth() * level.collisionLayer.getTileWidth() - cameraLeftEdge);
 
-        float cameraVertEdge = worldCamera.viewportHeight/2f;
-        cameraTargetPos.y = MathUtils.clamp(cameraTargetPos.y, cameraVertEdge, level.collisionLayer.getHeight()* level.collisionLayer.getTileHeight() - cameraVertEdge);
+        float cameraVertEdge = worldCamera.viewportHeight / 2f;
+        cameraTargetPos.y = MathUtils.clamp(cameraTargetPos.y, cameraVertEdge, level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight() - cameraVertEdge);
 
 //        targetZoom.setValue(1 + Math.abs(player.velocity.y / 1000f));
 
         updateCamera();
+    }
+
+    private Rectangle pound;
+    public void groundPound(float x, float y, float distance) {
+        pound = new Rectangle(x - distance, y, distance * 2, 2);
+        System.out.println((x - distance) + " - " + (x + distance));
+        for (GameEntity ge : gameEntities) {
+            // same level
+            if (ge.position.y == y && ge.position.x >= x - distance && ge.position.x <= x + distance) {
+                ge.stun();
+            }
+
+        }
     }
 
 }

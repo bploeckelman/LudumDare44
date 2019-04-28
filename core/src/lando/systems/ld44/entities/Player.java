@@ -18,7 +18,7 @@ public class Player extends GameEntity {
 
     public void update(float dt) {
         super.update(dt);
-
+        if (groundPoundDelay > 0) return;
         if (Gdx.input.isKeyPressed(Input.Keys.A)){
             velocity.add(-horizontalSpeed, 0);
             direction = Direction.LEFT;

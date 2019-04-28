@@ -27,6 +27,7 @@ public class GameEntity {
     public boolean grounded;
     public float jumpVelocity = 800;
     public float gravity = 2000;
+    public float groundPoundDelay = 0;
 
     public TextureRegion image;
     public Array<Rectangle> tiles;
@@ -59,7 +60,7 @@ public class GameEntity {
     }
 
     public void update(float dt) {
-
+        groundPoundDelay = Math.max(groundPoundDelay -dt, 0);
         velocity.y -= gravity * dt;
 
         tempPos.set(position);
@@ -111,6 +112,8 @@ public class GameEntity {
                     if (jumpState == JumpState.POUND) {
                         // TODO groundpound
                         screen.shaker.addDamage(.8f);
+                        groundPoundDelay = .5f;
+                        velocity.x = 0;
                     }
                     jumpState = JumpState.NONE;
                     grounded = true;

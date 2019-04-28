@@ -8,10 +8,12 @@ public class Coin extends AnimationGameEntity {
     public float value;
 
     private float anim;
+    public float poundVelocity = 1000;
 
     public Coin(GameScreen screen, Animation<TextureRegion> coinAnimation, float value) {
         super(screen, coinAnimation);
 
+        poundable = consumable = true;
         this.value = value;
     }
 
@@ -20,5 +22,11 @@ public class Coin extends AnimationGameEntity {
         super.update(dt);
         anim += dt;
         image = animation.getKeyFrame(anim, true);
+    }
+
+    @Override
+    public void pound() {
+        // float dx = -100 + ((float)Math.random() * 200);
+        velocity.set(0, poundVelocity);
     }
 }

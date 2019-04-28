@@ -2,13 +2,10 @@ package lando.systems.ld44.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Audio;
-import lando.systems.ld44.utils.CallbackListener;
-import lando.systems.ld44.utils.CallbackTimer;
 
 public class Player extends GameEntity {
     public float horizontalSpeed = 100;
@@ -42,8 +39,6 @@ public class Player extends GameEntity {
             shoot();
         }
 
-        handleRandos();
-
         velocity.x *= .85f;
         if (jumpState != JumpState.BOUNCE) {
             velocity.x = MathUtils.clamp(velocity.x, -300, 300);
@@ -56,7 +51,38 @@ public class Player extends GameEntity {
             jump();
         }
 
+        handleConsumables();
+
         stateManager.update(dt);
+
+        handleRandos();
+    }
+
+    private void handleConsumables() {
+        for (GameEntity ge : screen.gameEntities) {
+            if (ge instanceof Coin) {
+                Coin coin = (Coin)ge;
+
+                checkConsume(coin);
+                consume(coin);
+            }
+        }
+    }
+
+    private void checkConsume(Coin coin) {
+        if (!coin.consuming && (coin.velocity.y < 0) && coin.left() > left() && coin.right() < right() && coin.bottom() < top() + 100 && coin.bottom() > top() - 20) {
+            coin.consuming = true;
+            open();
+        }
+    }
+
+    private void consume(Coin coin) {
+        if (coin.consuming && coin.left() > left() && coin.right() < right() && coin.top() < top() - 10) {
+            playSound(Audio.Sounds.ConsumeCoin);
+            coin.remove = true;
+            addValue(coin.value);
+            close();
+        }
     }
 
     public void handleRandos() {
@@ -67,10 +93,6 @@ public class Player extends GameEntity {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             addValue(-0.2f);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            open();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
@@ -84,8 +106,11 @@ public class Player extends GameEntity {
     }
 
     public void open() {
-        PlayerStates state = stateManager.currentState == PlayerStates.Open ? PlayerStates.Close : PlayerStates.Open;
-        stateManager.transition(state);
+        stateManager.transition(PlayerStates.Open);
+    }
+
+    public void close() {
+        stateManager.transition(PlayerStates.Close);
     }
 
     // 0 is empty - 1 is full - fatty
@@ -104,7 +129,7 @@ public class Player extends GameEntity {
     public void shoot() {
 
         // todo: check if there is inventory to shoot
-        screen.playSound(Audio.Sounds.Shoot);
+        playSound(Audio.Sounds.Shoot);
         stateManager.transition(PlayerStates.Shoot);
     }
 
@@ -116,6 +141,7 @@ public class Player extends GameEntity {
         float distance = width/2 * (3 + (2 * weightRatio));
         screen.groundPound(poundPosition.x + width/2, poundPosition.y, width/2, distance);
 
+        playSound(Audio.Sounds.GroundPound);
         screen.shaker.addDamage(shake);
     }
 

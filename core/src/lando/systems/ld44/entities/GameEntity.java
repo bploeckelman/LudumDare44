@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.Audio;
 import lando.systems.ld44.utils.Config;
 import lando.systems.ld44.world.Spring;
 
@@ -33,6 +34,8 @@ public class GameEntity {
     public float groundPoundDelay = 0;
 
     public boolean poundable;
+    public boolean consumable; // coins
+    public boolean consuming;
     public float stunTime = 0;
     public float preStunnedVelocity;
     public boolean remove;
@@ -52,6 +55,10 @@ public class GameEntity {
         this.image = image;
         width = image.getRegionWidth();
         height = image.getRegionHeight();
+    }
+
+    public void playSound(Audio.Sounds sound) {
+        screen.audio.playSound(sound);
     }
 
     public void changeDirection() {
@@ -92,6 +99,12 @@ public class GameEntity {
             case DOWN:  velocity.y =  jumpVelocity   * /*entityTypeVelocityMultiplier * */velocityMultiplier; break;
             case LEFT:  velocity.x =  bounceVelocity * entityTypeVelocityMultiplier * velocityMultiplier; break;
             case RIGHT: velocity.x = -bounceVelocity * entityTypeVelocityMultiplier * velocityMultiplier; break;
+        }
+    }
+
+    public void pound() {
+        if (poundable) {
+            stun();
         }
     }
 
@@ -167,7 +180,7 @@ public class GameEntity {
                 } else {
                     tempPos.y = Math.max(tempPos.y, tile.y + tile.height);
                     if (jumpState == JumpState.POUND) {
-                        groundPoundDelay = .5f;
+                        groundPoundDelay = .25f;
                         velocity.x = 0;
                         pounded = true;
                     }
@@ -227,5 +240,21 @@ public class GameEntity {
                 assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
             }
         }
+    }
+
+    public float left() {
+        return bounds.x;
+    }
+
+    public float right() {
+        return (bounds.x + bounds.width);
+    }
+
+    public float top() {
+        return (bounds.y + bounds.height);
+    }
+
+    public float bottom() {
+        return bounds.y;
     }
 }

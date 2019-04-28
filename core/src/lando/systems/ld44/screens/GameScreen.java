@@ -78,11 +78,10 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             background.draw(shaker.getViewCamera(), batch);
+            player.render(batch);
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
             }
-
-            player.render(batch);
             particleManager.render(batch);
         }
         batch.end();
@@ -126,8 +125,7 @@ public class GameScreen extends BaseScreen {
     }
 
     public void spawn(Coin coin) {
-        coin.velocity.y = 2000;
-        coin.velocity.x = -20 + ((float)Math.random() * 40);
+        coin.pound();
         gameEntities.add(coin);
     }
 }

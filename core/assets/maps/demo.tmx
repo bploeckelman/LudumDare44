@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="50" height="36" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="75">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="50" height="36" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="76">
  <tileset firstgid="1" source="tileset.tsx"/>
  <objectgroup id="3" name="objects">
   <object id="2" type="spawnPlayer" gid="183" x="192" y="992" width="32" height="32"/>
@@ -246,6 +246,11 @@
   <object id="74" type="tack" gid="187" x="1536" y="1152" width="32" height="32">
    <properties>
     <property name="facing" value="right"/>
+   </properties>
+  </object>
+  <object id="75" name="chicken" type="spawnEnemy" gid="185" x="352" y="928" width="32" height="32">
+   <properties>
+    <property name="direction" value="left"/>
    </properties>
   </object>
  </objectgroup>

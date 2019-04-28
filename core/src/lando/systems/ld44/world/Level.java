@@ -99,9 +99,10 @@ public class Level {
 
                 String name = object.getName().toLowerCase();
                 EnemySpawner.EnemyType enemyType = null;
-                if      ("penny" .equals(name)) enemyType = EnemySpawner.EnemyType.penny;
-                else if ("nickel".equals(name)) enemyType = EnemySpawner.EnemyType.nickel;
-                else if ("dime"  .equals(name)) enemyType = EnemySpawner.EnemyType.dime;
+                if      ("penny"   .equals(name)) enemyType = EnemySpawner.EnemyType.penny;
+                else if ("nickel"  .equals(name)) enemyType = EnemySpawner.EnemyType.nickel;
+                else if ("dime"    .equals(name)) enemyType = EnemySpawner.EnemyType.dime;
+                else if ("chicken" .equals(name)) enemyType = EnemySpawner.EnemyType.chicken;
                 else Gdx.app.log("Map", "Unknown enemy type for spawnEnemy entity: '" + name + "'");
 
                 if (enemyType != null) {

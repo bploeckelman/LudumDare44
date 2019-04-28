@@ -23,7 +23,9 @@ public class Audio implements Disposable {
     public static final boolean shutUpYourTunes = false;
 
     public enum Sounds {
-        Shoot
+        Shoot,
+        GroundPound,
+        ConsumeCoin
     }
 
     public enum Musics {

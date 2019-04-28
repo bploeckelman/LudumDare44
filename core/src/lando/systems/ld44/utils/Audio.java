@@ -61,6 +61,7 @@ public class Audio implements Disposable {
 
         putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam.mp3")));
         putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam2.mp3")));
+        putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam3.mp3")));
 
         putSound(Sounds.Landing, Gdx.audio.newSound(Gdx.files.internal("sounds/thump.mp3")));
 //        putSound(Sounds.dog_bork, Gdx.audio.newSound(Gdx.files.internal("audio/dog.mp3")));

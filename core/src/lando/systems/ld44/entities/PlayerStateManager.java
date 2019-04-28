@@ -8,6 +8,8 @@ enum PlayerStates { None, Normal, Open, Close, Shoot }
 
 public class PlayerStateManager {
     private float stateTime = 0;
+    private float openTime = 0;
+
     public PlayerStates currentState = PlayerStates.Normal;
     private PlayerStates transitionState = PlayerStates.None;
 
@@ -25,6 +27,7 @@ public class PlayerStateManager {
         TextureRegion image = assets.player;
         switch (transitionState) {
             case None:
+                handleOpen(dt);
                 return;
 
             case Normal:
@@ -47,6 +50,16 @@ public class PlayerStateManager {
         player.setImage(image);
     }
 
+    private void handleOpen(float dt) {
+        if (currentState == PlayerStates.Open) {
+            openTime += dt;
+            if (openTime > 2) {
+                // open for 2 seconds - close that bitch
+                transition(PlayerStates.Close);
+            }
+        }
+    }
+
     private TextureRegion reset() {
         currentState = PlayerStates.Normal;
         transitionState = PlayerStates.None;
@@ -58,7 +71,7 @@ public class PlayerStateManager {
         return handleTransition(animation, dt, false);
     }
 
-        private TextureRegion handleTransition(Animation<TextureRegion> animation, float dt, boolean reverse){
+    private TextureRegion handleTransition(Animation<TextureRegion> animation, float dt, boolean reverse){
         stateTime += dt;
 
         float time = stateTime;
@@ -75,6 +88,7 @@ public class PlayerStateManager {
         if (completed) {
             currentState = transitionState;
             transitionState = PlayerStates.None;
+            openTime = 0;
         }
         return animation.getKeyFrame(time);
     }

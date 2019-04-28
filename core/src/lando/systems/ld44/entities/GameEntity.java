@@ -34,7 +34,6 @@ public class GameEntity {
     public float groundPoundDelay = 0;
 
     public boolean poundable;
-    public boolean consumable; // coins
     public boolean consuming;
     public float stunTime = 0;
     public float preStunnedVelocity;

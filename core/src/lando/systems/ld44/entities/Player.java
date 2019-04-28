@@ -2,6 +2,7 @@ package lando.systems.ld44.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld44.screens.GameScreen;
@@ -15,20 +16,13 @@ public class Player extends GameEntity {
     public float maxValue = 2f;
     public float value;
 
-    public CallbackTimer shootTimer = new CallbackTimer(new CallbackListener() {
-        @Override
-        public void callback() {
-            image = assets.player;
-        }
-    });
+    private PlayerStateManager stateManager;
 
     public Player(GameScreen screen, float x, float y) {
         super(screen);
 
+        stateManager = new PlayerStateManager(this);
         this.position.set(x, y);
-        setImage(assets.player);
-        jumpState = JumpState.JUMP;
-
     }
 
     public void update(float dt) {
@@ -56,6 +50,10 @@ public class Player extends GameEntity {
             addValue(-0.2f);
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            open();
+        }
+
         velocity.x *= .85f;
         if (jumpState != JumpState.BOUNCE) {
             velocity.x = MathUtils.clamp(velocity.x, -300, 300);
@@ -68,7 +66,12 @@ public class Player extends GameEntity {
             jump();
         }
 
-        shootTimer.update(dt);
+        stateManager.update(dt);
+    }
+
+    public void open() {
+        PlayerStates state = stateManager.currentState == PlayerStates.Open ? PlayerStates.Close : PlayerStates.Open;
+        stateManager.transition(state);
     }
 
     // 0 is empty - 1 is full - fatty
@@ -85,13 +88,10 @@ public class Player extends GameEntity {
     }
 
     public void shoot() {
-        if (value > 0) {
-            addValue(-0.01f);
 
-            screen.playSound(Audio.Sounds.Shoot);
-            setImage(assets.playerShoot);
-            shootTimer.setTime(0.5f);
-        }
+        // todo: check if there is inventory to shoot
+        screen.playSound(Audio.Sounds.Shoot);
+        stateManager.transition(PlayerStates.Shoot);
     }
 
     @Override

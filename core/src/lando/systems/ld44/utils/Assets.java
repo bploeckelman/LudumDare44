@@ -95,7 +95,7 @@ public class Assets implements Disposable {
         whiteCircle = atlas.findRegion("white-circle");
 
         player = atlas.findRegion("purse_image");
-        playerShoot = atlas.findRegion("spit");
+        playerShoot = atlas.findRegion("purse_spit");
 
         Array openPurse = atlas.findRegions("player_open");
         playerOpenAnimation = new Animation<TextureRegion>(0.1f, openPurse, Animation.PlayMode.NORMAL);

@@ -145,9 +145,14 @@ public class GameEntity {
         if (image != null) {
             float scaleX = (direction == Direction.RIGHT) ? 1 : -1;
             float scaleY = 1;
-            if (jumpState == JumpState.POUND) {
-                scaleX *= .7f;
-                scaleY = 1.2f;
+            if (!grounded){
+                if (jumpState == JumpState.POUND) {
+                    scaleX *= .7f;
+                    scaleY = 1.2f;
+                } else {
+                    scaleX *= .85f;
+                    scaleY = 1.15f;
+                }
             }
             if (groundPoundDelay > 0){
                 scaleX *= 1 + groundPoundDelay/2f;

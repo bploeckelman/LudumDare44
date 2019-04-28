@@ -61,7 +61,7 @@ public class GameEntity {
         if (grounded){
             velocity.y = jumpVelocity * velocityMultiplier;
             jumpState = JumpState.JUMP;
-        } else if (jumpState == JumpState.JUMP){
+        } else if (jumpState == JumpState.JUMP || jumpState == JumpState.BOUNCE){
             velocity.y = -1000;
             velocity.x = 0;
             jumpState = JumpState.POUND;
@@ -69,15 +69,12 @@ public class GameEntity {
     }
 
     public void bounce(float velocityMultiplier, Spring.Orientation springOrientation) {
-        if (springOrientation == Spring.Orientation.DOWN) {
-            jump(velocityMultiplier);
-        } else {
-            jumpState = JumpState.BOUNCE;
-            switch (springOrientation) {
-                case UP:    velocity.y = -bounceVelocity * velocityMultiplier; break;
-                case LEFT:  velocity.x =  bounceVelocity * velocityMultiplier; break;
-                case RIGHT: velocity.x = -bounceVelocity * velocityMultiplier; break;
-            }
+        jumpState = JumpState.BOUNCE;
+        switch (springOrientation) {
+            case UP:    velocity.y = -jumpVelocity   * velocityMultiplier; break;
+            case DOWN:  velocity.y =  jumpVelocity   * velocityMultiplier; break;
+            case LEFT:  velocity.x =  bounceVelocity * velocityMultiplier; break;
+            case RIGHT: velocity.x = -bounceVelocity * velocityMultiplier; break;
         }
     }
 

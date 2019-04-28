@@ -29,6 +29,8 @@ public abstract class BaseScreen extends InputAdapter {
     public MutableFloat targetZoom = new MutableFloat(1f);
     public boolean cameraOverride = false;
 
+    public boolean allowInput;
+
     public BaseScreen(Game game, Assets assets) {
         super();
         this.game = game;

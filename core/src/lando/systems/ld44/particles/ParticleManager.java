@@ -56,11 +56,11 @@ public class ParticleManager {
             // Red on the ground
             GenericParticle particle = particlePool.obtain();
             particle.init(assets.whiteCircle,
-                    4, 4, 2, 2,
+                    8, 8, 2, 2,
                     i, y, 0,5, 0,0,0,
                     GenericParticle.OriginType.CENTER, 0,0,
                     1, 0, 0, 1,
-                    .5f, 0,0,1,
+                    1f, 0,0,0,
                     0, 0, .5f, Math.abs(distance)/ 500f);
             activeParticles.add(particle);
         }

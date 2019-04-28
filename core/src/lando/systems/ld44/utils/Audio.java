@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import lando.systems.ld44.Game;
@@ -19,13 +20,13 @@ import java.util.HashMap;
 public class Audio implements Disposable {
 
     public static final float MUSIC_VOLUME = 1f;
+    public static final float SOUNDSCALE3D = 800;
+    public static final float SOUNDPANSCLAE = 900;
     public static final boolean shutUpYourFace = false;
     public static final boolean shutUpYourTunes = false;
 
     public enum Sounds {
-        Shoot,
-        GroundPound,
-        ConsumeCoin
+        Shoot, Coin, Spring, GroundPound, Landing, ConsumeCoin
     }
 
     public enum Musics {
@@ -47,6 +48,19 @@ public class Audio implements Disposable {
 
     public Audio(boolean playMusic, Game game) {
         this.game = game;
+        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin1.mp3")));
+        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin2.mp3")));
+        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin3.mp3")));
+        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin4.mp3")));
+        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin5.mp3")));
+        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin6.mp3")));
+
+        putSound(Sounds.Spring, Gdx.audio.newSound(Gdx.files.internal("sounds/bounce2.mp3")));
+
+        putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam.mp3")));
+        putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam2.mp3")));
+
+        putSound(Sounds.Landing, Gdx.audio.newSound(Gdx.files.internal("sounds/thump.mp3")));
 //        putSound(Sounds.dog_bork, Gdx.audio.newSound(Gdx.files.internal("audio/dog.mp3")));
 //        putSound(Sounds.cat_meow, Gdx.audio.newSound(Gdx.files.internal("audio/cat.mp3")));
 //
@@ -84,6 +98,10 @@ public class Audio implements Disposable {
         if (oldCurrentMusic != null) {
             oldCurrentMusic.setVolume(musicVolume.floatValue());
         }
+
+        for (SoundContainer container : sounds.values()){
+            container.update(dt);
+        }
     }
 
     @Override
@@ -114,13 +132,30 @@ public class Audio implements Disposable {
         sounds.put(soundType, soundCont);
     }
 
-    public long playSound(Sounds soundOption) {
+    public long playSound(Sounds soundOption, float volume, float panning) {
         if (shutUpYourFace) return -1;
+        if (volume <= 0) return -1;
 
         SoundContainer soundCont = sounds.get(soundOption);
         if (soundCont == null) return -1;
         Sound s = soundCont.getSound();
-        return (s != null) ? s.play(1f) : 0;
+        if (soundCont.playDelay > 0 && volume != 1) return -1;
+        soundCont.playDelay = .1f;
+        return (s != null) ? s.play(volume, 1, panning) : 0;
+    }
+
+    public long playSound(Sounds soundOption) {
+        return playSound(soundOption, 1, 0);
+    }
+
+    public long playSound(Sounds soundOption, float sX, float sY, float dX, float dY){
+        float volume = (float)Math.pow(MathUtils.clamp(1f - (float)Math.sqrt((sX-dX)*(sX-dX) + (sY-dY)*(sY-dY)) / SOUNDSCALE3D, 0, 1),2);
+        float panning = MathUtils.clamp((sX-dX) / SOUNDPANSCLAE, -1, 1);
+        return playSound(soundOption, volume, panning);
+    }
+
+    public long playSound(Sounds soundOption, Vector2 emitterPos, Vector2 listenerPos) {
+        return playSound(soundOption, emitterPos.x, emitterPos.y, listenerPos.x, listenerPos.y);
     }
 
     public void playMusic(Musics musicOption) {
@@ -194,9 +229,14 @@ public class Audio implements Disposable {
 class SoundContainer {
     public Array<Sound> sounds;
     public Sound currentSound;
+    public float playDelay;
 
     public SoundContainer() {
         sounds = new Array<Sound>();
+    }
+
+    public void update(float dt){
+        playDelay = Math.max(playDelay-dt, 0);
     }
 
     public void addSound(Sound s) {

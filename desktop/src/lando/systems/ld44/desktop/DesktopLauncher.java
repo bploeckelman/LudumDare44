@@ -12,6 +12,7 @@ public class DesktopLauncher {
 		config.height = Config.window_height;
 		config.resizable = Config.resizable;
 		config.title = Config.title;
+		config.useHDPI = true;
 		new LwjglApplication(new Game(), config);
 	}
 }

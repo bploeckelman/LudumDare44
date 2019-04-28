@@ -168,6 +168,7 @@ public class GameEntity {
         startX = entityRect.x;
         endX = entityRect.x + entityRect.width;
 
+        boolean wasGrounded = grounded;
         grounded = false;
         boolean pounded = false;
         screen.level.getTiles(startX, startY, endX, endY, tiles);
@@ -183,9 +184,12 @@ public class GameEntity {
                         groundPoundDelay = .25f;
                         velocity.x = 0;
                         pounded = true;
+                    } else if (!wasGrounded) {
+                        screen.audio.playSound(Audio.Sounds.Landing, position, screen.player.position);
                     }
                     jumpState = JumpState.NONE;
                     grounded = true;
+
                 }
                 velocity.y = 0;
             }

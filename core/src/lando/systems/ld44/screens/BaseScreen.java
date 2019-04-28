@@ -63,8 +63,4 @@ public abstract class BaseScreen extends InputAdapter {
             worldCamera.update();
         }
     }
-
-    public void playSound(Audio.Sounds sound) {
-        this.game.audio.playSound(sound);
-    }
 }

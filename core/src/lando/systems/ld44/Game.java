@@ -82,6 +82,7 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		float dt = Math.min(Gdx.graphics.getDeltaTime(), 1f / 30f);
+		audio.update(dt);
 		tween.update(dt);
 		screen.update(dt);
 		if (nextScreen != null) {

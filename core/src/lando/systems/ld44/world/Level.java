@@ -19,6 +19,7 @@ import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.Audio;
 
 public class Level {
 
@@ -171,6 +172,7 @@ public class Level {
                     entity.groundPoundDelay = 0f;
                     multiplier = 1.75f;
                 }
+                screen.audio.playSound(Audio.Sounds.Spring, entity.position, screen.player.position);
                 entity.bounce(multiplier, spring.orientation);
             }
         }

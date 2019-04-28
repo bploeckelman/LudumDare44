@@ -139,9 +139,9 @@ public class Player extends GameEntity {
         float shake = 0.5f + (0.4f * weightRatio);
 
         float distance = width/2 * (3 + (2 * weightRatio));
+        screen.audio.playSound(Audio.Sounds.GroundPound);
         screen.groundPound(poundPosition.x + width/2, poundPosition.y, width/2, distance);
 
-        playSound(Audio.Sounds.GroundPound);
         screen.shaker.addDamage(shake);
     }
 

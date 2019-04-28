@@ -95,6 +95,12 @@ public class GameEntity {
         }
     }
 
+    public void pound() {
+        if (poundable) {
+            stun();
+        }
+    }
+
     public void stun() {
         if (stunTime > 0) { return; }
 

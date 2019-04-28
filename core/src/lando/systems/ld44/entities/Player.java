@@ -33,6 +33,11 @@ public class Player extends GameEntity {
                 direction = Direction.RIGHT;
             }
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            shoot();
+        }
+
+        // temp
         if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             addValue(0.2f);
         }
@@ -49,6 +54,18 @@ public class Player extends GameEntity {
         if (jumpPressed){
             jump();
         }
+
+        handleShoot(dt);
+    }
+
+    private void handleShoot(float dt) {
+        if (shootTime > 0) {
+            shootTime -= dt;
+            if (shootTime <= 0) {
+                shootTime = 0;
+                image = assets.player;
+            }
+        }
     }
 
     // 0 is empty - 1 is full - fatty
@@ -62,8 +79,12 @@ public class Player extends GameEntity {
         float invWeightRatio = 1 - getWeightRatio();
         horizontalSpeed = 30 + (170 * invWeightRatio);
         jumpVelocity = 600 + (400 * invWeightRatio);
+    }
 
-
+    float shootTime = 0;
+    public void shoot() {
+        shootTime = 0.5f;
+        setImage(assets.playerShoot);
     }
 
     @Override

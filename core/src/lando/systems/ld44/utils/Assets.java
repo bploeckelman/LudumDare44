@@ -37,6 +37,8 @@ public class Assets implements Disposable {
     public TextureRegion whiteCircle;
 
     public TextureRegion player;
+    public TextureRegion playerShoot;
+    public TextureRegion playerOpen;
     public Animation<TextureRegion> pennyAnimation;
     public Animation<TextureRegion> nickelAnimation;
     public Animation<TextureRegion> dimeAnimation;
@@ -87,6 +89,8 @@ public class Assets implements Disposable {
         whiteCircle = atlas.findRegion("white-circle");
 
         player = atlas.findRegion("purse_image");
+        playerShoot = atlas.findRegion("purse_shoot");
+        playerOpen = atlas.findRegion("player_open");
 
         Array pennies = atlas.findRegions("penny_walk");
         pennyAnimation = new Animation<TextureRegion>(0.1f, pennies, Animation.PlayMode.LOOP);

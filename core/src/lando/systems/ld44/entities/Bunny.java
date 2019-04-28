@@ -11,6 +11,8 @@ public class Bunny extends Enemy {
     public Bunny(GameScreen screen) {
         super(screen, screen.assets.dustBunnyAnimation, 30f);
         randomizeThreshold = MathUtils.random(2.5f, 3.5f);
+        bounceVelocity = 500f;
+        jumpVelocity = 500f;
     }
 
     @Override

@@ -13,6 +13,7 @@ public class AnimationGameEntity extends GameEntity {
     public AnimationGameEntity(GameScreen screen, Animation<TextureRegion> animation) {
         super(screen);
         setAnimation(animation);
+        poundable = true;
     }
 
     protected void setAnimation(Animation<TextureRegion> animation) {

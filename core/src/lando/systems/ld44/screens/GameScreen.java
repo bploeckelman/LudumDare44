@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.entities.GameEntity;
+import lando.systems.ld44.entities.GroundPound;
 import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
@@ -41,8 +42,12 @@ public class GameScreen extends BaseScreen {
             Gdx.app.exit();
         }
         player.update(dt);
-        for (GameEntity ge : gameEntities) {
+        for (int i = gameEntities.size; i > 0; i--) {
+            GameEntity ge = gameEntities.get(i - 1);
             ge.update(dt);
+            if (ge.remove) {
+                gameEntities.removeIndex(i - 1);
+            }
         }
         shaker.update(dt);
         level.update(dt);
@@ -60,10 +65,6 @@ public class GameScreen extends BaseScreen {
         {
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
-            }
-
-            if (pound != null) {
-                assets.ninePatch.draw(batch, pound.x, pound.y, pound.width, pound.height);
             }
 
             player.render(batch);
@@ -96,17 +97,7 @@ public class GameScreen extends BaseScreen {
         updateCamera();
     }
 
-    private Rectangle pound;
     public void groundPound(float x, float y, float distance) {
-        pound = new Rectangle(x - distance, y, distance * 2, 2);
-        System.out.println((x - distance) + " - " + (x + distance));
-        for (GameEntity ge : gameEntities) {
-            // same level
-            if (ge.position.y == y && ge.position.x >= x - distance && ge.position.x <= x + distance) {
-                ge.stun();
-            }
-
-        }
+        gameEntities.add(new GroundPound(this, x, y, distance));
     }
-
 }

@@ -29,6 +29,10 @@ public class GameEntity {
     public float gravity = 2000;
     public float groundPoundDelay = 0;
 
+    public boolean poundable;
+    public boolean stunned;
+    public boolean remove;
+
     public TextureRegion image;
     public Array<Rectangle> tiles;
 
@@ -57,6 +61,8 @@ public class GameEntity {
     }
 
     public void stun() {
+        stunned = true;
+        velocity.x = 0;
         position.y += 20;
     }
 

@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.entities.GameEntity;
@@ -20,12 +22,14 @@ public class GameScreen extends BaseScreen {
     public Array<GameEntity> gameEntities = new Array<GameEntity>();
     public ScreenShakeCameraController shaker;
 
+    private float cameraMargins = 100;
+
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
         shaker = new ScreenShakeCameraController(worldCamera);
         level = new Level("maps/demo.tmx", assets, this);
         player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
-        shaker = new ScreenShakeCameraController(worldCamera);
+
     }
 
     @Override
@@ -41,13 +45,27 @@ public class GameScreen extends BaseScreen {
         shaker.update(dt);
         level.update(dt);
 
-        // TEMP
-        float speed = 350f;
-        if      (Gdx.input.isKeyPressed(Input.Keys.LEFT))  worldCamera.translate(-speed * dt, 0f);
-        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) worldCamera.translate( speed * dt, 0f);
-        if      (Gdx.input.isKeyPressed(Input.Keys.DOWN))  worldCamera.translate(0f, -speed * dt);
-        else if (Gdx.input.isKeyPressed(Input.Keys.UP))    worldCamera.translate(0f,  speed * dt);
-        worldCamera.update();
+//        // TEMP
+//        float speed = 350f;
+//        if      (Gdx.input.isKeyPressed(Input.Keys.LEFT))  worldCamera.translate(-speed * dt, 0f);
+//        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) worldCamera.translate( speed * dt, 0f);
+//        if      (Gdx.input.isKeyPressed(Input.Keys.DOWN))  worldCamera.translate(0f, -speed * dt);
+//        else if (Gdx.input.isKeyPressed(Input.Keys.UP))    worldCamera.translate(0f,  speed * dt);
+        float playerX = player.position.x + player.width/2f;
+        if (playerX < cameraTargetPos.x - cameraMargins) cameraTargetPos.x = playerX + cameraMargins;
+        if (playerX > cameraTargetPos.x + cameraMargins) cameraTargetPos.x = playerX - cameraMargins;
+
+        float playerY = player.position.y + player.height/2f;
+        if (playerY < cameraTargetPos.y - cameraMargins) cameraTargetPos.y = playerY + cameraMargins;
+        if (playerY > cameraTargetPos.y + cameraMargins) cameraTargetPos.y = playerY - cameraMargins;
+
+        float cameraLeftEdge = worldCamera.viewportWidth/2f;
+        cameraTargetPos.x = MathUtils.clamp(cameraTargetPos.x, cameraLeftEdge, level.collisionLayer.getWidth() * level.collisionLayer.getTileWidth() - cameraLeftEdge);
+
+        float cameraVertEdge = worldCamera.viewportHeight/2f;
+        cameraTargetPos.y = MathUtils.clamp(cameraTargetPos.y, cameraVertEdge, level.collisionLayer.getHeight()* level.collisionLayer.getTileHeight() - cameraVertEdge);
+
+        updateCamera();
     }
 
     @Override

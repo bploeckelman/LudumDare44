@@ -48,6 +48,7 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> nickelAnimation;
     public Animation<TextureRegion> dimeAnimation;
     public Animation<TextureRegion> quarterAnimation;
+    public Animation<TextureRegion> chickenAnimation;
     public Animation<TextureRegion> pennyPickupAnimation;
     public Animation<TextureRegion> nickelPickupAnimation;
     public Animation<TextureRegion> dimePickupAnimation;
@@ -133,6 +134,7 @@ public class Assets implements Disposable {
         nickelAnimation = new Animation<TextureRegion>(0.1f, nickels, Animation.PlayMode.LOOP);
         dimeAnimation = new Animation<TextureRegion>(0.1f, dimes, Animation.PlayMode.LOOP);
         quarterAnimation = new Animation<TextureRegion>(0.1f, quarters, Animation.PlayMode.LOOP);
+
         Array pennyPickup = atlas.findRegions("pickup-penny");
         Array nickelPickup = atlas.findRegions("pickup-nickel");
         Array dimePickup = atlas.findRegions("pickup-dime");
@@ -141,6 +143,9 @@ public class Assets implements Disposable {
         nickelPickupAnimation = new Animation<TextureRegion>(0.075f, nickelPickup, Animation.PlayMode.LOOP_PINGPONG);
         dimePickupAnimation = new Animation<TextureRegion>(0.075f, dimePickup, Animation.PlayMode.LOOP_PINGPONG);
         quarterPickupAnimation = new Animation<TextureRegion>(0.075f, quarterPickup, Animation.PlayMode.LOOP_PINGPONG);
+
+        Array chickenFrames = atlas.findRegions("chicken");
+        chickenAnimation = new Animation<TextureRegion>(0.2f, chickenFrames, Animation.PlayMode.LOOP);
 
         Array springUp    = atlas.findRegions("spring-up");
         Array springDown  = atlas.findRegions("spring-down");

@@ -10,6 +10,10 @@ public class Enemy extends AnimationGameEntity {
     private Animation<TextureRegion> coin;
     public float value;
 
+    public Enemy(GameScreen screen, Animation<TextureRegion> live, float movement) {
+        this(screen, live, null, movement, 0f);
+    }
+
     public Enemy(GameScreen screen, Animation<TextureRegion> live, Animation<TextureRegion> coin, float movement, float value) {
         super(screen, live);
 
@@ -27,10 +31,12 @@ public class Enemy extends AnimationGameEntity {
 
     public void kill() {
         remove = true;
-        Coin spawnCoin = new Coin(screen, coin, value);
-        float x = position.x + width/2 - spawnCoin.width/2;
-        spawnCoin.position.set(x, position.y);
-        screen.spawn(spawnCoin);
+        if (coin != null) {
+            Coin spawnCoin = new Coin(screen, coin, value);
+            float x = position.x + width / 2 - spawnCoin.width / 2;
+            spawnCoin.position.set(x, position.y);
+            screen.spawn(spawnCoin);
+        }
     }
 
     @Override

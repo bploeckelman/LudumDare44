@@ -78,11 +78,10 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             background.draw(shaker.getViewCamera(), batch);
+            player.render(batch);
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
             }
-
-            player.render(batch);
             particleManager.render(batch);
         }
         batch.end();

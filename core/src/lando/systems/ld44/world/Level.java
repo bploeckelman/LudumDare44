@@ -86,20 +86,10 @@ public class Level {
                 String name = object.getName().toLowerCase();
 
                 GameEntity enemy = null;
-                if (name.equals("penny")) {
-                    enemy = new Penny(screen);
-                } else if (name.equals("nickel")) {
-                    if (Math.random() > 0.8) {
-                        enemy = new Penny(screen);
-                    } else if (Math.random() > 0.8) {
-                        enemy = new Dime(screen);
-                    } else {
-                        enemy = new Nickel(screen);
-                    }
-                } else {
-                    Gdx.app.log("Map", "Unknown enemy type for spawnEnemy entity: '" + name + "'");
-                    break;
-                }
+                if      ("penny" .equals(name)) enemy = new Penny(screen);
+                else if ("nickel".equals(name)) enemy = new Nickel(screen);
+                else if ("dime"  .equals(name)) enemy = new Dime(screen);
+                else Gdx.app.log("Map", "Unknown enemy type for spawnEnemy entity: '" + name + "'");
 
                 if (enemy != null) {
                     enemy.position.set(x, y);

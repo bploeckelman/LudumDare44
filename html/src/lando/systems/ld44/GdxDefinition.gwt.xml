@@ -9,6 +9,7 @@
     -->
 	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion" />
 	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.math.Rectangle" />
+	<extend-configuration-property name="gdx.reflect.include" value="lando.systems.ld44.particles.GenericParticle" />
 
 	<inherits name='LudumDare44' />
 	<entry-point class='lando.systems.ld44.client.HtmlLauncher' />

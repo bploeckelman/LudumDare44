@@ -131,25 +131,29 @@ public class Level {
         mapRenderer.render();
     }
 
-    public void getTiles(int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
+    public void getTiles(float startX, float startY, float endX, float endY, Array<Rectangle> tiles) {
         if (startX > endX){
-            int t = startX;
+            float t = startX;
             startX = endX;
             endX = t;
         }
         if (startY > endY){
-            int t = startY;
+            float t = startY;
             startY = endY;
             endY = t;
         }
         rectPool.freeAll(tiles);
         tiles.clear();
-        for (int y = startY; y <= endY; y++) {
-            for (int x = startX; x <= endX; x++) {
+        int iStartY = (int)(startY / collisionLayer.getTileHeight());
+        int iEndY = (int)(endY / collisionLayer.getTileHeight());
+        int iStartX = (int)(startX / collisionLayer.getTileWidth());
+        int iEndX = (int)(endX / collisionLayer.getTileWidth());
+        for (int y = iStartY; y <= iEndY; y++) {
+            for (int x = iStartX; x <= iEndX; x++) {
                 TiledMapTileLayer.Cell cell = collisionLayer.getCell(x, y);
                 if (cell != null) {
                     Rectangle rect = rectPool.obtain();
-                    rect.set(x, y, 1, 1);
+                    rect.set(x * collisionLayer.getTileWidth(), y * collisionLayer.getTileHeight(), collisionLayer.getTileWidth(), collisionLayer.getTileHeight());
                     tiles.add(rect);
                 }
             }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import javafx.scene.layout.Background;
 import lando.systems.ld44.Game;
+import lando.systems.ld44.entities.Coin;
 import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.GroundPound;
 import lando.systems.ld44.entities.Player;
@@ -93,14 +94,6 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             level.renderObjects(batch, shaker.getViewCamera());
-
-            // TODO: remove these, they're for testing purposes only
-            TextureRegion pennyAnimKeyframe = assets.pennyPickupAnimation.getKeyFrame(tempStateTime);
-            TextureRegion nickelAnimKeyframe = assets.nickelPickupAnimation.getKeyFrame(tempStateTime);
-            TextureRegion dimeAnimKeyframe = assets.dimePickupAnimation.getKeyFrame(tempStateTime);
-            batch.draw(pennyAnimKeyframe,  Level.TILE_SIZE * 10, Level.TILE_SIZE * 3);
-            batch.draw(nickelAnimKeyframe, Level.TILE_SIZE * 13, Level.TILE_SIZE * 3);
-            batch.draw(dimeAnimKeyframe,   Level.TILE_SIZE * 16, Level.TILE_SIZE * 3);
         }
         batch.end();
     }
@@ -132,5 +125,11 @@ public class GameScreen extends BaseScreen {
 
     public void groundPound(float x, float y, float offset, float distance) {
         gameEntities.add(new GroundPound(this, x, y, offset, distance));
+    }
+
+    public void spawn(Coin coin) {
+        coin.velocity.y = 2000;
+        coin.velocity.x = -20 + ((float)Math.random() * 40);
+        gameEntities.add(coin);
     }
 }

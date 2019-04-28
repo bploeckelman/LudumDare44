@@ -42,17 +42,7 @@ public class Player extends GameEntity {
             shoot();
         }
 
-        // temp
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-            addValue(0.2f);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
-            addValue(-0.2f);
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            open();
-        }
+        handleRandos();
 
         velocity.x *= .85f;
         if (jumpState != JumpState.BOUNCE) {
@@ -67,6 +57,30 @@ public class Player extends GameEntity {
         }
 
         stateManager.update(dt);
+    }
+
+    public void handleRandos() {
+        // delete me
+        // temp
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            addValue(0.2f);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+            addValue(-0.2f);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            open();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            for (GameEntity ge : screen.gameEntities) {
+                if (ge instanceof Enemy) {
+                    ((Enemy)ge).kill();
+                    break;
+                }
+            }
+        }
     }
 
     public void open() {
@@ -103,5 +117,10 @@ public class Player extends GameEntity {
         screen.groundPound(poundPosition.x + width/2, poundPosition.y, width/2, distance);
 
         screen.shaker.addDamage(shake);
+    }
+
+    @Override
+    public void changeDirection() {
+        // noop so it doesn't flip rapidly when pushing against a wall.
     }
 }

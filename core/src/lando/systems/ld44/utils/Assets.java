@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import lando.systems.ld44.entities.AnimationGameEntity;
 
 public class Assets implements Disposable {
 
@@ -50,6 +51,7 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> pennyPickupAnimation;
     public Animation<TextureRegion> nickelPickupAnimation;
     public Animation<TextureRegion> dimePickupAnimation;
+    public Animation<TextureRegion> quarterPickupAnimation;
     public Animation<TextureRegion> springAnimationUp;
     public Animation<TextureRegion> springAnimationDown;
     public Animation<TextureRegion> springAnimationLeft;
@@ -130,9 +132,11 @@ public class Assets implements Disposable {
         Array pennyPickup = atlas.findRegions("pickup-penny");
         Array nickelPickup = atlas.findRegions("pickup-nickel");
         Array dimePickup = atlas.findRegions("pickup-dime");
+        Array quarterPickup = atlas.findRegions("pickup-quarter");
         pennyPickupAnimation = new Animation<TextureRegion>(0.075f, pennyPickup, Animation.PlayMode.LOOP_PINGPONG);
         nickelPickupAnimation = new Animation<TextureRegion>(0.075f, nickelPickup, Animation.PlayMode.LOOP_PINGPONG);
         dimePickupAnimation = new Animation<TextureRegion>(0.075f, dimePickup, Animation.PlayMode.LOOP_PINGPONG);
+        quarterPickupAnimation = new Animation<TextureRegion>(0.075f, quarterPickup, Animation.PlayMode.LOOP_PINGPONG);
 
         Array springUp    = atlas.findRegions("spring-up");
         Array springDown  = atlas.findRegions("spring-down");

@@ -13,7 +13,7 @@ public class Coin extends AnimationGameEntity {
     public Coin(GameScreen screen, Animation<TextureRegion> coinAnimation, float value) {
         super(screen, coinAnimation);
 
-        poundable = true;
+        poundable = consumable = true;
         this.value = value;
     }
 

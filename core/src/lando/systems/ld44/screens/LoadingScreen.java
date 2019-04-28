@@ -41,10 +41,10 @@ public class LoadingScreen extends BaseScreen {
 
         if (Gdx.input.justTouched()) {
             touchPos.set(mousePos);
-        }
 
-        if (startGameButton.contains(touchPos.x, touchPos.y)) {
-            game.setScreen(new TitleScreen(game, assets));
+            if (startGameButton.contains(touchPos.x, touchPos.y)) {
+                game.setScreen(new TitleScreen(game, assets));
+            }
         }
     }
 

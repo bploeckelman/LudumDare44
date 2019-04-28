@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import javafx.scene.layout.Background;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.GroundPound;

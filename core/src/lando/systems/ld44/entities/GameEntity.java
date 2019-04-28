@@ -53,7 +53,7 @@ public class GameEntity {
             velocity.y = jumpVelocity;
             jumpState = JumpState.JUMP;
         } else if (jumpState == JumpState.JUMP){
-            velocity.y = -3000;
+            velocity.y = -1000;
             velocity.x = 0;
             jumpState = JumpState.POUND;
         }
@@ -131,7 +131,16 @@ public class GameEntity {
     public void render(SpriteBatch batch) {
         if (image != null) {
             float scaleX = (direction == Direction.RIGHT) ? 1 : -1;
-            batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, 1, 0);
+            float scaleY = 1;
+            if (jumpState == JumpState.POUND) {
+                scaleX *= .7f;
+                scaleY = 1.2f;
+            }
+            if (groundPoundDelay > 0){
+                scaleX *= 1 + groundPoundDelay/2f;
+                scaleY = 1 - groundPoundDelay/3f;
+            }
+            batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
         }
     }
 }

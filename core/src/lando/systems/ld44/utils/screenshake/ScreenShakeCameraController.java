@@ -10,12 +10,12 @@ import com.badlogic.gdx.math.Matrix4;
 
 public class ScreenShakeCameraController {
 
-    public float maxXOffset = 40;
-    public float maxYOffset = 40;
-    public float maxAngleDegrees = 5;
+    public float maxXOffset = 20;
+    public float maxYOffset = 80;
+    public float maxAngleDegrees = 2;
 
-    public float xOffsetSpeed = 3f;
-    public float yOffsetSpeed = 3f;
+    public float xOffsetSpeed = 1f;
+    public float yOffsetSpeed = 4f;
     public float rotationSpeed = 2f;
 
 
@@ -71,7 +71,7 @@ public class ScreenShakeCameraController {
         float offsetY = maxYOffset * shake * worldCamera.zoom * (float)noise.getNoise(20, accumTime * yOffsetSpeed);
         float angle = maxAngleDegrees * shake * (float)noise.getNoise(30, accumTime * rotationSpeed);
 
-        viewCamera.position.add(offsetX, offsetY, 0);
+        viewCamera.position.add(offsetX, Math.abs(offsetY), 0);
         viewCamera.rotate(angle);
 //        viewCamera.rotateAround(new Vector3(viewCamera.position), viewCamera.direction, angle);
         viewCamera.update();

@@ -42,6 +42,9 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> pennyAnimation;
     public Animation<TextureRegion> nickelAnimation;
     public Animation<TextureRegion> dimeAnimation;
+    public Animation<TextureRegion> pennyPickupAnimation;
+    public Animation<TextureRegion> nickelPickupAnimation;
+    public Animation<TextureRegion> dimePickupAnimation;
     public Animation<TextureRegion> springAnimationUp;
     public Animation<TextureRegion> springAnimationDown;
     public Animation<TextureRegion> springAnimationLeft;
@@ -96,13 +99,18 @@ public class Assets implements Disposable {
         playerOpen = atlas.findRegion("player_open");
 
         Array pennies = atlas.findRegions("penny_walk");
-        pennyAnimation = new Animation<TextureRegion>(0.1f, pennies, Animation.PlayMode.LOOP);
-
         Array nickels = atlas.findRegions("nickel_walk");
-        nickelAnimation = new Animation<TextureRegion>(0.1f, nickels, Animation.PlayMode.LOOP);
-
         Array dimes = atlas.findRegions("dime_walk");
+        pennyAnimation = new Animation<TextureRegion>(0.1f, pennies, Animation.PlayMode.LOOP);
+        nickelAnimation = new Animation<TextureRegion>(0.1f, nickels, Animation.PlayMode.LOOP);
         dimeAnimation = new Animation<TextureRegion>(0.1f, dimes, Animation.PlayMode.LOOP);
+
+        Array pennyPickup = atlas.findRegions("pickup-penny");
+        Array nickelPickup = atlas.findRegions("pickup-nickel");
+        Array dimePickup = atlas.findRegions("pickup-dime");
+        pennyPickupAnimation = new Animation<TextureRegion>(0.075f, pennyPickup, Animation.PlayMode.LOOP_PINGPONG);
+        nickelPickupAnimation = new Animation<TextureRegion>(0.075f, nickelPickup, Animation.PlayMode.LOOP_PINGPONG);
+        dimePickupAnimation = new Animation<TextureRegion>(0.075f, dimePickup, Animation.PlayMode.LOOP_PINGPONG);
 
         Array springUp    = atlas.findRegions("spring-up");
         Array springDown  = atlas.findRegions("spring-down");

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -30,6 +31,8 @@ public class GameScreen extends BaseScreen {
 
     private float cameraHorMargins = 100;
     private float cameraVertMargins = 20;
+
+    private float tempStateTime = 0f;
 
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
@@ -59,6 +62,7 @@ public class GameScreen extends BaseScreen {
 
         handleCameraConstraints();
 
+        tempStateTime += dt;
     }
 
     @Override
@@ -82,6 +86,14 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             level.renderObjects(batch, shaker.getViewCamera());
+
+            // TODO: remove these, they're for testing purposes only
+            TextureRegion pennyAnimKeyframe = assets.pennyPickupAnimation.getKeyFrame(tempStateTime);
+            TextureRegion nickelAnimKeyframe = assets.nickelPickupAnimation.getKeyFrame(tempStateTime);
+            TextureRegion dimeAnimKeyframe = assets.dimePickupAnimation.getKeyFrame(tempStateTime);
+            batch.draw(pennyAnimKeyframe,  Level.TILE_SIZE * 10, Level.TILE_SIZE * 3);
+            batch.draw(nickelAnimKeyframe, Level.TILE_SIZE * 13, Level.TILE_SIZE * 3);
+            batch.draw(dimeAnimKeyframe,   Level.TILE_SIZE * 16, Level.TILE_SIZE * 3);
         }
         batch.end();
     }

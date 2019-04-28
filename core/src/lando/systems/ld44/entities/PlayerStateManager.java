@@ -64,7 +64,7 @@ public class PlayerStateManager {
         float time = stateTime;
         float duration = animation.getAnimationDuration();
 
-        boolean completed = false;
+        boolean completed;
         if (reverse) {
             time = Math.max(0, animation.getAnimationDuration() - stateTime);
             completed = time == 0;

@@ -79,11 +79,19 @@ public class GameEntity {
 
     public void bounce(float velocityMultiplier, Spring.Orientation springOrientation) {
         jumpState = JumpState.BOUNCE;
+
+        // Enemies can bounce too fast in some cases (like if they're in an enclosed bounce box), so we have to modify that so they don't pop past collision boundaries
+        float entityTypeVelocityMultiplier = 1f;
+        if (this instanceof Penny || this instanceof Nickel || this instanceof Dime) {
+            entityTypeVelocityMultiplier = 0.3f;
+        }
+
         switch (springOrientation) {
-            case UP:    velocity.y = -jumpVelocity   * velocityMultiplier; break;
-            case DOWN:  velocity.y =  jumpVelocity   * velocityMultiplier; break;
-            case LEFT:  velocity.x =  bounceVelocity * velocityMultiplier; break;
-            case RIGHT: velocity.x = -bounceVelocity * velocityMultiplier; break;
+            // NOTE: since the bounce velocity is higher than jump velocity, we only modify the bounce ones
+            case UP:    velocity.y = -jumpVelocity   * /*entityTypeVelocityMultiplier * */velocityMultiplier; break;
+            case DOWN:  velocity.y =  jumpVelocity   * /*entityTypeVelocityMultiplier * */velocityMultiplier; break;
+            case LEFT:  velocity.x =  bounceVelocity * entityTypeVelocityMultiplier * velocityMultiplier; break;
+            case RIGHT: velocity.x = -bounceVelocity * entityTypeVelocityMultiplier * velocityMultiplier; break;
         }
     }
 
@@ -94,6 +102,16 @@ public class GameEntity {
         preStunnedVelocity = velocity.x;
         velocity.x = 0;
         position.y += 20;
+    }
+
+    public void getHurt() {
+        // TODO: override in Player to bounce back and lose some coins
+        float centerX = position.x + width / 2f;
+        float centerY = position.y;
+        screen.particleManager.addGroundPoundDust(centerX, centerY, centerX - 100f, centerX + 100f);
+        float weightRatio = 1f;
+        float shake = 0.5f + (0.4f * weightRatio);
+        screen.shaker.addDamage(shake);
     }
 
     public void update(float dt) {

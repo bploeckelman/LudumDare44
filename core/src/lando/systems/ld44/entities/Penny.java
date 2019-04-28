@@ -4,6 +4,6 @@ import lando.systems.ld44.screens.GameScreen;
 
 public class Penny extends Enemy {
     public Penny(GameScreen screen) {
-        super(screen, screen.assets.pennyAnimation, 40);
+        super(screen, screen.assets.pennyAnimation, screen.assets.pennyPickupAnimation, 40, 0.01f);
     }
 }

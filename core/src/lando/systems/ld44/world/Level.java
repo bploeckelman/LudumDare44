@@ -15,10 +15,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import lando.systems.ld44.entities.Dime;
 import lando.systems.ld44.entities.GameEntity;
-import lando.systems.ld44.entities.Nickel;
-import lando.systems.ld44.entities.Penny;
+import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 
@@ -37,6 +35,7 @@ public class Level {
     public SpawnPlayer spawnPlayer;
     public Array<EnemySpawner> enemySpawners;
     public Exit exit;
+    public Array<Tack> tacks;
     public Array<Spring> springs;
     public Array<Rectangle> tileRects;
     public Pool<Rectangle> rectPool;
@@ -71,6 +70,7 @@ public class Level {
         }
 
         // Load map objects
+        tacks = new Array<Tack>();
         springs = new Array<Spring>();
         enemySpawners = new Array<EnemySpawner>();
         MapObjects objects = objectsLayer.getObjects();
@@ -115,6 +115,18 @@ public class Level {
                 float y = props.get("y", Float.class);
                 exit = new Exit(x, y, assets);
             }
+            else if ("tack".equalsIgnoreCase(type)) {
+                float x = props.get("x", Float.class);
+                float y = props.get("y", Float.class);
+                String facingProp = props.get("facing", "up", String.class).toLowerCase();
+                Tack.Facing facing = Tack.Facing.UP;
+                if      ("up"   .equals(facingProp)) facing = Tack.Facing.UP;
+                else if ("down" .equals(facingProp)) facing = Tack.Facing.DOWN;
+                else if ("left" .equals(facingProp)) facing = Tack.Facing.LEFT;
+                else if ("right".equals(facingProp)) facing = Tack.Facing.RIGHT;
+                Tack tack = new Tack(x, y, facing, assets);
+                tacks.add(tack);
+            }
             else if ("spring".equalsIgnoreCase(type)) {
                 float x = props.get("x", Float.class);
                 float y = props.get("y", Float.class);
@@ -140,16 +152,18 @@ public class Level {
         for (Spring spring : springs) {
             spring.update(dt);
         }
+        for (Tack tack : tacks) {
+            tack.update(dt);
+        }
     }
 
-    // TODO: game entity should have its own rect or some other collision region for using Intersector here
-    Rectangle bounds = new Rectangle();
+    private Rectangle entityBounds = new Rectangle();
     public void handleObjectInteractions(GameEntity entity) {
         for (Spring spring : springs) {
             if (spring.springing) continue;
 
-            bounds.set(entity.position.x, entity.position.y, entity.width, entity.height);
-            if (spring.bounds.overlaps(bounds)) {
+            entityBounds.set(entity.position.x, entity.position.y, entity.width, entity.height);
+            if (spring.bounds.overlaps(entityBounds)) {
                 spring.trigger();
                 float multiplier = 1.5f;
                 if (entity.groundPoundDelay > 0f) {
@@ -157,6 +171,17 @@ public class Level {
                     multiplier = 1.75f;
                 }
                 entity.bounce(multiplier, spring.orientation);
+            }
+        }
+        for (Tack tack : tacks) {
+            entityBounds.set(entity.position.x, entity.position.y, entity.width, entity.height);
+            if (tack.bounds.overlaps(entityBounds)) {
+                // TODO: if this is the player, lose some coins and bounce back or whatever, if enemy, then die or whatever
+                if (entity instanceof Player) {
+                    entity.getHurt();
+                } else {
+                    entity.stun();
+                }
             }
         }
     }
@@ -171,6 +196,9 @@ public class Level {
         // TODO: only render if within current view...
         for (Spring spring : springs) {
             spring.render(batch);
+        }
+        for (Tack tack : tacks) {
+            tack.render(batch);
         }
     }
 

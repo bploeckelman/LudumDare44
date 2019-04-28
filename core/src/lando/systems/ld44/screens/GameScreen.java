@@ -103,7 +103,7 @@ public class GameScreen extends BaseScreen {
         updateCamera();
     }
 
-    public void groundPound(float x, float y, float distance) {
-        gameEntities.add(new GroundPound(this, x, y, distance));
+    public void groundPound(float x, float y, float offset, float distance) {
+        gameEntities.add(new GroundPound(this, x, y, offset, distance));
     }
 }

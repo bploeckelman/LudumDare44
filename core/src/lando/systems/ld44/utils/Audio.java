@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 public class Audio implements Disposable {
 
-    public static final float MUSIC_VOLUME = .5f;
+    public static final float MUSIC_VOLUME = .6f;
     public static final float SOUNDSCALE3D = 800;
     public static final float SOUNDPANSCLAE = 900;
     public static final boolean shutUpYourFace = false;

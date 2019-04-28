@@ -48,6 +48,8 @@ public class GroundPound extends GameEntity {
         if (min == 0) {
             min = x;
         }
+        screen.particleManager.addGroundPoundDust(x, y, min, max);
+
     }
 
     @Override

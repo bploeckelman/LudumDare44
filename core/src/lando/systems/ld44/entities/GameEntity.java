@@ -155,8 +155,8 @@ public class GameEntity {
             float scaleY = 1;
             if (!grounded){
                 if (jumpState == JumpState.POUND) {
-                    scaleX *= .7f;
-                    scaleY = 1.2f;
+                    scaleX *= .6f;
+                    scaleY = 1.3f;
                 } else {
                     scaleX *= .85f;
                     scaleY = 1.15f;

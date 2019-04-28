@@ -13,6 +13,7 @@ import lando.systems.ld44.Game;
 import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.GroundPound;
 import lando.systems.ld44.entities.Player;
+import lando.systems.ld44.particles.ParticleManager;
 import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
 import lando.systems.ld44.world.Level;
@@ -23,6 +24,7 @@ public class GameScreen extends BaseScreen {
     public Player player;
     public Array<GameEntity> gameEntities = new Array<GameEntity>();
     public ScreenShakeCameraController shaker;
+    public ParticleManager particleManager;
 
     private float cameraHorMargins = 100;
     private float cameraVertMargins = 20;
@@ -32,7 +34,7 @@ public class GameScreen extends BaseScreen {
         shaker = new ScreenShakeCameraController(worldCamera);
         level = new Level("maps/demo.tmx", assets, this);
         player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
-
+        this.particleManager = new ParticleManager(assets);
     }
 
     @Override
@@ -51,6 +53,7 @@ public class GameScreen extends BaseScreen {
         }
         shaker.update(dt);
         level.update(dt);
+        particleManager.update(dt);
 
         handleCameraConstraints();
 
@@ -68,6 +71,7 @@ public class GameScreen extends BaseScreen {
             }
 
             player.render(batch);
+            particleManager.render(batch);
         }
         batch.end();
 

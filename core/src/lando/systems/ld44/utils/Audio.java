@@ -26,6 +26,7 @@ public class Audio implements Disposable {
     public static final boolean shutUpYourTunes = false;
 
     public enum Sounds {
+        None, // don't put sound to this - default no op
         Shoot, Coin, Spring, GroundPound, Landing, ConsumeCoin
     }
 
@@ -133,7 +134,7 @@ public class Audio implements Disposable {
     }
 
     public long playSound(Sounds soundOption, float volume, float panning) {
-        if (shutUpYourFace) return -1;
+        if (shutUpYourFace || soundOption == Sounds.None) return -1;
         if (volume <= 0) return -1;
 
         SoundContainer soundCont = sounds.get(soundOption);

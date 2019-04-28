@@ -44,6 +44,9 @@ public class GameEntity {
     public Array<Rectangle> tiles;
     public Rectangle bounds = new Rectangle();
 
+    // sound customizations
+    public Audio.Sounds killSound = Audio.Sounds.None;
+
     public GameEntity(GameScreen screen){
         this.assets = screen.assets;
         this.screen = screen;
@@ -115,6 +118,11 @@ public class GameEntity {
         preStunnedVelocity = velocity.x;
         velocity.x = 0;
         position.y += 20;
+    }
+
+    public void kill() {
+        playSound(killSound);
+        remove = true;
     }
 
     public void getHurt() {

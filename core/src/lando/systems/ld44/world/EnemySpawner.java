@@ -1,10 +1,7 @@
 package lando.systems.ld44.world;
 
 import com.badlogic.gdx.math.Vector2;
-import lando.systems.ld44.entities.Dime;
-import lando.systems.ld44.entities.GameEntity;
-import lando.systems.ld44.entities.Nickel;
-import lando.systems.ld44.entities.Penny;
+import lando.systems.ld44.entities.*;
 import lando.systems.ld44.screens.GameScreen;
 
 public class EnemySpawner {
@@ -22,15 +19,14 @@ public class EnemySpawner {
     }
 
     public void spawnEnemy(GameScreen screen) {
-        GameEntity entity = null;
+        Enemy entity = null;
         switch (enemyType) {
             case penny:  entity = new Penny(screen); break;
             case nickel: entity = new Nickel(screen); break;
             case dime:   entity = new Dime(screen); break;
         }
         if (entity != null) {
-            entity.position.set(pos.x, pos.y);
-            entity.direction = direction;
+            entity.spawn(direction, pos.x, pos.y);
             screen.gameEntities.add(entity);
         }
     }

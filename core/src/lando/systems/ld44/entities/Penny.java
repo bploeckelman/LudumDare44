@@ -2,9 +2,8 @@ package lando.systems.ld44.entities;
 
 import lando.systems.ld44.screens.GameScreen;
 
-public class Penny extends AnimationGameEntity {
+public class Penny extends Enemy {
     public Penny(GameScreen screen) {
-        super(screen, screen.assets.pennyAnimation);
-        setVelocityX(10 + ((float)Math.random()*10));
+        super(screen, screen.assets.pennyAnimation, 30);
     }
 }

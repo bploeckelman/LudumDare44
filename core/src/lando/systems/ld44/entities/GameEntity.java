@@ -53,6 +53,14 @@ public class GameEntity {
         height = image.getRegionHeight();
     }
 
+    public void changeDirection() {
+        setDirection((direction == Direction.LEFT) ? Direction.RIGHT : Direction.LEFT);
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
     public void jump() {
         jump(1f);
     }
@@ -111,7 +119,7 @@ public class GameEntity {
             entityRect.set(tempPos.x, position.y, width, height);
             if (entityRect.overlaps(tile)){
                 tempPos.x = position.x;
-//                velocity.x *= -.5f;
+                changeDirection();
                 break;
             }
         }

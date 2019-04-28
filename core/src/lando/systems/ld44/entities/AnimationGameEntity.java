@@ -9,11 +9,11 @@ public class AnimationGameEntity extends GameEntity {
     public Animation<TextureRegion> animation;
     private float anim;
     protected float frameRateMod = 1;
+    protected float initialVelocity = 10;
 
     public AnimationGameEntity(GameScreen screen, Animation<TextureRegion> animation) {
         super(screen);
         setAnimation(animation);
-        poundable = true;
     }
 
     protected void setAnimation(Animation<TextureRegion> animation) {
@@ -26,38 +26,20 @@ public class AnimationGameEntity extends GameEntity {
         this.height = (height > 0) ? height : animation.getKeyFrame(0).getRegionHeight();
     }
 
-    public void setVelocityX(float x) {
-        if (x < 0) {
-            if (velocity.x >= 0) {
-                direction = Direction.LEFT;
-            }
-        } else if (x > 0) {
-            if (velocity.x <= 0) {
-                direction = Direction.RIGHT;
-            }
-        }
-
-        velocity.x = x;
-        frameRateMod = (Math.abs(x)/20);
+    public void setDirection(Direction direction, float speed) {
+        super.setDirection(direction);
+        velocity.x = (direction == Direction.LEFT) ? -speed : speed;
+        frameRateMod = (speed / 20);
     }
-
 
     @Override
     public void update(float dt) {
         super.update(dt);
-        updateDirection();
         anim += (dt * frameRateMod);
         if (velocity.x == 0) {
             anim = 0;
         }
 
         image = animation.getKeyFrame(anim, true);
-    }
-
-    private void updateDirection() {
-        if (velocity.x > 0 && position.x >= 300 || velocity.x < 0 && position.x <= 100) {
-            setVelocityX(-velocity.x);
-            jump();
-        }
     }
 }

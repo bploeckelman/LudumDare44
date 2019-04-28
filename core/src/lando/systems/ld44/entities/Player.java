@@ -21,9 +21,11 @@ public class Player extends GameEntity {
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)){
             velocity.add(-horizontalSpeed, 0);
+            direction = Direction.LEFT;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             velocity.add(horizontalSpeed, 0);
+            direction = Direction.RIGHT;
         }
         velocity.x *= .85f;
         velocity.x = MathUtils.clamp(velocity.x, -300, 300);

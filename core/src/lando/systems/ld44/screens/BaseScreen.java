@@ -10,11 +10,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.Audio;
 import lando.systems.ld44.utils.Config;
 
 public abstract class BaseScreen extends InputAdapter {
     public final Game game;
     public final Assets assets;
+    public final Audio audio;
 
     public OrthographicCamera worldCamera;
     public OrthographicCamera hudCamera;
@@ -31,6 +33,7 @@ public abstract class BaseScreen extends InputAdapter {
         super();
         this.game = game;
         this.assets = assets;
+        this.audio = game.audio;
 
         float aspect = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         this.worldCamera = new OrthographicCamera();
@@ -57,5 +60,9 @@ public abstract class BaseScreen extends InputAdapter {
             worldCamera.position.y = MathUtils.lerp(worldCamera.position.y, cameraTargetPos.y, PAN_LERP);
             worldCamera.update();
         }
+    }
+
+    public void playSound(Audio.Sounds sound) {
+        this.game.audio.playSound(sound);
     }
 }

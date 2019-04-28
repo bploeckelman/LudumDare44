@@ -5,6 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld44.screens.GameScreen;
+import lando.systems.ld44.utils.Audio;
+import lando.systems.ld44.utils.CallbackListener;
+import lando.systems.ld44.utils.CallbackTimer;
 
 public class Player extends GameEntity {
     public float horizontalSpeed = 100;
@@ -12,12 +15,20 @@ public class Player extends GameEntity {
     public float maxValue = 2f;
     public float value;
 
+    public CallbackTimer shootTimer = new CallbackTimer(new CallbackListener() {
+        @Override
+        public void callback() {
+            image = assets.player;
+        }
+    });
+
     public Player(GameScreen screen, float x, float y) {
         super(screen);
 
         this.position.set(x, y);
         setImage(assets.player);
         jumpState = JumpState.JUMP;
+
     }
 
     public void update(float dt) {
@@ -57,17 +68,7 @@ public class Player extends GameEntity {
             jump();
         }
 
-        handleShoot(dt);
-    }
-
-    private void handleShoot(float dt) {
-        if (shootTime > 0) {
-            shootTime -= dt;
-            if (shootTime <= 0) {
-                shootTime = 0;
-                image = assets.player;
-            }
-        }
+        shootTimer.update(dt);
     }
 
     // 0 is empty - 1 is full - fatty
@@ -83,10 +84,14 @@ public class Player extends GameEntity {
         jumpVelocity = 600 + (400 * invWeightRatio);
     }
 
-    float shootTime = 0;
     public void shoot() {
-        shootTime = 0.5f;
-        setImage(assets.playerShoot);
+        if (value > 0) {
+            addValue(-0.01f);
+
+            screen.playSound(Audio.Sounds.Shoot);
+            setImage(assets.playerShoot);
+            shootTimer.setTime(0.5f);
+        }
     }
 
     @Override

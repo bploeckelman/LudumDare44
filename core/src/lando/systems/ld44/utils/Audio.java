@@ -23,6 +23,7 @@ public class Audio implements Disposable {
     public static final boolean shutUpYourTunes = false;
 
     public enum Sounds {
+        Shoot
     }
 
     public enum Musics {
@@ -59,10 +60,10 @@ public class Audio implements Disposable {
         if (playMusic) {
 //            currentMusic = musics.get(Musics.SpaceAmbWithMaster);
 //            eCurrentMusic = Musics.SpaceAmbWithMaster;
-            currentMusic.setLooping(true);
-            currentMusic.setVolume(0f);
-            currentMusic.play();
-            setMusicVolume(MUSIC_VOLUME, 2f);
+//            currentMusic.setLooping(true);
+//            currentMusic.setVolume(0f);
+//            currentMusic.play();
+//            setMusicVolume(MUSIC_VOLUME, 2f);
             // currentMusic.setOnCompletionListener(nextSong);
         }
     }
@@ -115,6 +116,7 @@ public class Audio implements Disposable {
         if (shutUpYourFace) return -1;
 
         SoundContainer soundCont = sounds.get(soundOption);
+        if (soundCont == null) return -1;
         Sound s = soundCont.getSound();
         return (s != null) ? s.play(1f) : 0;
     }

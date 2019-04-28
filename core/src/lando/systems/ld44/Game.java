@@ -16,12 +16,14 @@ import lando.systems.ld44.screens.BaseScreen;
 import lando.systems.ld44.screens.LoadingScreen;
 import lando.systems.ld44.screens.TitleScreen;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.Audio;
 import lando.systems.ld44.utils.Config;
 
 public class Game extends ApplicationAdapter {
 
 	public Assets assets;
 	public TweenManager tween;
+	public Audio audio;
 
 	private BaseScreen screen;
 
@@ -40,6 +42,10 @@ public class Game extends ApplicationAdapter {
 
 		if (assets == null) {
 			assets = new Assets();
+		}
+
+		if (audio == null) {
+			audio = new Audio(this);
 		}
 
 		// Go to bullshit start screen for web

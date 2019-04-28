@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import lando.systems.ld44.utils.Assets;
 
-import javax.xml.soap.Text;
-
 enum PlayerStates { None, Normal, Open, Close, Shoot }
 
 public class PlayerStateManager {

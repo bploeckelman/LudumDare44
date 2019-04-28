@@ -46,6 +46,7 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> pennyAnimation;
     public Animation<TextureRegion> nickelAnimation;
     public Animation<TextureRegion> dimeAnimation;
+    public Animation<TextureRegion> quarterAnimation;
     public Animation<TextureRegion> pennyPickupAnimation;
     public Animation<TextureRegion> nickelPickupAnimation;
     public Animation<TextureRegion> dimePickupAnimation;
@@ -121,10 +122,11 @@ public class Assets implements Disposable {
         Array pennies = atlas.findRegions("penny_walk");
         Array nickels = atlas.findRegions("nickel_walk");
         Array dimes = atlas.findRegions("dime_walk");
+        Array quarters = atlas.findRegions("quarter_walk");
         pennyAnimation = new Animation<TextureRegion>(0.1f, pennies, Animation.PlayMode.LOOP);
         nickelAnimation = new Animation<TextureRegion>(0.1f, nickels, Animation.PlayMode.LOOP);
         dimeAnimation = new Animation<TextureRegion>(0.1f, dimes, Animation.PlayMode.LOOP);
-
+        quarterAnimation = new Animation<TextureRegion>(0.1f, quarters, Animation.PlayMode.LOOP);
         Array pennyPickup = atlas.findRegions("pickup-penny");
         Array nickelPickup = atlas.findRegions("pickup-nickel");
         Array dimePickup = atlas.findRegions("pickup-dime");

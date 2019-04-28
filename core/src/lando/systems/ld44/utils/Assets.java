@@ -42,7 +42,10 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> pennyAnimation;
     public Animation<TextureRegion> nickelAnimation;
     public Animation<TextureRegion> dimeAnimation;
-    public Animation<TextureRegion> springAnimation;
+    public Animation<TextureRegion> springAnimationUp;
+    public Animation<TextureRegion> springAnimationDown;
+    public Animation<TextureRegion> springAnimationLeft;
+    public Animation<TextureRegion> springAnimationRight;
 
     public NinePatch ninePatch;
 
@@ -101,8 +104,14 @@ public class Assets implements Disposable {
         Array dimes = atlas.findRegions("dime_walk");
         dimeAnimation = new Animation<TextureRegion>(0.1f, dimes, Animation.PlayMode.LOOP);
 
-        Array spring = atlas.findRegions("spring");
-        springAnimation = new Animation<TextureRegion>(0.075f, spring, Animation.PlayMode.NORMAL);
+        Array springUp    = atlas.findRegions("spring-up");
+        Array springDown  = atlas.findRegions("spring-down");
+        Array springLeft  = atlas.findRegions("spring-left");
+        Array springRight = atlas.findRegions("spring-right");
+        springAnimationUp    = new Animation<TextureRegion>(0.075f, springUp,    Animation.PlayMode.NORMAL);
+        springAnimationDown  = new Animation<TextureRegion>(0.075f, springDown,  Animation.PlayMode.NORMAL);
+        springAnimationLeft  = new Animation<TextureRegion>(0.075f, springLeft,  Animation.PlayMode.NORMAL);
+        springAnimationRight = new Animation<TextureRegion>(0.075f, springRight, Animation.PlayMode.NORMAL);
 
         titleTexture = mgr.get(titleTextureAsset);
         pixelTexture = mgr.get(pixelTextureAsset);

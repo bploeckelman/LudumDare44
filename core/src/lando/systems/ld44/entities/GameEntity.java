@@ -7,10 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.world.Spring;
 
 public class GameEntity {
     public enum Direction {RIGHT, LEFT}
-    public enum JumpState {NONE, JUMP, POUND}
+    public enum JumpState {NONE, JUMP, POUND, BOUNCE}
 
     public Assets assets;
     public GameScreen screen;
@@ -26,6 +27,7 @@ public class GameEntity {
     public JumpState jumpState = JumpState.NONE;
     public boolean grounded;
     public float jumpVelocity = 800;
+    public float bounceVelocity = 2000f;
     public float gravity = 2000;
     public float groundPoundDelay = 0;
 
@@ -63,6 +65,19 @@ public class GameEntity {
             velocity.y = -1000;
             velocity.x = 0;
             jumpState = JumpState.POUND;
+        }
+    }
+
+    public void bounce(float velocityMultiplier, Spring.Orientation springOrientation) {
+        if (springOrientation == Spring.Orientation.DOWN) {
+            jump(velocityMultiplier);
+        } else {
+            jumpState = JumpState.BOUNCE;
+            switch (springOrientation) {
+                case UP:    velocity.y = -bounceVelocity * velocityMultiplier; break;
+                case LEFT:  velocity.x =  bounceVelocity * velocityMultiplier; break;
+                case RIGHT: velocity.x = -bounceVelocity * velocityMultiplier; break;
+            }
         }
     }
 

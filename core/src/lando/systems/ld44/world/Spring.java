@@ -8,20 +8,29 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld44.utils.Assets;
 
 public class Spring {
+    public enum Orientation { UP, DOWN, LEFT, RIGHT }
 
     public Vector2 pos;
     public Rectangle bounds;
     public TextureRegion keyframe;
     public Animation<TextureRegion> animation;
+    public Orientation orientation;
     public float stateTime;
     public boolean springing;
 
-    public Spring(float x, float y, Assets assets) {
+    public Spring(float x, float y, Orientation orientation, Assets assets) {
         this.pos = new Vector2(x, y);
-        this.animation = assets.springAnimation;
+        this.orientation = orientation;
+        switch (orientation) {
+            default:
+            case UP:    this.animation = assets.springAnimationUp;    break;
+            case DOWN:  this.animation = assets.springAnimationDown;  break;
+            case LEFT:  this.animation = assets.springAnimationLeft;  break;
+            case RIGHT: this.animation = assets.springAnimationRight; break;
+        }
         this.keyframe = animation.getKeyFrames()[0];
-        this.bounds = new Rectangle(pos.x - keyframe.getRegionWidth() / 2f, pos.y,
-                                    keyframe.getRegionWidth(), keyframe.getRegionHeight());
+        this.bounds = new Rectangle(pos.x, pos.y, keyframe.getRegionWidth(), keyframe.getRegionHeight());
+        setBoundsBasedOnOrientation();
         this.stateTime = 0f;
         this.springing = false;
     }
@@ -35,7 +44,7 @@ public class Spring {
             }
 
             keyframe = animation.getKeyFrame(stateTime);
-            bounds.height = keyframe.getRegionHeight();
+            setBoundsBasedOnOrientation();
         }
     }
 
@@ -46,6 +55,25 @@ public class Spring {
 
     public void render(SpriteBatch batch) {
         batch.draw(keyframe, bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+
+    private void setBoundsBasedOnOrientation() {
+        switch (orientation) {
+            case UP:
+                bounds.height = keyframe.getRegionHeight();
+                bounds.y = pos.y + Level.TILE_SIZE - bounds.height;
+                break;
+            case DOWN:
+                bounds.height = keyframe.getRegionHeight();
+                break;
+            case LEFT:
+                bounds.width = keyframe.getRegionWidth();
+                break;
+            case RIGHT:
+                bounds.width = keyframe.getRegionWidth();
+                bounds.x = pos.x + Level.TILE_SIZE - bounds.width;
+                break;
+        }
     }
 
 }

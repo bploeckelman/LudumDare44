@@ -46,7 +46,9 @@ public class Player extends GameEntity {
         }
 
         velocity.x *= .85f;
-        velocity.x = MathUtils.clamp(velocity.x, -300, 300);
+        if (jumpState != JumpState.BOUNCE) {
+            velocity.x = MathUtils.clamp(velocity.x, -300, 300);
+        }
 
         if (Math.abs(velocity.x) < 20) velocity.x = 0;
 

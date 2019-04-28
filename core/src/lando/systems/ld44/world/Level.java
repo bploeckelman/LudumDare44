@@ -15,11 +15,16 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import lando.systems.ld44.entities.*;
+import lando.systems.ld44.entities.Dime;
+import lando.systems.ld44.entities.GameEntity;
+import lando.systems.ld44.entities.Nickel;
+import lando.systems.ld44.entities.Penny;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 
 public class Level {
+
+    public static final float TILE_SIZE = 32f;
 
     private Assets assets;
     private GameScreen screen;
@@ -105,7 +110,13 @@ public class Level {
             else if ("spring".equalsIgnoreCase(type)) {
                 float x = props.get("x", Float.class);
                 float y = props.get("y", Float.class);
-                Spring spring = new Spring(x, y, assets);
+                String orientationProp = props.get("orientation", String.class).toLowerCase();
+                Spring.Orientation orientation = Spring.Orientation.UP;
+                if      ("up"   .equals(orientationProp)) orientation = Spring.Orientation.UP;
+                else if ("down" .equals(orientationProp)) orientation = Spring.Orientation.DOWN;
+                else if ("left" .equals(orientationProp)) orientation = Spring.Orientation.LEFT;
+                else if ("right".equals(orientationProp)) orientation = Spring.Orientation.RIGHT;
+                Spring spring = new Spring(x, y, orientation, assets);
                 springs.add(spring);
             }
         }
@@ -137,7 +148,7 @@ public class Level {
                     entity.groundPoundDelay = 0f;
                     multiplier = 1.75f;
                 }
-                entity.jump(multiplier);
+                entity.bounce(multiplier, spring.orientation);
             }
         }
     }

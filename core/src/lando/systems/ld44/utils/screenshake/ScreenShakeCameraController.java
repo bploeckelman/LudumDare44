@@ -76,7 +76,7 @@ public class ScreenShakeCameraController {
 //        viewCamera.rotateAround(new Vector3(viewCamera.position), viewCamera.direction, angle);
         viewCamera.update();
 
-        trauma = MathUtils.clamp(trauma - (dt/2f), 0f, 1f);
+        trauma = MathUtils.clamp(trauma - (dt/1f), 0f, 1f);
 
     }
 

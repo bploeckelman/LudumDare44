@@ -13,6 +13,7 @@ public class Player extends GameEntity {
 
         this.position.set(x, y);
         setImage(assets.player);
+        jumpState = JumpState.JUMP;
     }
 
     public void update(float dt) {

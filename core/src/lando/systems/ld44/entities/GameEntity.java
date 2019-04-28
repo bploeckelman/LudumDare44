@@ -114,6 +114,7 @@ public class GameEntity {
                 } else {
                     if (jumpState == JumpState.POUND) {
                         // TODO groundpound
+                        screen.shaker.addDamage(.8f);
                     }
                     jumpState = JumpState.ONGROUND;
                     tempPos.y = Math.max(tempPos.y, tile.y + tile.height);

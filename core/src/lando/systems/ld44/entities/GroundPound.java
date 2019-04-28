@@ -72,7 +72,7 @@ public class GroundPound extends GameEntity {
         }
 
         for (GameEntity ge : screen.gameEntities) {
-            if (ge.poundable && !ge.stunned && isInStunRange(ge.bounds)) {
+            if (ge.poundable && isInStunRange(ge.bounds)) {
                 ge.stun();
             }
         }
@@ -90,6 +90,8 @@ public class GroundPound extends GameEntity {
 
     @Override
     public void render(SpriteBatch batch) {
-        assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
+        if (screen.debug) {
+            assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
+        }
     }
 }

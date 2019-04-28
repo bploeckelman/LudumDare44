@@ -20,6 +20,7 @@ import lando.systems.ld44.world.Level;
 
 public class GameScreen extends BaseScreen {
 
+    public boolean debug = false;
     public Level level;
     public Player player;
     public Array<GameEntity> gameEntities = new Array<GameEntity>();

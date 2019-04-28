@@ -30,7 +30,8 @@ public class GameEntity {
     public float groundPoundDelay = 0;
 
     public boolean poundable;
-    public boolean stunned;
+    public float stunTime = 0;
+    public float preStunnedVelocity;
     public boolean remove;
 
     public TextureRegion image;
@@ -66,7 +67,10 @@ public class GameEntity {
     }
 
     public void stun() {
-        stunned = true;
+        if (stunTime > 0) { return; }
+
+        stunTime = 2;
+        preStunnedVelocity = velocity.x;
         velocity.x = 0;
         position.y += 20;
     }
@@ -135,6 +139,8 @@ public class GameEntity {
             }
         }
 
+        handleStun(dt);
+
         screen.level.handleObjectInteractions(this);
 
         screen.level.rectPool.free(entityRect);
@@ -147,6 +153,16 @@ public class GameEntity {
 
     protected void groundPound(Vector2 poundPosition) {
         screen.shaker.addDamage(.5f);
+    }
+
+    private void handleStun(float dt) {
+        if (stunTime > 0) {
+            stunTime -= dt;
+            if (stunTime <= 0) {
+                stunTime = 0;
+                velocity.x = preStunnedVelocity;
+            }
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -167,7 +183,10 @@ public class GameEntity {
                 scaleY = 1 - groundPoundDelay/3f;
             }
             batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
-            assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
+
+            if (screen.debug) {
+                assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
+            }
         }
     }
 }

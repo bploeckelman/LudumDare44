@@ -24,7 +24,7 @@ public class GroundPound extends GameEntity {
         min = max = 0;
 
         Array<Rectangle> tiles = new Array<Rectangle>();
-        screen.level.getTiles(x + offset, y - 2, x + distance, y - 2, tiles);
+        screen.level.getTiles(x, y - 2, x + distance, y - 2, tiles);
         for (Rectangle r : tiles) {
             if (max == 0 || r.x == max) {
                 max = r.x + r.width;
@@ -36,7 +36,7 @@ public class GroundPound extends GameEntity {
             max = x;
         }
 
-        screen.level.getTiles(x - distance, y - 2, x - offset, y - 2, tiles);
+        screen.level.getTiles(x - distance, y - 2, x, y - 2, tiles);
           for (int i = tiles.size; i > 0; i--) {
             Rectangle r = tiles.get(i - 1);
             if (min == 0 || (r.x + r.width) == min) {

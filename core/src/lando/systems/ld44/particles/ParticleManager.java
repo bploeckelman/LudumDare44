@@ -37,9 +37,10 @@ public class ParticleManager {
 
     public void addGroundPoundDust(float x, float y, float minX, float maxX) {
         for (int i = (int)minX; i < maxX; i++){
+            float distance = x - i;
+            // floating dust
             for (int count = 0; count < 2; count++) {
                 GenericParticle particle = particlePool.obtain();
-                float distance = x - i;
                 float size = MathUtils.random(1f, 2f);
                 float ttl = MathUtils.random(.4f, .9f);
                 particle.init(assets.whiteCircle,
@@ -51,6 +52,17 @@ public class ParticleManager {
                         0, 0, ttl, Math.abs(distance) / 500f);
                 activeParticles.add(particle);
             }
+
+            // Red on the ground
+            GenericParticle particle = particlePool.obtain();
+            particle.init(assets.whiteCircle,
+                    4, 4, 2, 2,
+                    i, y, 0,5, 0,0,0,
+                    GenericParticle.OriginType.CENTER, 0,0,
+                    1, 0, 0, 1,
+                    .5f, 0,0,1,
+                    0, 0, .5f, Math.abs(distance)/ 500f);
+            activeParticles.add(particle);
         }
     }
 }

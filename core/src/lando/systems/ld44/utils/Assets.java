@@ -85,7 +85,7 @@ public class Assets implements Disposable {
         whitePixel = atlas.findRegion("white-pixel");
         whiteCircle = atlas.findRegion("white-circle");
 
-        player = atlas.findRegion("purse");
+        player = atlas.findRegion("purse_image");
 
         Array pennies = atlas.findRegions("penny_walk");
         pennyAnimation = new Animation<TextureRegion>(0.1f, pennies, Animation.PlayMode.LOOP);

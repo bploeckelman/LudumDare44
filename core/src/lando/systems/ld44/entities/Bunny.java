@@ -16,6 +16,10 @@ public class Bunny extends Enemy {
     @Override
     public void update(float dt) {
         super.update(dt);
+        if (stunTime > 0f) {
+            return;
+        }
+
         randomizeTimer += dt;
         if (randomizeTimer >= randomizeThreshold) {
             randomizeTimer -= randomizeThreshold;

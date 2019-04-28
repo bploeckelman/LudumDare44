@@ -56,6 +56,10 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> springAnimationDown;
     public Animation<TextureRegion> springAnimationLeft;
     public Animation<TextureRegion> springAnimationRight;
+    public Animation<TextureRegion> tackAnimationUp;
+    public Animation<TextureRegion> tackAnimationDown;
+    public Animation<TextureRegion> tackAnimationLeft;
+    public Animation<TextureRegion> tackAnimationRight;
 
     public NinePatch ninePatch;
 
@@ -146,6 +150,15 @@ public class Assets implements Disposable {
         springAnimationDown  = new Animation<TextureRegion>(0.075f, springDown,  Animation.PlayMode.NORMAL);
         springAnimationLeft  = new Animation<TextureRegion>(0.075f, springLeft,  Animation.PlayMode.NORMAL);
         springAnimationRight = new Animation<TextureRegion>(0.075f, springRight, Animation.PlayMode.NORMAL);
+
+        Array tackUp    = atlas.findRegions("tack-up");
+        Array tackDown  = atlas.findRegions("tack-down");
+        Array tackLeft  = atlas.findRegions("tack-left");
+        Array tackRight = atlas.findRegions("tack-right");
+        tackAnimationUp    = new Animation<TextureRegion>(0.075f, tackUp,    Animation.PlayMode.NORMAL);
+        tackAnimationDown  = new Animation<TextureRegion>(0.075f, tackDown,  Animation.PlayMode.NORMAL);
+        tackAnimationLeft  = new Animation<TextureRegion>(0.075f, tackLeft,  Animation.PlayMode.NORMAL);
+        tackAnimationRight = new Animation<TextureRegion>(0.075f, tackRight, Animation.PlayMode.NORMAL);
 
         titleTexture = mgr.get(titleTextureAsset);
         arcadeTexture = mgr.get(arcadeTextureAsset);

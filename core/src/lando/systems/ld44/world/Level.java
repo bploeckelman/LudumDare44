@@ -152,6 +152,9 @@ public class Level {
         for (Spring spring : springs) {
             spring.update(dt);
         }
+        for (Tack tack : tacks) {
+            tack.update(dt);
+        }
     }
 
     private Rectangle entityBounds = new Rectangle();

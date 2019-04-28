@@ -155,10 +155,10 @@ public class Assets implements Disposable {
         Array tackDown  = atlas.findRegions("tack-down");
         Array tackLeft  = atlas.findRegions("tack-left");
         Array tackRight = atlas.findRegions("tack-right");
-        tackAnimationUp    = new Animation<TextureRegion>(0.075f, tackUp,    Animation.PlayMode.NORMAL);
-        tackAnimationDown  = new Animation<TextureRegion>(0.075f, tackDown,  Animation.PlayMode.NORMAL);
-        tackAnimationLeft  = new Animation<TextureRegion>(0.075f, tackLeft,  Animation.PlayMode.NORMAL);
-        tackAnimationRight = new Animation<TextureRegion>(0.075f, tackRight, Animation.PlayMode.NORMAL);
+        tackAnimationUp    = new Animation<TextureRegion>(0.1f, tackUp,    Animation.PlayMode.LOOP);
+        tackAnimationDown  = new Animation<TextureRegion>(0.1f, tackDown,  Animation.PlayMode.LOOP);
+        tackAnimationLeft  = new Animation<TextureRegion>(0.1f, tackLeft,  Animation.PlayMode.LOOP);
+        tackAnimationRight = new Animation<TextureRegion>(0.1f, tackRight, Animation.PlayMode.LOOP);
 
         titleTexture = mgr.get(titleTextureAsset);
         arcadeTexture = mgr.get(arcadeTextureAsset);

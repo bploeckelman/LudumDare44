@@ -84,11 +84,15 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(shaker.getCombinedMatrix());
+
+        level.renderBackground(shaker.getViewCamera());
+
         batch.begin();
         {
             if (!level.isBossLevel) {
                 background.draw(shaker.getViewCamera(), batch);
             }
+
             player.render(batch);
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
@@ -97,7 +101,7 @@ public class GameScreen extends BaseScreen {
         }
         batch.end();
 
-        level.render(shaker.getViewCamera());
+        level.renderForeground(shaker.getViewCamera());
 
         batch.begin();
         {

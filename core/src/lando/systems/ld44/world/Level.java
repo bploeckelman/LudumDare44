@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
@@ -32,6 +33,9 @@ public class Level {
     public TiledMap map;
     public TiledMapRenderer mapRenderer;
     public TiledMapTileLayer collisionLayer;
+    public TiledMapTileLayer backgroundLayer;
+    public int[] collisionLayerIndex = new int[1];
+    public int[] backgroundLayerIndex = new int[1];
     public MapLayer objectsLayer;
     public SpawnPlayer spawnPlayer;
     public Array<EnemySpawner> enemySpawners;
@@ -67,9 +71,16 @@ public class Level {
         // Validate map layers
         MapLayers layers = map.getLayers();
         collisionLayer = (TiledMapTileLayer) layers.get("collision");
+        backgroundLayer = (TiledMapTileLayer) layers.get("background");
         objectsLayer = layers.get("objects");
         if (collisionLayer == null || objectsLayer == null) {
             throw new GdxRuntimeException("Missing required map layer. (required: 'collision', 'objects')");
+        } else {
+            for (int i = 0; i < layers.size(); ++i) {
+                MapLayer layer = layers.get(i);
+                if      (layer.getName().equalsIgnoreCase("collision"))  collisionLayerIndex [0] = i;
+                else if (layer.getName().equalsIgnoreCase("background")) backgroundLayerIndex[0] = i;
+            }
         }
 
         // Load map objects
@@ -196,10 +207,20 @@ public class Level {
         }
     }
 
-    // TODO: break out drawing of different layers into different calls
     public void render(OrthographicCamera camera) {
         mapRenderer.setView(camera);
         mapRenderer.render();
+    }
+
+    public void renderBackground(OrthographicCamera camera) {
+        if (backgroundLayer == null) return;
+        mapRenderer.setView(camera);
+        mapRenderer.render(backgroundLayerIndex);
+    }
+
+    public void renderForeground(OrthographicCamera camera) {
+        mapRenderer.setView(camera);
+        mapRenderer.render(collisionLayerIndex);
     }
 
     public void renderObjects(SpriteBatch batch, OrthographicCamera camera) {

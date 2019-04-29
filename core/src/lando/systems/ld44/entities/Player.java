@@ -21,6 +21,8 @@ public class Player extends AnimationGameEntity {
 
     private PlayerStateManager stateManager;
 
+    private boolean juggle;
+
     public Player(GameScreen screen, float x, float y) {
         super(screen, screen.assets.playerAnimation);
 
@@ -81,11 +83,14 @@ public class Player extends AnimationGameEntity {
             jump();
         }
 
+        juggle = Gdx.input.isKeyPressed(Input.Keys.J);
+
         handleConsumables();
 
         stateManager.update(dt);
 
         updateHurt(dt);
+        updateJuggle(dt);
     }
 
     private void handleConsumables() {
@@ -246,5 +251,28 @@ public class Player extends AnimationGameEntity {
         if (hurtTime > 0) {
             hurtTime -= dt;
         }
+    }
+
+    private float juggleTime = 0;
+    private int juggleCount = 0;
+    public void updateJuggle(float dt) {
+        if (!juggle) return;
+        juggleTime += dt * 4;
+        if ((int)juggleTime> juggleCount) {
+            juggleCount++;
+
+            Coin coin = popFirstCoin();
+            if (coin != null) {
+                close();
+                coin.reset();
+                float x = bounds.x ;
+                float y = top() - 10;
+                float vy = 600 + ((float) Math.random() * 200);
+                coin.position.set(x, y);
+                coin.velocity.set(90, vy);
+                screen.add(coin);
+            }
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package lando.systems.ld44.entities;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -65,5 +66,19 @@ public class Bunny extends Enemy {
                 jump();
             }
         }
+    }
+
+    @Override
+    public void renderDying(SpriteBatch batch, float scaleX, float scaleY) {
+        batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX * scale, scaleY * scale , dyingRotation);
+    }
+
+    private float scale = 1.0f;
+    private float dyingRotation = 0;
+    @Override
+    public void handleDying(float dt) {
+        super.handleDying(dt);
+        dyingRotation += dt*200;
+        scale -= dt/3;
     }
 }

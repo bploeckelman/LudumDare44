@@ -289,12 +289,14 @@ public class GameEntity {
                 scaleX *= 1 + groundPoundDelay/2f;
                 scaleY = 1 - groundPoundDelay/3f;
             }
-            batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
 
-            if (stunTime > 0){
-                batch.draw(assets.stunStarsAnimation.getKeyFrame(stunTime), position.x, position.y + collisionBoundsOffsets.height, width, 10);
+            if (isDying()) {
+                renderDying(batch, scaleX, scaleY);
+            } else if (isStunned()) {
+                renderStunned(batch, scaleX, scaleY);
+            } else {
+                renderNormal(batch, scaleX, scaleY);
             }
-
             if (Config.debug) {
                 assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
                 batch.setColor(Color.RED);
@@ -302,6 +304,19 @@ public class GameEntity {
                 batch.setColor(Color.WHITE);
             }
         }
+    }
+
+    protected void renderNormal(SpriteBatch batch, float scaleX, float scaleY) {
+        batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
+    }
+
+    protected void renderStunned(SpriteBatch batch, float scaleX, float scaleY) {
+        batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
+        batch.draw(assets.stunStarsAnimation.getKeyFrame(stunTime), position.x, position.y + collisionBoundsOffsets.height, width, 10);
+    }
+
+    protected void renderDying(SpriteBatch batch, float scaleX, float scaleY) {
+        batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
     }
 
     public float left() {

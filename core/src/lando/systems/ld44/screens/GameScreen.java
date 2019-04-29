@@ -62,6 +62,25 @@ public class GameScreen extends BaseScreen {
             Gdx.app.exit();
         }
         player.update(dt);
+
+        for (GameEntity ge : gameEntities) {
+            if (!ge.projecttile) continue;
+            for (int i = 0; i < gameEntities.size; i++) {
+                GameEntity ge2 = gameEntities.get(i);
+                if (ge2.projecttile) continue;
+
+                if (ge.bounds.overlaps(ge2.bounds)) {
+                    if (ge2.stunTime > 0) {
+                        ge2.kill();
+                    } else {
+                        ge2.stun();
+                    }
+                    ge.remove = true;
+                }
+            }
+        }
+
+
         for (int i = gameEntities.size; i > 0; i--) {
             GameEntity ge = gameEntities.get(i - 1);
             ge.update(dt);

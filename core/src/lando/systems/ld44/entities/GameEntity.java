@@ -37,6 +37,7 @@ public class GameEntity {
 
     public boolean poundable;
     public boolean consuming;
+    public boolean projecttile;
     public float stunTime = 0;
     public float preStunnedVelocity;
     public boolean remove;

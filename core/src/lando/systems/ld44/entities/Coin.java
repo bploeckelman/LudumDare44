@@ -30,4 +30,10 @@ public class Coin extends AnimationGameEntity {
         // float dx = -100 + ((float)Math.random() * 200);
         velocity.set(0, poundVelocity);
     }
+
+    @Override
+    public void changeDirection() {
+        velocity.x = 0;
+        projecttile = false;
+    }
 }

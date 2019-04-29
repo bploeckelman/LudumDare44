@@ -173,6 +173,7 @@ public class Player extends GameEntity {
         c.consuming = false;
         c.position.set(x, y);
         c.velocity.set(speed, 200);
+        c.projecttile = true;
         screen.add(c);
     }
 

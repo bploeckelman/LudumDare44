@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.Audio;
 
 public class EndScreen extends BaseScreen {
 
     public EndScreen(Game game, Assets assets) {
         super(game, assets);
+        game.audio.playMusic(Audio.Musics.EndScreen);
     }
 
     @Override

@@ -84,6 +84,7 @@ public class Audio implements Disposable {
         musics.put(Musics.Level2, Gdx.audio.newMusic(Gdx.files.internal("sounds/level2.mp3")));
         musics.put(Musics.Level3, Gdx.audio.newMusic(Gdx.files.internal("sounds/level3.mp3")));
         musics.put(Musics.Boss, Gdx.audio.newMusic(Gdx.files.internal("sounds/boss_fight.mp3")));
+        musics.put(Musics.EndScreen, Gdx.audio.newMusic(Gdx.files.internal("sounds/end_credit_music.mp3")));
 
         musicVolume = new MutableFloat(MUSIC_VOLUME);
         if (playMusic) {

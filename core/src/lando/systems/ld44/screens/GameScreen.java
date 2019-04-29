@@ -109,6 +109,9 @@ public class GameScreen extends BaseScreen {
 
         if (!firstRun && !allowInput) return;
         firstRun = false;
+
+        game.stats.secondsToWin += dt;
+
         player.update(dt);
         // Find Exits
         for (Exit exit : level.exits){

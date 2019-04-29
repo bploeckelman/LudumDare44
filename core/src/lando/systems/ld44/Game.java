@@ -16,16 +16,14 @@ import lando.systems.ld44.accessors.*;
 import lando.systems.ld44.screens.BaseScreen;
 import lando.systems.ld44.screens.LoadingScreen;
 import lando.systems.ld44.screens.TitleScreen;
-import lando.systems.ld44.utils.Assets;
-import lando.systems.ld44.utils.Audio;
-import lando.systems.ld44.utils.CallbackListener;
-import lando.systems.ld44.utils.Config;
+import lando.systems.ld44.utils.*;
 
 public class Game extends ApplicationAdapter {
 
 	public Assets assets;
 	public TweenManager tween;
 	public Audio audio;
+	public Statistics stats;
 
 	private BaseScreen screen;
 	private BaseScreen nextScreen;
@@ -71,6 +69,8 @@ public class Game extends ApplicationAdapter {
 		if (audio == null) {
 			audio = new Audio(this);
 		}
+
+		stats = new Statistics();
 
 		// Go to bullshit start screen for web
 		if (Gdx.app.getType() == Application.ApplicationType.WebGL){

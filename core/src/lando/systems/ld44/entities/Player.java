@@ -132,6 +132,7 @@ public class Player extends AnimationGameEntity {
     private void addCoin(Coin coin) {
         coinPurse.add(coin);
         coin.remove = true;
+        screen.game.stats.coinsCollected++;
         /*
         value = MathUtils.clamp(value + value, 0, maxValue);
 
@@ -158,6 +159,7 @@ public class Player extends AnimationGameEntity {
 
     public void shoot() {
         if (coinPurse.size > 0) {
+            screen.game.stats.coinsSpit++;
             playSound(Audio.Sounds.Shoot);
             stateManager.transition(PlayerStates.Shoot);
 
@@ -196,6 +198,7 @@ public class Player extends AnimationGameEntity {
 
     @Override
     protected void groundPound(Vector2 poundPosition) {
+        screen.game.stats.groundPounds++;
         float weightRatio = getWeightRatio();
         float shake = 0.5f + (0.4f * weightRatio);
 
@@ -218,6 +221,8 @@ public class Player extends AnimationGameEntity {
         if (hurtTime <= 0) {
             super.getHurt(damageRect);
             hurtTime = 2;
+
+            screen.game.stats.timesHit++;
 
             int coinsToLose = (coinPurse.size+1) / 2;
             for (int i = 0; i < coinsToLose; i++){

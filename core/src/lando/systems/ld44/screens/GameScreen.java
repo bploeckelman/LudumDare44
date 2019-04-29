@@ -80,6 +80,9 @@ public class GameScreen extends BaseScreen {
     public void nextLevel(){
         switch (levelIndex) {
             case Level1:
+                game.setScreen(new GameScreen(game, assets, LevelIndex.Level2), assets.stereoShader, 2f, null);
+                break;
+            case Level2:
                 game.setScreen(new GameScreen(game, assets, LevelIndex.Boss), assets.stereoShader, 2f, null);
                 break;
             case Boss:

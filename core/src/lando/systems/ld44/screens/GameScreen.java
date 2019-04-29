@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -50,8 +51,16 @@ public class GameScreen extends BaseScreen {
         shaker = new ScreenShakeCameraController(worldCamera);
         loadLevel();
         this.particleManager = new ParticleManager(assets);
-//        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.arcadeTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
-        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.couchTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
+        TextureRegionParallaxLayer layer;
+        if (level.isBossLevel) {
+            TextureRegion region = new TextureRegion(assets.mgr.get(assets.titleCouchWake3TextureAsset));
+            layer = new TextureRegionParallaxLayer(region, level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
+            // scoot it to better fit on screen
+            layer.setPadBottom(-190f);
+            layer.setPadLeft(-region.getRegionWidth() / 2f - 64f);
+        } else {
+            layer = new TextureRegionParallaxLayer(new TextureRegion(assets.couchTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
+        }
         background = new ParallaxBackground(layer);
         hud = new Hud(this);
         firstRun = true;
@@ -175,10 +184,7 @@ public class GameScreen extends BaseScreen {
 
         batch.begin();
         {
-            if (!level.isBossLevel) {
-                background.draw(shaker.getViewCamera(), batch);
-            }
-
+            background.draw(shaker.getViewCamera(), batch);
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
             }

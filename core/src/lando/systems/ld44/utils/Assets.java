@@ -297,10 +297,10 @@ public class Assets implements Disposable {
         mgr.unload(titleTitle1TextureAsset.fileName);
         mgr.unload(titleTitle2TextureAsset.fileName);
         mgr.unload(titleTitle3TextureAsset.fileName);
-        mgr.unload(titleCouchWake0TextureAsset.fileName);
-        mgr.unload(titleCouchWake1TextureAsset.fileName);
-        mgr.unload(titleCouchWake2TextureAsset.fileName);
-        mgr.unload(titleCouchWake3TextureAsset.fileName);
+//        mgr.unload(titleCouchWake0TextureAsset.fileName);
+//        mgr.unload(titleCouchWake1TextureAsset.fileName);
+//        mgr.unload(titleCouchWake2TextureAsset.fileName);
+//        mgr.unload(titleCouchWake3TextureAsset.fileName);
         // TODO: unload couch talking frames
     }
 

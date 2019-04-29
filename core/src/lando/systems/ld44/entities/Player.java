@@ -28,6 +28,8 @@ public class Player extends GameEntity {
         while (coinPurse.size < 5) {
             addCoin(new Coin(screen, assets.pennyPickupAnimation, 0.01f));
         }
+        this.collisionBoundsOffsets.set(4, 0, 64, 60);
+
     }
 
     public void update(float dt) {

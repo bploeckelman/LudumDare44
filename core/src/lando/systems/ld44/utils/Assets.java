@@ -62,6 +62,7 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> tackAnimationDown;
     public Animation<TextureRegion> tackAnimationLeft;
     public Animation<TextureRegion> tackAnimationRight;
+    public Animation<TextureRegion> stunStarsAnimation;
 
     public NinePatch ninePatch;
 
@@ -168,6 +169,9 @@ public class Assets implements Disposable {
         tackAnimationDown  = new Animation<TextureRegion>(0.1f, tackDown,  Animation.PlayMode.LOOP);
         tackAnimationLeft  = new Animation<TextureRegion>(0.1f, tackLeft,  Animation.PlayMode.LOOP);
         tackAnimationRight = new Animation<TextureRegion>(0.1f, tackRight, Animation.PlayMode.LOOP);
+
+        Array stunStars = atlas.findRegions("stars");
+        stunStarsAnimation = new Animation<TextureRegion>(.1f, stunStars, Animation.PlayMode.LOOP);
 
         titleTexture = mgr.get(titleTextureAsset);
         arcadeTexture = mgr.get(arcadeTextureAsset);

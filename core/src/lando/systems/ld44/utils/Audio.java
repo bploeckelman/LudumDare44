@@ -27,7 +27,7 @@ public class Audio implements Disposable {
 
     public enum Sounds {
         None, // don't put sound to this - default no op
-        Shoot, Coin, Spring, GroundPound, Landing, ConsumeCoin
+        Shoot, Coin, Spring, GroundPound, Landing, ConsumeCoin, Stun
     }
 
     public enum Musics {
@@ -60,10 +60,13 @@ public class Audio implements Disposable {
         putSound(Sounds.Spring, Gdx.audio.newSound(Gdx.files.internal("sounds/bounce2.mp3")));
 
         putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam.mp3")));
-        putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam2.mp3")));
-        putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam3.mp3")));
+        putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/slam4.mp3")));
+        putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/slam3.mp3")));
+//        putSound(Sounds.GroundPound, Gdx.audio.newSound(Gdx.files.internal("sounds/stun_slam3.mp3")));
 
         putSound(Sounds.Landing, Gdx.audio.newSound(Gdx.files.internal("sounds/thump.mp3")));
+
+        putSound(Sounds.Stun, Gdx.audio.newSound(Gdx.files.internal("sounds/stun2.mp3")));
 //        putSound(Sounds.dog_bork, Gdx.audio.newSound(Gdx.files.internal("audio/dog.mp3")));
 //        putSound(Sounds.cat_meow, Gdx.audio.newSound(Gdx.files.internal("audio/cat.mp3")));
 //

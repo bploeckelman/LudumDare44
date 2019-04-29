@@ -13,6 +13,8 @@ public class Bunny extends Enemy {
         randomizeThreshold = MathUtils.random(2.5f, 3.5f);
         bounceVelocity = 500f;
         jumpVelocity = 500f;
+        this.collisionBoundsOffsets.set(0, 0, width, height);
+
     }
 
     @Override

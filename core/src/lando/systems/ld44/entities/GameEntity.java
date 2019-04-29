@@ -1,5 +1,6 @@
 package lando.systems.ld44.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -20,6 +21,7 @@ public class GameEntity {
 
     public float width;
     public float height;
+    public Rectangle collisionBoundsOffsets;
 
     public Vector2 position = new Vector2();
     private Vector2 tempPos = new Vector2();
@@ -50,6 +52,7 @@ public class GameEntity {
         this.assets = screen.assets;
         this.screen = screen;
         this.tiles = new Array<Rectangle>();
+        this.collisionBoundsOffsets = new Rectangle();
         grounded = true;
     }
 
@@ -112,8 +115,8 @@ public class GameEntity {
 
     public void stun() {
         if (stunTime > 0) { return; }
-
-        stunTime = 2;
+        screen.audio.playSound(Audio.Sounds.Stun, position, screen.player.position);
+        stunTime = 4;
         preStunnedVelocity = velocity.x;
         velocity.x = 0;
         position.y += 20;
@@ -142,7 +145,7 @@ public class GameEntity {
         tempPos.add(velocity.x * dt, velocity.y * dt);
 
         Rectangle entityRect = screen.level.rectPool.obtain();
-        entityRect.set(tempPos.x, position.y, width, height);
+        entityRect.set(tempPos.x + collisionBoundsOffsets.x, position.y + collisionBoundsOffsets.y, collisionBoundsOffsets.width, collisionBoundsOffsets.height);
         float startX, startY, endX, endY;
 
         // Check Horizontal
@@ -155,7 +158,7 @@ public class GameEntity {
         endY = entityRect.y + entityRect.height;
         screen.level.getTiles(startX, startY, endX, endY, tiles);
         for (Rectangle tile : tiles) {
-            entityRect.set(tempPos.x, position.y, width, height);
+            entityRect.set(tempPos.x + collisionBoundsOffsets.x, position.y + collisionBoundsOffsets.y, collisionBoundsOffsets.width, collisionBoundsOffsets.height);
             if (entityRect.overlaps(tile)){
                 tempPos.x = position.x;
                 changeDirection();
@@ -163,7 +166,7 @@ public class GameEntity {
             }
         }
 
-        entityRect.set(tempPos.x, tempPos.y, width, height);
+        entityRect.set(tempPos.x + collisionBoundsOffsets.x, tempPos.y + collisionBoundsOffsets.y, collisionBoundsOffsets.width, collisionBoundsOffsets.height);
 
         // Check vertical
         if (velocity.y > 0){ // above?
@@ -180,7 +183,7 @@ public class GameEntity {
         boolean pounded = false;
         screen.level.getTiles(startX, startY, endX, endY, tiles);
         for (Rectangle tile : tiles) {
-            entityRect.set(tempPos.x, tempPos.y, width, height);
+            entityRect.set(tempPos.x + collisionBoundsOffsets.x, tempPos.y + collisionBoundsOffsets.y, collisionBoundsOffsets.width, collisionBoundsOffsets.height);
             if (entityRect.overlaps(tile)) {
                 // Up
                 if (velocity.y > 0) {
@@ -247,8 +250,15 @@ public class GameEntity {
             }
             batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
 
+            if (stunTime > 0){
+                batch.draw(assets.stunStarsAnimation.getKeyFrame(stunTime), position.x, position.y + collisionBoundsOffsets.height, width, 10);
+            }
+
             if (Config.debug) {
                 assets.ninePatch.draw(batch, bounds.x, bounds.y, bounds.width, bounds.height);
+                batch.setColor(Color.RED);
+                assets.ninePatch.draw(batch, position.x + collisionBoundsOffsets.x, position.y + collisionBoundsOffsets.y, collisionBoundsOffsets.width, collisionBoundsOffsets.height);
+                batch.setColor(Color.WHITE);
             }
         }
     }

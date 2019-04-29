@@ -26,10 +26,12 @@ public class GameScreen extends BaseScreen {
     public Level level;
     public Player player;
     public Array<GameEntity> gameEntities = new Array<GameEntity>();
+    public Boss boss;
     public ScreenShakeCameraController shaker;
     public ParticleManager particleManager;
     public ParallaxBackground background;
     public Hud hud;
+    public boolean firstRun;
 
     private float cameraHorMargins = 100;
     private float cameraVertMargins = 20;
@@ -40,9 +42,10 @@ public class GameScreen extends BaseScreen {
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
         shaker = new ScreenShakeCameraController(worldCamera);
-        level = new Level("maps/demo.tmx", assets, this);
+//        level = new Level("maps/demo.tmx", assets, this);
 //        level = new Level("maps/boss-arena.tmx", assets, this);
-//        level = new Level("maps/level1.tmx", assets, this);
+//        boss = new Boss(this);
+        level = new Level("maps/level1.tmx", assets, this);
         player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
         this.particleManager = new ParticleManager(assets);
 //        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.arcadeTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
@@ -50,6 +53,7 @@ public class GameScreen extends BaseScreen {
         background = new ParallaxBackground(layer);
         audio.playMusic(Audio.Musics.Level1);
         hud = new Hud(this);
+        firstRun = true;
     }
 
     @Override
@@ -58,6 +62,11 @@ public class GameScreen extends BaseScreen {
          && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }
+        handleCameraConstraints();
+        shaker.update(dt);
+
+        if (!firstRun && !allowInput) return;
+        firstRun = false;
         player.update(dt);
 
         // shitty collision - checking on projectile, not coin in case we add non coin projectiles
@@ -92,12 +101,10 @@ public class GameScreen extends BaseScreen {
                 gameEntities.removeIndex(i - 1);
             }
         }
-        shaker.update(dt);
+        if (boss != null) boss.update(dt);
         level.update(dt);
         particleManager.update(dt);
         hud.update(dt);
-
-        handleCameraConstraints();
 
         tempStateTime += dt;
     }
@@ -119,6 +126,9 @@ public class GameScreen extends BaseScreen {
             player.render(batch);
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
+            }
+            if (boss != null){
+                boss.render(batch);
             }
             particleManager.render(batch);
         }

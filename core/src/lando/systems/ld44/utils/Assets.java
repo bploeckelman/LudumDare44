@@ -48,6 +48,9 @@ public class Assets implements Disposable {
     public TextureRegion testTexture;
     public TextureRegion whitePixel;
     public TextureRegion whiteCircle;
+    public TextureRegion handFlat;
+    public TextureRegion handFist;
+    public TextureRegion handPointer;
 
     public TextureRegion player;
     public Animation<Texture> titleAnimation;
@@ -73,6 +76,7 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> tackAnimationLeft;
     public Animation<TextureRegion> tackAnimationRight;
     public Animation<TextureRegion> stunStarsAnimation;
+    public Animation<TextureRegion> explosionAnimation;
 
     public NinePatch ninePatch;
 
@@ -138,6 +142,10 @@ public class Assets implements Disposable {
         testTexture = atlas.findRegion("dogsuit");
         whitePixel = atlas.findRegion("white-pixel");
         whiteCircle = atlas.findRegion("white-circle");
+
+        handFist = atlas.findRegion("hand-fist");
+        handFlat = atlas.findRegion("hand-flat");
+        handPointer = atlas.findRegion("hand-point");
 
         player = atlas.findRegion("purse_image");
 
@@ -206,6 +214,9 @@ public class Assets implements Disposable {
 
         Array stunStars = atlas.findRegions("stars");
         stunStarsAnimation = new Animation<TextureRegion>(.1f, stunStars, Animation.PlayMode.LOOP);
+
+        Array<TextureAtlas.AtlasRegion> explosion = atlas.findRegions("explosion");
+        explosionAnimation = new Animation<TextureRegion>(.1f, explosion, Animation.PlayMode.NORMAL);
 
         arcadeTexture = mgr.get(arcadeTextureAsset);
         arcadeTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

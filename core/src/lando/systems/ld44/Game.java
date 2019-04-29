@@ -35,6 +35,7 @@ public class Game extends ApplicationAdapter {
 	Texture originalTexture;
 	Texture transitionTexture;
 	ShaderProgram transitionShader;
+	boolean transitioning;
 
 	@Override
 	public void create () {
@@ -49,6 +50,8 @@ public class Game extends ApplicationAdapter {
 
 		originalFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Config.window_width, Config.window_height, false);
 		originalTexture = originalFBO.getColorBufferTexture();
+
+		transitioning = false;
 
 		if (tween == null) {
 			tween = new TweenManager();
@@ -123,10 +126,12 @@ public class Game extends ApplicationAdapter {
 
 	public void setScreen(final BaseScreen newScreen, ShaderProgram transitionType, float transitionSpeed, final CallbackListener callback) {
 		if (nextScreen != null) return;
+		if (transitioning) return; // only want one transition
 		if (screen == null) {
 			screen = newScreen;
 			screen.allowInput = true;
 		} else {
+			transitioning = true;
 			if (transitionType == null){
 				transitionShader = assets.randomTransitions.get(MathUtils.random(assets.randomTransitions.size-1));
 			} else {
@@ -150,6 +155,7 @@ public class Game extends ApplicationAdapter {
 							screen = nextScreen;
 							nextScreen = null;
 							screen.allowInput = true;
+							transitioning = false;
 							if (callback != null) {
 								callback.callback();
 							}

@@ -63,6 +63,8 @@ public class GameScreen extends BaseScreen {
         }
         player.update(dt);
 
+        // shitty collision - checking on projectile, not coin in case we add non coin projectiles
+        // probably should make projectile base class and handle if it's active.
         for (GameEntity ge : gameEntities) {
             if (ge.projecttile) {
                 for (int i = 0; i < gameEntities.size; i++) {
@@ -75,10 +77,11 @@ public class GameScreen extends BaseScreen {
                         } else {
                             ge2.stun();
                         }
-                        ge.remove = true;
+                        ge.pound(); // or remove
+                        //ge.remove = true;
                     }
                 }
-            } else {
+            } else if (!(ge instanceof Coin)) {
                 if (ge.bounds.overlaps(player.bounds)) {
                     if (player.hurtTime <= 0) {
                         player.getHurt();

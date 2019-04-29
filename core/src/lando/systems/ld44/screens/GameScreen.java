@@ -128,6 +128,11 @@ public class GameScreen extends BaseScreen {
 
     public void spawn(Coin coin) {
         coin.pound();
-        gameEntities.add(coin);
+        add(coin);
+    }
+
+    public void add(GameEntity ge) {
+        ge.remove = false;
+        gameEntities.add(ge);
     }
 }

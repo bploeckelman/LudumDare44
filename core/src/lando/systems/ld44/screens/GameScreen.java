@@ -10,10 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.Game;
-import lando.systems.ld44.entities.Coin;
-import lando.systems.ld44.entities.GameEntity;
-import lando.systems.ld44.entities.GroundPound;
-import lando.systems.ld44.entities.Player;
+import lando.systems.ld44.entities.*;
 import lando.systems.ld44.particles.ParticleManager;
 import lando.systems.ld44.ui.Hud;
 import lando.systems.ld44.utils.Assets;
@@ -66,31 +63,26 @@ public class GameScreen extends BaseScreen {
         // shitty collision - checking on projectile, not coin in case we add non coin projectiles
         // probably should make projectile base class and handle if it's active.
         for (GameEntity ge : gameEntities) {
-            if (ge.projecttile) {
+            if (ge instanceof Projectile) {
+                Projectile projectile = (Projectile)ge;
                 for (int i = 0; i < gameEntities.size; i++) {
                     GameEntity ge2 = gameEntities.get(i);
-                    if (ge2 instanceof Coin) continue;
-
-                    if (ge.bounds.overlaps(ge2.bounds)) {
-                        if (ge2.stunTime > 0) {
+                    if (projectile.hasHit(ge2)) {
+                        if (ge2.isStunned()) {
                             ge2.kill();
                         } else {
                             ge2.stun();
                         }
-                        ge.pound(); // or remove
-                        //ge.remove = true;
+                        projectile.markHit();
                     }
                 }
-            } else if (!(ge instanceof Coin)) {
-                if (ge.bounds.overlaps(player.bounds)) {
-                    if (player.hurtTime <= 0) {
-                        player.getHurt();
-                        ge.changeDirection();
-                    }
+            } else if (ge.bounds.overlaps(player.bounds)) {
+                if (player.hurtTime <= 0) {
+                    player.getHurt();
+                    ge.changeDirection();
                 }
             }
         }
-
 
         for (int i = gameEntities.size; i > 0; i--) {
             GameEntity ge = gameEntities.get(i - 1);

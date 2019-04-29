@@ -155,11 +155,9 @@ public class Player extends GameEntity {
     }
 
     private void shootCoin(Coin c, float x, float y, float speed) {
-        c.remove = false;
-        c.consuming = false;
+        c.reset();
         c.position.set(x, y);
         c.velocity.set(speed, 200);
-        c.projecttile = true;
         screen.add(c);
     }
 

@@ -37,14 +37,14 @@ public class GameEntity {
 
     public boolean poundable;
     public boolean consuming;
-    public boolean projecttile;
-    public float stunTime = 0;
-    public float preStunnedVelocity;
     public boolean remove;
 
     public TextureRegion image;
     public Array<Rectangle> tiles;
     public Rectangle bounds = new Rectangle();
+
+    private float stunTime = 0;
+    private float preStunnedVelocity;
 
     // sound customizations
     public Audio.Sounds killSound = Audio.Sounds.None;
@@ -61,6 +61,10 @@ public class GameEntity {
         this.image = image;
         width = image.getRegionWidth();
         height = image.getRegionHeight();
+    }
+
+    public boolean isStunned() {
+        return stunTime > 0;
     }
 
     public void playSound(Audio.Sounds sound) {

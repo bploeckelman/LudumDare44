@@ -17,11 +17,13 @@ import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.Audio;
 import lando.systems.ld44.utils.Utils;
 import lando.systems.ld44.utils.screenshake.ScreenShakeCameraController;
+import lando.systems.ld44.world.Exit;
 import lando.systems.ld44.world.Level;
 import lando.systems.ld44.world.backgrounds.ParallaxBackground;
 import lando.systems.ld44.world.backgrounds.TextureRegionParallaxLayer;
 
 public class GameScreen extends BaseScreen {
+    enum LevelIndex {Level1, Boss}
 
     public Level level;
     public Player player;
@@ -38,22 +40,44 @@ public class GameScreen extends BaseScreen {
     private float cameraVertJumpMargin = 150;
 
     private float tempStateTime = 0f;
+    public LevelIndex levelIndex;
 
-    public GameScreen(Game game, Assets assets) {
+    public GameScreen(Game game, Assets assets, LevelIndex levelIndex) {
         super(game, assets);
+        this.levelIndex = levelIndex;
         shaker = new ScreenShakeCameraController(worldCamera);
-//        level = new Level("maps/demo.tmx", assets, this);
-//        level = new Level("maps/boss-arena.tmx", assets, this);
-//        boss = new Boss(this);
-        level = new Level("maps/level1.tmx", assets, this);
-        player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
+        loadLevel();
         this.particleManager = new ParticleManager(assets);
 //        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.arcadeTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
         TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.couchTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
         background = new ParallaxBackground(layer);
-        audio.playMusic(Audio.Musics.Level1);
         hud = new Hud(this);
         firstRun = true;
+    }
+
+    private void loadLevel(){
+        switch(levelIndex){
+            case Level1:
+                level = new Level("maps/level1.tmx", assets, this);
+                audio.playMusic(Audio.Musics.Level1);
+                break;
+            case Boss:
+                level = new Level("maps/boss-arena.tmx", assets, this);
+                audio.playMusic(Audio.Musics.Boss);
+                boss = new Boss(this);
+                break;
+        }
+        player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
+    }
+
+    public void nextLevel(){
+        switch (levelIndex) {
+            case Level1:
+                game.setScreen(new GameScreen(game, assets, LevelIndex.Boss), assets.stereoShader, 2f, null);
+                break;
+            case Boss:
+                break;
+        }
     }
 
     @Override
@@ -68,6 +92,14 @@ public class GameScreen extends BaseScreen {
         if (!firstRun && !allowInput) return;
         firstRun = false;
         player.update(dt);
+        // Find Exits
+        for (Exit exit : level.exits){
+            if (exit.bounds.overlaps(player.bounds)){
+                allowInput = false;
+                nextLevel();
+                return;
+            }
+        }
 
         // shitty collision - checking on projectile, not coin in case we add non coin projectiles
         // probably should make projectile base class and handle if it's active.

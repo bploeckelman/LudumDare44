@@ -31,7 +31,7 @@ public class Audio implements Disposable {
     }
 
     public enum Musics {
-        Title, Level1, Level2, Level3, Level4
+        Title, Level1, Level2, Level3, Boss
     }
 
     public HashMap<Sounds, SoundContainer> sounds = new HashMap<Sounds, SoundContainer>();
@@ -81,7 +81,7 @@ public class Audio implements Disposable {
         musics.put(Musics.Level1, Gdx.audio.newMusic(Gdx.files.internal("sounds/level1.mp3")));
         musics.put(Musics.Level2, Gdx.audio.newMusic(Gdx.files.internal("sounds/level2.mp3")));
         musics.put(Musics.Level3, Gdx.audio.newMusic(Gdx.files.internal("sounds/level3.mp3")));
-        musics.put(Musics.Level4, Gdx.audio.newMusic(Gdx.files.internal("sounds/level4.mp3")));
+        musics.put(Musics.Boss, Gdx.audio.newMusic(Gdx.files.internal("sounds/boss_fight.mp3")));
 
         musicVolume = new MutableFloat(MUSIC_VOLUME);
         if (playMusic) {

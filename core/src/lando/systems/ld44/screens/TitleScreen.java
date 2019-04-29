@@ -142,7 +142,7 @@ public class TitleScreen extends BaseScreen {
 
             if (storyTweenComplete && !isTransitioning) {
                 isTransitioning = true;
-                game.setScreen(new GameScreen(game, assets), assets.stereoShader, 2f,
+                game.setScreen(new GameScreen(game, assets, GameScreen.LevelIndex.Level1), assets.stereoShader, 2f,
                                new CallbackListener() {
                                    @Override
                                    public void callback() {

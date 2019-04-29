@@ -39,7 +39,7 @@ public class Level {
     public MapLayer objectsLayer;
     public SpawnPlayer spawnPlayer;
     public Array<EnemySpawner> enemySpawners;
-    public Exit exit;
+    public Array<Exit> exits;
     public Array<Tack> tacks;
     public Array<Spring> springs;
     public Array<Rectangle> tileRects;
@@ -87,6 +87,7 @@ public class Level {
         tacks = new Array<Tack>();
         springs = new Array<Spring>();
         enemySpawners = new Array<EnemySpawner>();
+        exits = new Array<Exit>();
         MapObjects objects = objectsLayer.getObjects();
         for (MapObject object : objects) {
             MapProperties props = object.getProperties();
@@ -130,7 +131,7 @@ public class Level {
             else if ("exit".equalsIgnoreCase(type)) {
                 float x = props.get("x", Float.class);
                 float y = props.get("y", Float.class);
-                exit = new Exit(x, y, assets);
+                exits.add(new Exit(x, y, assets));
             }
             else if ("tack".equalsIgnoreCase(type)) {
                 float x = props.get("x", Float.class);

@@ -23,7 +23,7 @@ import lando.systems.ld44.world.backgrounds.ParallaxBackground;
 import lando.systems.ld44.world.backgrounds.TextureRegionParallaxLayer;
 
 public class GameScreen extends BaseScreen {
-    enum LevelIndex {Level1, Boss}
+    enum LevelIndex {Level1, Level2, Boss}
 
     public Level level;
     public Player player;
@@ -59,6 +59,10 @@ public class GameScreen extends BaseScreen {
         switch(levelIndex){
             case Level1:
                 level = new Level("maps/level1.tmx", assets, this);
+                audio.playMusic(Audio.Musics.Level1);
+                break;
+            case Level2:
+                level = new Level("maps/level2.tmx", assets, this);
                 audio.playMusic(Audio.Musics.Level1);
                 break;
             case Boss:

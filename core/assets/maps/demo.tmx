@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="100" height="36" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="83">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="100" height="36" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="84">
  <tileset firstgid="1" source="tileset.tsx"/>
  <objectgroup id="3" name="objects">
   <object id="2" type="spawnPlayer" gid="183" x="192" y="992" width="32" height="32"/>
@@ -288,6 +288,7 @@
     <property name="orientation" value="down"/>
    </properties>
   </object>
+  <object id="83" name="quarter" type="spawnEnemy" gid="185" x="800" y="1056" width="32" height="32"/>
  </objectgroup>
  <layer id="6" name="collision" width="100" height="36">
   <data encoding="base64">

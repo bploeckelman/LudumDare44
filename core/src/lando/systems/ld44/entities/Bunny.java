@@ -17,16 +17,10 @@ public class Bunny extends Enemy {
         bounceVelocity = 500f;
         jumpVelocity = 500f;
         this.collisionBoundsOffsets.set(0, 0, width, height);
-
     }
 
     @Override
-    public void update(float dt) {
-        super.update(dt);
-        if (isStunned()) {
-            return;
-        }
-
+    public void updateEntity(float dt) {
         // Check for about to fall off a platform
         if (grounded && Math.abs(velocity.x) > 0f) {
             Level level = screen.level;
@@ -61,7 +55,7 @@ public class Bunny extends Enemy {
 
             float movement = 100f;
             float newSpeed = MathUtils.random(movement - (1f / 4f) * movement,
-                                              movement + (1f / 4f) * movement);
+                    movement + (1f / 4f) * movement);
 
             setDirection(direction, newSpeed);
 
@@ -72,5 +66,4 @@ public class Bunny extends Enemy {
             }
         }
     }
-
 }

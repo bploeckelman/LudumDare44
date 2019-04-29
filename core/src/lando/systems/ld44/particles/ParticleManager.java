@@ -35,6 +35,18 @@ public class ParticleManager {
         }
     }
 
+    public void addExplosion(float x, float y, float width, float height) {
+        GenericParticle particle = particlePool.obtain();
+        float ttl = MathUtils.random(1f, 1.2f);
+        particle.init(null, assets.explosionAnimation,
+                width, width, height, height,
+                x, y, 0, 0, 0, 0, 0, GenericParticle.OriginType.CENTER, 0, 0,
+                1f, 1f, 1f, 1f,
+                1f, 1f, 1f, 1f,
+                0, 0, ttl, 0);
+        activeParticles.add(particle);
+    }
+
     public void addGroundPoundDust(float x, float y, float minX, float maxX) {
         for (int i = (int)minX; i < maxX; i++){
             float distance = x - i;

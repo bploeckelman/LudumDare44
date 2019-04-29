@@ -18,6 +18,8 @@ public class Assets implements Disposable {
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
     public final AssetDescriptor<Texture> titleBackgroundTextureAsset = new AssetDescriptor<Texture>("images/title/title-background.png", Texture.class);
     public final AssetDescriptor<Texture> titleCouchTextureAsset = new AssetDescriptor<Texture>("images/title/title-couch.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk1TextureAsset = new AssetDescriptor<Texture>("images/title/title-couch-talk_1.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk2TextureAsset = new AssetDescriptor<Texture>("images/title/title-couch-talk_2.png", Texture.class);
     public final AssetDescriptor<Texture> titleSubtitleTextureAsset = new AssetDescriptor<Texture>("images/title/title-subtitle.png", Texture.class);
     public final AssetDescriptor<Texture> titleTitle0TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_0.png", Texture.class);
     public final AssetDescriptor<Texture> titleTitle1TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_1.png", Texture.class);
@@ -48,6 +50,9 @@ public class Assets implements Disposable {
     public TextureRegion testTexture;
     public TextureRegion whitePixel;
     public TextureRegion whiteCircle;
+    public TextureRegion handFlat;
+    public TextureRegion handFist;
+    public TextureRegion handPointer;
 
     public TextureRegion player;
     public Animation<Texture> titleAnimation;
@@ -73,6 +78,7 @@ public class Assets implements Disposable {
     public Animation<TextureRegion> tackAnimationLeft;
     public Animation<TextureRegion> tackAnimationRight;
     public Animation<TextureRegion> stunStarsAnimation;
+    public Animation<TextureRegion> explosionAnimation;
 
     public NinePatch ninePatch;
 
@@ -112,6 +118,8 @@ public class Assets implements Disposable {
         mgr.load(atlasAsset);
         mgr.load(titleBackgroundTextureAsset);
         mgr.load(titleCouchTextureAsset);
+        mgr.load(titleCouchTalk1TextureAsset);
+        mgr.load(titleCouchTalk2TextureAsset);
         mgr.load(titleSubtitleTextureAsset);
         mgr.load(titleTitle0TextureAsset);
         mgr.load(titleTitle1TextureAsset);
@@ -139,6 +147,10 @@ public class Assets implements Disposable {
         whitePixel = atlas.findRegion("white-pixel");
         whiteCircle = atlas.findRegion("white-circle");
 
+        handFist = atlas.findRegion("hand-fist");
+        handFlat = atlas.findRegion("hand-flat");
+        handPointer = atlas.findRegion("hand-point");
+
         player = atlas.findRegion("purse_image");
 
         Array<Texture> titleFrames = new Array<Texture>();
@@ -152,9 +164,11 @@ public class Assets implements Disposable {
 
         Array<Texture> couchFrames = new Array<Texture>();
         couchFrames.addAll(
-                mgr.get(titleCouchTextureAsset)
+                mgr.get(titleCouchTextureAsset),
+                mgr.get(titleCouchTalk1TextureAsset),
+                mgr.get(titleCouchTalk2TextureAsset)
         );
-        couchAnimation = new Animation<Texture>(0.2f, couchFrames, Animation.PlayMode.LOOP);
+        couchAnimation = new Animation<Texture>(0.2f, couchFrames, Animation.PlayMode.LOOP_PINGPONG);
 
         Array playerShoot = atlas.findRegions("purse_spit");
         playerShootAnimation = new Animation<TextureRegion>(0.3f, playerShoot, Animation.PlayMode.NORMAL);
@@ -206,6 +220,9 @@ public class Assets implements Disposable {
 
         Array stunStars = atlas.findRegions("stars");
         stunStarsAnimation = new Animation<TextureRegion>(.1f, stunStars, Animation.PlayMode.LOOP);
+
+        Array<TextureAtlas.AtlasRegion> explosion = atlas.findRegions("explosion");
+        explosionAnimation = new Animation<TextureRegion>(.1f, explosion, Animation.PlayMode.NORMAL);
 
         arcadeTexture = mgr.get(arcadeTextureAsset);
         arcadeTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

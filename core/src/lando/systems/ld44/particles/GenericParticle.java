@@ -1,6 +1,7 @@
 package lando.systems.ld44.particles;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -11,6 +12,7 @@ public class GenericParticle implements Pool.Poolable{
     public enum OriginType {CENTER, CUSTOM}
 
     TextureRegion region;
+    Animation<TextureRegion> animation;
     float startWidth;
     float endWidth;
     float startHeight;
@@ -57,7 +59,48 @@ public class GenericParticle implements Pool.Poolable{
                      float eR, float eG, float eB, float eA,
                      float startRotation, float endRotation,
                      float ttl, float delay) {
+        init(region, null, startWidth, endWidth, startHeight, endHeight,
+                x, y, vx, vy, ax, ay, accDamping,
+                originType, originX, originY,
+                sR, sG, sB, sA,
+                eR, eG, eB, eA,
+                startRotation, endRotation, ttl, delay);
+    }
+
+    public void init(Animation<TextureRegion> animation,
+                     float startWidth, float endWidth,
+                     float startHeight, float endHeight,
+                     float x, float y,
+                     float vx, float vy,
+                     float ax, float ay,
+                     float accDamping,
+                     OriginType originType, float originX, float originY,
+                     float sR, float sG, float sB, float sA,
+                     float eR, float eG, float eB, float eA,
+                     float startRotation, float endRotation,
+                     float ttl, float delay) {
+        init(null, animation, startWidth, endWidth, startHeight, endHeight,
+                x, y, vx, vy, ax, ay, accDamping,
+                originType, originX, originY,
+                sR, sG, sB, sA,
+                eR, eG, eB, eA,
+                startRotation, endRotation, ttl, delay);
+    }
+
+    public void init(TextureRegion region, Animation<TextureRegion> animation,
+                     float startWidth, float endWidth,
+                     float startHeight, float endHeight,
+                     float x, float y,
+                     float vx, float vy,
+                     float ax, float ay,
+                     float accDamping,
+                     OriginType originType, float originX, float originY,
+                     float sR, float sG, float sB, float sA,
+                     float eR, float eG, float eB, float eA,
+                     float startRotation, float endRotation,
+                     float ttl, float delay) {
         this.region = region;
+        this.animation = animation;
         this.startWidth = startWidth;
         this.endWidth = endWidth;
         this.startHeight = startHeight;
@@ -123,7 +166,12 @@ public class GenericParticle implements Pool.Poolable{
         y -= originY;
 
         batch.setColor(r, g, b, a);
-        batch.draw(region, x, y, originX, originY, width, height, 1f, 1f, rotation);
+        if (animation != null){
+            float totalDuration = animation.getAnimationDuration();
+            batch.draw(animation.getKeyFrame(t * totalDuration), x, y, originX, originY, width, height, 1f, 1f, rotation);
+        } else {
+            batch.draw(region, x, y, originX, originY, width, height, 1f, 1f, rotation);
+        }
         batch.setColor(Color.WHITE);
 
     }

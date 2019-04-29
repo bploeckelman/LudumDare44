@@ -30,9 +30,9 @@ public class Player extends GameEntity {
         while (coinPurse.size < 5) {
             addCoin(new Coin(screen, assets.pennyPickupAnimation, 0.01f));
         }
-        addCoin(new Coin(screen, assets.nickelPickupAnimation, 0.05f));
-        addCoin(new Coin(screen, assets.dimePickupAnimation, 0.10f));
-        addCoin(new Coin(screen, assets.quarterPickupAnimation, 0.25f));
+//        addCoin(new Coin(screen, assets.nickelPickupAnimation, 0.05f));
+//        addCoin(new Coin(screen, assets.dimePickupAnimation, 0.10f));
+//        addCoin(new Coin(screen, assets.quarterPickupAnimation, 0.25f));
         this.collisionBoundsOffsets.set(4, 0, 64, 60);
     }
 
@@ -40,16 +40,16 @@ public class Player extends GameEntity {
         super.update(dt);
         if (groundPoundDelay > 0) return;
         if (jumpState != JumpState.POUND) {
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 velocity.add(-horizontalSpeed, 0);
                 direction = Direction.LEFT;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 velocity.add(horizontalSpeed, 0);
                 direction = Direction.RIGHT;
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+        if (Gdx.input.justTouched()) {
             shoot();
         }
 
@@ -60,7 +60,7 @@ public class Player extends GameEntity {
 
         if (Math.abs(velocity.x) < 20) velocity.x = 0;
 
-        boolean jumpPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched();
+        boolean jumpPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.UP);
         if (jumpPressed){
             jump();
         }

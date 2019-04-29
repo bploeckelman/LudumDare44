@@ -311,7 +311,11 @@ public class GameEntity {
     }
 
     protected void renderStunned(SpriteBatch batch, float scaleX, float scaleY) {
+        Color stunColor = (stunTime % 0.4f > 0.2f) ? Color.RED : Color.WHITE;
+
+        batch.setColor(stunColor);
         batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
+        batch.setColor(Color.WHITE);
         batch.draw(assets.stunStarsAnimation.getKeyFrame(stunTime), position.x, position.y + collisionBoundsOffsets.height, width, 10);
     }
 

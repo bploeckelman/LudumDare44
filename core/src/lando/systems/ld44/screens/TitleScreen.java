@@ -1,9 +1,6 @@
 package lando.systems.ld44.screens;
 
-import aurelienribon.tweenengine.BaseTween;
-import aurelienribon.tweenengine.Timeline;
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.*;
 import aurelienribon.tweenengine.equations.Back;
 import aurelienribon.tweenengine.equations.Bounce;
 import aurelienribon.tweenengine.equations.Elastic;
@@ -18,6 +15,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
 import lando.systems.ld44.Game;
@@ -37,7 +35,10 @@ public class TitleScreen extends BaseScreen {
     private Texture couchKeyFrame;
     private Animation<Texture> titleAnimation;
     private Animation<Texture> couchAnimation;
+    private TextureRegion coinPurseKeyFrame;
+    private Animation<TextureRegion> coinPurseAnimation;
     private float stateTime;
+    private float couchyTalkStateTime;
 
     private Rectangle titleBoundsStart;
     private Rectangle subtitleBoundsStart;
@@ -51,6 +52,7 @@ public class TitleScreen extends BaseScreen {
     private Rectangle titleBounds;
     private Rectangle subtitleBounds;
     private Rectangle couchBounds;
+    private Rectangle coinPurseBounds;
 
     private Color backgroundColor;
     private MutableFloat subtitleAlpha;
@@ -58,6 +60,7 @@ public class TitleScreen extends BaseScreen {
 
     private boolean startupTweenComplete;
     private boolean storyTweenComplete;
+    private boolean couchyIsTalking;
     private boolean isTransitioning;
 
     private float clickToPlayYBaseline;
@@ -78,6 +81,11 @@ public class TitleScreen extends BaseScreen {
         couchAnimation = assets.couchAnimation;
         couchKeyFrame = couchAnimation.getKeyFrame(0f);
         stateTime = 0f;
+        couchyTalkStateTime = 0f;
+
+//        coinPurseAnimation = assets.coinPurseIdleAnimation;
+//        coinPurseKeyFrame = coinPurseAnimation.getKeyFrame(0f);
+        coinPurseKeyFrame = assets.player;
 
         float halfScreenWidth = hudCamera.viewportWidth / 2f;
         titleBoundsEnd = new Rectangle(halfScreenWidth - titleKeyFrame.getWidth() / 2f, hudCamera.viewportHeight - titleKeyFrame.getHeight(), titleKeyFrame.getWidth(), titleKeyFrame.getHeight());
@@ -96,6 +104,7 @@ public class TitleScreen extends BaseScreen {
         titleBounds = new Rectangle();
         subtitleBounds = new Rectangle();
         couchBounds = new Rectangle();
+        coinPurseBounds = new Rectangle(100f, -coinPurseKeyFrame.getRegionHeight() - 10f, coinPurseKeyFrame.getRegionWidth(), coinPurseKeyFrame.getRegionHeight());
 
         backgroundColor = new Color();
         subtitleAlpha = new MutableFloat(0f);
@@ -104,6 +113,7 @@ public class TitleScreen extends BaseScreen {
         clickTextBounceY = new MutableFloat(clickToPlayYBaseline);
 
         isTransitioning = false;
+        couchyIsTalking = false;
 
         startStartupTween();
     }
@@ -117,6 +127,15 @@ public class TitleScreen extends BaseScreen {
 
         stateTime += dt;
         titleKeyFrame = titleAnimation.getKeyFrame(stateTime);
+
+        if (couchyIsTalking) {
+            couchyTalkStateTime += dt;
+            couchKeyFrame = couchAnimation.getKeyFrame(couchyTalkStateTime);
+
+            if (storyTweenComplete) {
+                couchKeyFrame = couchAnimation.getKeyFrame(0f);
+            }
+        }
 
         if (startupTweenComplete && Gdx.input.justTouched()) {
             startStoryTween();
@@ -153,7 +172,9 @@ public class TitleScreen extends BaseScreen {
 
             batch.draw(couchKeyFrame, couchBounds.x, couchBounds.y, couchBounds.width, couchBounds.height);
 
-            // TODO: draw characters
+            if (startupTweenComplete) {
+                batch.draw(coinPurseKeyFrame, coinPurseBounds.x, coinPurseBounds.y, coinPurseBounds.width, coinPurseBounds.height);
+            }
 
             if (storyTweenComplete) {
                 float scaleX = assets.font.getData().scaleX;
@@ -200,9 +221,9 @@ public class TitleScreen extends BaseScreen {
                              .target(1f, 1f, 1f)
                 )
                 .push(// slide in couch
-                        Tween.to(couchBounds, RectangleAccessor.XYWH, 1.0f)
+                        Tween.to(couchBounds, RectangleAccessor.XYWH, 0.8f)
                              .target(couchBoundsEnd.x, couchBoundsEnd.y, couchBoundsEnd.width, couchBoundsEnd.height)
-                             .ease(Elastic.OUT)
+                             .ease(Back.OUT)
                 )
                 .push(// bounce in title
                         Tween.to(titleBounds, RectangleAccessor.XYWH, 1.5f)
@@ -249,13 +270,40 @@ public class TitleScreen extends BaseScreen {
                         Tween.to(couchBounds, RectangleAccessor.XYWH, 1.5f)
                              .target(couchBoundsStory.x, couchBoundsStory.y, couchBoundsStory.width, couchBoundsStory.height)
                 )
-//                .push(
-//                        // Start bouncing characters and showing text
-//                        Timeline.createParallel()
-//                        .push(
-//
-//                        )
-//                )
+                .push(
+                        // Start bouncing characters and showing text
+                        Timeline.createParallel()
+                        .push(
+                                Tween.to(coinPurseBounds, RectangleAccessor.XY, 0.2f)
+                                     .target(100f, 200f)
+                                     .ease(Bounce.OUT)
+                        )
+                )
+                .push(
+                        Tween.call(new TweenCallback() {
+                            @Override
+                            public void onEvent(int i, BaseTween<?> baseTween) {
+                                couchyIsTalking = true;
+                            }
+                        })
+                )
+                // TODO: might have to split this out into a before-text tween and an after-text tween
+                .pushPause(3f)
+                .push(
+                        Tween.call(new TweenCallback() {
+                            @Override
+                            public void onEvent(int i, BaseTween<?> baseTween) {
+                                couchyIsTalking = false;
+                            }
+                        })
+                )
+                .push(// Pursey: "I'm going in"
+                        Tween.to(coinPurseBounds, RectangleAccessor.XYWH, 1.5f)
+                             .waypoint(hudCamera.viewportWidth / 2f - coinPurseBounds.width / 2f, couchBounds.y + couchBounds.height, coinPurseBounds.width, coinPurseBounds.height)
+                             .waypoint(hudCamera.viewportWidth / 2f - coinPurseBounds.width / 2f, couchBounds.y + couchBounds.height * (1f / 3f), 0f, 0f)
+                             .path(TweenPaths.catmullRom)
+
+                )
                 .setCallback(new TweenCallback() {
                     @Override
                     public void onEvent(int i, BaseTween<?> baseTween) {

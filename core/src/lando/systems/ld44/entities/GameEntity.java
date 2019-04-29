@@ -143,7 +143,6 @@ public class GameEntity {
     }
 
     public void getHurt(Rectangle damageRect) {
-        // TODO: override in Player to bounce back and lose some coins
 //        float centerX = position.x + width / 2f;
 //        float centerY = position.y;
 //        screen.particleManager.addGroundPoundDust(centerX, centerY, centerX - 100f, centerX + 100f);

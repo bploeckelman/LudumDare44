@@ -200,7 +200,6 @@ public class Level {
         for (Tack tack : tacks) {
             entityBounds.set(entity.position.x + entity.collisionBoundsOffsets.x, entity.position.y + entity.collisionBoundsOffsets.y, entity.collisionBoundsOffsets.width, entity.collisionBoundsOffsets.height);
             if (Intersector.intersectRectangles(tack.bounds, entityBounds, tempRect)) {
-                // TODO: if this is the player, lose some coins and bounce back or whatever, if enemy, then die or whatever
                 if (entity instanceof Player) {
                     entity.getHurt(tempRect);
                 } else {

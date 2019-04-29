@@ -16,6 +16,7 @@ public class Player extends AnimationGameEntity {
     public float maxValue = 2f;
     public float value;
 
+    private float timeWithoutCoins;
     public Array<Coin> coinPurse = new Array<Coin>();
 
     private PlayerStateManager stateManager;
@@ -38,6 +39,17 @@ public class Player extends AnimationGameEntity {
 
     public void update(float dt) {
         super.update(dt);
+
+        if (coinPurse.size == 0){
+            timeWithoutCoins += dt;
+            if (timeWithoutCoins > 15){
+                // TODO: Notify player about this?
+                addCoin(new Coin(screen, assets.pennyPickupAnimation, 0.01f));
+                timeWithoutCoins = 0;
+            }
+        } else {
+            timeWithoutCoins = 0;
+        }
 
         image = (hurtTime > 0) ? assets.playerHurt : image;
 

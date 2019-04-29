@@ -123,6 +123,7 @@ public class Player extends AnimationGameEntity {
             coin.bounds.getCenter(center);
             if (consumeRect.contains(center)) {
                 playSound(Audio.Sounds.ConsumeCoin);
+                screen.game.stats.coinsCollected++;
                 addCoin(coin);
                 close();
             }
@@ -132,7 +133,6 @@ public class Player extends AnimationGameEntity {
     private void addCoin(Coin coin) {
         coinPurse.add(coin);
         coin.remove = true;
-        screen.game.stats.coinsCollected++;
         /*
         value = MathUtils.clamp(value + value, 0, maxValue);
 

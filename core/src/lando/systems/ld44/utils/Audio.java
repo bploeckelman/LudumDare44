@@ -27,7 +27,7 @@ public class Audio implements Disposable {
 
     public enum Sounds {
         None, // don't put sound to this - default no op
-        Shoot, Coin, Spring, GroundPound, Landing, ConsumeCoin, Stun
+        Shoot, Spring, GroundPound, Landing, ConsumeCoin, Stun
     }
 
     public enum Musics {
@@ -50,12 +50,12 @@ public class Audio implements Disposable {
 
     public Audio(boolean playMusic, Game game) {
         this.game = game;
-        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin1.mp3")));
-        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin2.mp3")));
-        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin3.mp3")));
-        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin4.mp3")));
-        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin5.mp3")));
-        putSound(Sounds.Coin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin6.mp3")));
+        putSound(Sounds.ConsumeCoin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin1.mp3")));
+        putSound(Sounds.ConsumeCoin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin2.mp3")));
+        putSound(Sounds.ConsumeCoin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin3.mp3")));
+        putSound(Sounds.ConsumeCoin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin4.mp3")));
+        putSound(Sounds.ConsumeCoin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin5.mp3")));
+        putSound(Sounds.ConsumeCoin, Gdx.audio.newSound(Gdx.files.internal("sounds/coin6.mp3")));
 
         putSound(Sounds.Spring, Gdx.audio.newSound(Gdx.files.internal("sounds/bounce2.mp3")));
 

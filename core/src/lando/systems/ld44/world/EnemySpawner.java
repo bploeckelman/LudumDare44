@@ -6,7 +6,7 @@ import lando.systems.ld44.screens.GameScreen;
 
 public class EnemySpawner {
 
-    public enum EnemyType { penny, nickel, dime, chicken, bunny }
+    public enum EnemyType { penny, nickel, dime, quarter, chicken, bunny }
 
     public Vector2 pos;
     public EnemyType enemyType;
@@ -25,6 +25,7 @@ public class EnemySpawner {
             case penny:   entity = new Penny(screen);   break;
             case nickel:  entity = new Nickel(screen);  break;
             case dime:    entity = new Dime(screen);    break;
+            case quarter: entity = new Quarter(screen); break;
             case chicken: entity = new Chicken(screen); break;
             case bunny:   entity = new Bunny(screen);   break;
         }

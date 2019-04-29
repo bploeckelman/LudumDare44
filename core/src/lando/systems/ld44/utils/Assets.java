@@ -16,7 +16,15 @@ import lando.systems.ld44.entities.AnimationGameEntity;
 public class Assets implements Disposable {
 
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
-    private final AssetDescriptor<Texture> titleTextureAsset = new AssetDescriptor<Texture>("images/title.png", Texture.class);
+//    private final AssetDescriptor<Texture> titleTextureAsset = new AssetDescriptor<Texture>("images/title.png", Texture.class);
+    public final AssetDescriptor<Texture> titleBackgroundTextureAsset = new AssetDescriptor<Texture>("images/title/title-background.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTextureAsset = new AssetDescriptor<Texture>("images/title/title-couch.png", Texture.class);
+    public final AssetDescriptor<Texture> titleSubtitleTextureAsset = new AssetDescriptor<Texture>("images/title/title-subtitle.png", Texture.class);
+    public final AssetDescriptor<Texture> titleTitle0TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_0.png", Texture.class);
+    public final AssetDescriptor<Texture> titleTitle1TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_1.png", Texture.class);
+    public final AssetDescriptor<Texture> titleTitle2TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_2.png", Texture.class);
+    public final AssetDescriptor<Texture> titleTitle3TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_3.png", Texture.class);
+
     private final AssetDescriptor<Texture> arcadeTextureAsset = new AssetDescriptor<Texture>("images/arcade.png", Texture.class);
     private final AssetDescriptor<Texture> couchTextureAsset = new AssetDescriptor<Texture>("images/couch.png", Texture.class);
     private final AssetDescriptor<Texture> pixelTextureAsset = new AssetDescriptor<Texture>("images/pixel.png", Texture.class);
@@ -44,6 +52,7 @@ public class Assets implements Disposable {
     public TextureRegion whiteCircle;
 
     public TextureRegion player;
+    public Animation<Texture> titleAnimation;
     public Animation<TextureRegion> playerShootAnimation;
     public Animation<TextureRegion> playerOpenAnimation;
     public Animation<TextureRegion> pennyAnimation;
@@ -102,7 +111,14 @@ public class Assets implements Disposable {
 
         mgr = new AssetManager();
         mgr.load(atlasAsset);
-        mgr.load(titleTextureAsset);
+//        mgr.load(titleTextureAsset);
+        mgr.load(titleBackgroundTextureAsset);
+        mgr.load(titleCouchTextureAsset);
+        mgr.load(titleSubtitleTextureAsset);
+        mgr.load(titleTitle0TextureAsset);
+        mgr.load(titleTitle1TextureAsset);
+        mgr.load(titleTitle2TextureAsset);
+        mgr.load(titleTitle3TextureAsset);
         mgr.load(arcadeTextureAsset);
         mgr.load(couchTextureAsset);
         mgr.load(pixelTextureAsset);
@@ -126,6 +142,15 @@ public class Assets implements Disposable {
         whiteCircle = atlas.findRegion("white-circle");
 
         player = atlas.findRegion("purse_image");
+
+        Array<Texture> titleFrames = new Array<Texture>();
+        titleFrames.addAll(
+                mgr.get(titleTitle0TextureAsset),
+                mgr.get(titleTitle1TextureAsset),
+                mgr.get(titleTitle2TextureAsset),
+                mgr.get(titleTitle3TextureAsset)
+        );
+        titleAnimation = new Animation<Texture>(0.33f, titleFrames, Animation.PlayMode.LOOP_PINGPONG);
 
         Array playerShoot = atlas.findRegions("purse_spit");
         playerShootAnimation = new Animation<TextureRegion>(0.3f, playerShoot, Animation.PlayMode.NORMAL);
@@ -178,7 +203,7 @@ public class Assets implements Disposable {
         Array stunStars = atlas.findRegions("stars");
         stunStarsAnimation = new Animation<TextureRegion>(.1f, stunStars, Animation.PlayMode.LOOP);
 
-        titleTexture = mgr.get(titleTextureAsset);
+//        titleTexture = mgr.get(titleTextureAsset);
         arcadeTexture = mgr.get(arcadeTextureAsset);
         arcadeTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         couchTexture = mgr.get(couchTextureAsset);
@@ -212,6 +237,16 @@ public class Assets implements Disposable {
 //        randomTransitions.add(pizelizeShader);
 
         return 1f;
+    }
+
+    public void unloadTitleAssets() {
+        mgr.unload(titleBackgroundTextureAsset.fileName);
+        mgr.unload(titleCouchTextureAsset.fileName);
+        mgr.unload(titleSubtitleTextureAsset.fileName);
+        mgr.unload(titleTitle0TextureAsset.fileName);
+        mgr.unload(titleTitle1TextureAsset.fileName);
+        mgr.unload(titleTitle2TextureAsset.fileName);
+        mgr.unload(titleTitle3TextureAsset.fileName);
     }
 
     @Override

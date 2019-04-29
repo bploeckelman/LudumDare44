@@ -18,6 +18,7 @@ import lando.systems.ld44.screens.LoadingScreen;
 import lando.systems.ld44.screens.TitleScreen;
 import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.Audio;
+import lando.systems.ld44.utils.CallbackListener;
 import lando.systems.ld44.utils.Config;
 
 public class Game extends ApplicationAdapter {
@@ -117,10 +118,10 @@ public class Game extends ApplicationAdapter {
 	}
 
 	public void setScreen(BaseScreen screen) {
-		setScreen(screen, null, 1f);
+		setScreen(screen, null, 1f, null);
 	}
 
-	public void setScreen(final BaseScreen newScreen, ShaderProgram transitionType, float transitionSpeed) {
+	public void setScreen(final BaseScreen newScreen, ShaderProgram transitionType, float transitionSpeed, final CallbackListener callback) {
 		if (nextScreen != null) return;
 		if (screen == null) {
 			screen = newScreen;
@@ -149,6 +150,9 @@ public class Game extends ApplicationAdapter {
 							screen = nextScreen;
 							nextScreen = null;
 							screen.allowInput = true;
+							if (callback != null) {
+								callback.callback();
+							}
 						}
 					}))
 					.start(tween);

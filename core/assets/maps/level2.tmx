@@ -156,7 +156,7 @@
     <property name="facing" value="down"/>
    </properties>
   </object>
-  <object id="45" type="spring" gid="186" x="2752" y="640" width="32" height="32">
+  <object id="45" type="spring" gid="186" x="2752" y="608" width="32" height="32">
    <properties>
     <property name="orientation" value="left"/>
    </properties>

@@ -66,7 +66,7 @@ public class GameScreen extends BaseScreen {
                 break;
             case Level2:
                 level = new Level("maps/level2.tmx", assets, this);
-                audio.playMusic(Audio.Musics.Level1);
+                audio.playMusic(Audio.Musics.Level2);
                 break;
             case Boss:
                 level = new Level("maps/boss-arena.tmx", assets, this);
@@ -96,6 +96,14 @@ public class GameScreen extends BaseScreen {
          && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }
+
+        //TODO REMOVE THIS
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop &&
+        Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            nextLevel();
+            return;
+        }
+
         handleCameraConstraints();
         shaker.update(dt);
 

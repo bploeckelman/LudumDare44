@@ -29,6 +29,7 @@ public class Coin extends AnimationGameEntity {
         velocity.x *= 0.975f;
         if (MathUtils.isEqual(velocity.x, 0f, 1.0f)) {
             velocity.x = 0f;
+            projecttile = false;
         }
     }
 
@@ -36,6 +37,7 @@ public class Coin extends AnimationGameEntity {
     public void pound() {
         // float dx = -100 + ((float)Math.random() * 200);
         velocity.set(0, poundVelocity);
+        projecttile = false;
     }
 
     @Override

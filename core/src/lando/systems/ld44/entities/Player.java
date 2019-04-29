@@ -40,16 +40,16 @@ public class Player extends GameEntity {
         super.update(dt);
         if (groundPoundDelay > 0) return;
         if (jumpState != JumpState.POUND) {
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 velocity.add(-horizontalSpeed, 0);
                 direction = Direction.LEFT;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 velocity.add(horizontalSpeed, 0);
                 direction = Direction.RIGHT;
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+        if (Gdx.input.justTouched()) {
             shoot();
         }
 
@@ -60,7 +60,7 @@ public class Player extends GameEntity {
 
         if (Math.abs(velocity.x) < 20) velocity.x = 0;
 
-        boolean jumpPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched();
+        boolean jumpPressed = Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.UP);
         if (jumpPressed){
             jump();
         }

@@ -36,6 +36,11 @@ public class Coin extends Projectile {
     }
 
     @Override
+    public void stun() {
+        // no op
+    }
+
+    @Override
     public void reset() {
         super.reset();
         consuming = false;

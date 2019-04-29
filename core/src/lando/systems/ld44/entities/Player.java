@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Audio;
 
-public class Player extends GameEntity {
+public class Player extends AnimationGameEntity {
     public float horizontalSpeed = 100;
 
     // TODO: change to maximum number of coins
@@ -21,7 +21,7 @@ public class Player extends GameEntity {
     private PlayerStateManager stateManager;
 
     public Player(GameScreen screen, float x, float y) {
-        super(screen);
+        super(screen, screen.assets.playerAnimation);
 
         stateManager = new PlayerStateManager(this);
         this.position.set(x, y);

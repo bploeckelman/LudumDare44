@@ -3,6 +3,7 @@ package lando.systems.ld44.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -141,12 +142,12 @@ public class GameEntity {
 
     public void getHurt() {
         // TODO: override in Player to bounce back and lose some coins
-        float centerX = position.x + width / 2f;
-        float centerY = position.y;
-        screen.particleManager.addGroundPoundDust(centerX, centerY, centerX - 100f, centerX + 100f);
-        float weightRatio = 1f;
-        float shake = 0.5f + (0.4f * weightRatio);
-        screen.shaker.addDamage(shake);
+//        float centerX = position.x + width / 2f;
+//        float centerY = position.y;
+//        screen.particleManager.addGroundPoundDust(centerX, centerY, centerX - 100f, centerX + 100f);
+//        float weightRatio = 1f;
+//        float shake = 0.5f + (0.4f * weightRatio);
+//        screen.shaker.addDamage(shake);
     }
 
     public void update(float dt) {
@@ -161,10 +162,9 @@ public class GameEntity {
     }
 
     // used to collide with player
-    public boolean hasHit(GameEntity entity) {
+    public boolean hasHit(GameEntity entity, Rectangle collisionRect) {
         if (isStunned() || isDying() || entity.isStunned() || entity.isDying()) return false;
-
-        return bounds.overlaps(entity.bounds);
+        return Intersector.intersectRectangles(bounds, entity.bounds, collisionRect);
     }
 
     protected void handleDying(float dt) {

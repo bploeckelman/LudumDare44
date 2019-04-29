@@ -81,6 +81,7 @@ public class Boss {
         for (GameEntity entity : gameScreen.gameEntities){
             if (entity instanceof Projectile) {
                 Projectile projectile = (Projectile) entity;
+                if (!projectile.isActive()) continue;
                 if (projectile.bounds.overlaps(bounds)) {
                     hitpoints--;
                     tookDamage = true;

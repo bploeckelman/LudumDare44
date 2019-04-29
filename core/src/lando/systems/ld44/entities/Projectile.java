@@ -64,7 +64,7 @@ public class Projectile extends AnimationGameEntity {
         }
         // Slow the coin down
         velocity.x *= 0.98f;
-        if (MathUtils.isEqual(velocity.x, 0f, 1.0f)) {
+        if (MathUtils.isEqual(velocity.x, 0f, 10.0f)) {
             velocity.x = 0f;
             active = false;
         }

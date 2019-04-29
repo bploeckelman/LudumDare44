@@ -2,6 +2,7 @@ package lando.systems.ld44.particles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -45,6 +46,24 @@ public class ParticleManager {
                 1f, 1f, 1f, 1f,
                 0, 0, ttl, 0);
         activeParticles.add(particle);
+    }
+
+    public void addBlood(Rectangle rect){
+        for (int i = 0; i < 80; i++) {
+            GenericParticle particle = particlePool.obtain();
+            float direction = MathUtils.random(60f, 120f);
+            float speed = MathUtils.random(40,100);
+            float vx = MathUtils.cosDeg(direction) * speed;
+            float vy = MathUtils.sinDeg(direction) * speed;
+
+            particle.init(assets.whiteCircle,2, 1, 2, 1,
+                    MathUtils.random(rect.x, rect.x + rect.width), MathUtils.random(rect.y, rect.y + rect.height),
+                    vx, vy, 0, -100, 1, GenericParticle.OriginType.CENTER, 0, 0,
+                    1f, 0, 0, 1f,
+                    1f, 0, 0, 0f,
+                    0, 0, MathUtils.random(.5f, 1.5f), 0);
+            activeParticles.add(particle);
+        }
     }
 
     public void addGroundPoundDust(float x, float y, float minX, float maxX) {

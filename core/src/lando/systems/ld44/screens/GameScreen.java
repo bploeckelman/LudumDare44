@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.Game;
@@ -41,6 +42,7 @@ public class GameScreen extends BaseScreen {
 
     private float tempStateTime = 0f;
     public LevelIndex levelIndex;
+    public Rectangle tempRect;
 
     public GameScreen(Game game, Assets assets, LevelIndex levelIndex) {
         super(game, assets);
@@ -53,6 +55,7 @@ public class GameScreen extends BaseScreen {
         background = new ParallaxBackground(layer);
         hud = new Hud(this);
         firstRun = true;
+        tempRect = new Rectangle();
     }
 
     private void loadLevel(){
@@ -122,10 +125,13 @@ public class GameScreen extends BaseScreen {
                         projectile.markHit();
                     }
                 }
-            } else if (ge.hasHit(player)) {
-                if (player.hurtTime <= 0) {
+            } else if (ge.hasHit(player, tempRect)) {
+                if (player.hurtTime <= 0 &&
+                        player.jumpState != GameEntity.JumpState.POUND &&
+                        player.groundPoundDelay <= 0) {
                     player.getHurt();
                     ge.changeDirection();
+                    particleManager.addBlood(tempRect);
                 }
             }
         }

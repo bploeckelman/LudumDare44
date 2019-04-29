@@ -193,10 +193,21 @@ public class Player extends GameEntity {
 
     public float hurtTime = 0;
     @Override
-    public void getHurt() {
+    public void getHurt(Rectangle damageRect) {
         if (hurtTime <= 0) {
-            super.getHurt();
+            super.getHurt(damageRect);
             hurtTime = 2;
+            screen.particleManager.addBlood(damageRect);
+            if (damageRect.width < damageRect.height ||
+                damageRect.y == bounds.y){
+                velocity.y = 400;
+            }
+            if (damageRect.x == bounds.x) {
+                velocity.x = 400;
+            } else {
+                velocity.x = -400;
+            }
+
         }
     }
 

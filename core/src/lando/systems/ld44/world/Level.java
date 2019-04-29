@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -45,11 +46,12 @@ public class Level {
     public Array<Rectangle> tileRects;
     public Pool<Rectangle> rectPool;
     public boolean isBossLevel;
+    public Rectangle tempRect;
 
     public Level(String mapFileName, Assets assets, GameScreen screen) {
         Gdx.app.log("Map", "Loading map: '" + mapFileName + "'");
         this.isBossLevel = mapFileName.contains("boss-arena");
-
+        tempRect = new Rectangle();
         this.assets = assets;
         this.screen = screen;
 
@@ -197,10 +199,10 @@ public class Level {
         }
         for (Tack tack : tacks) {
             entityBounds.set(entity.position.x + entity.collisionBoundsOffsets.x, entity.position.y + entity.collisionBoundsOffsets.y, entity.collisionBoundsOffsets.width, entity.collisionBoundsOffsets.height);
-            if (tack.bounds.overlaps(entityBounds)) {
+            if (Intersector.intersectRectangles(tack.bounds, entityBounds, tempRect)) {
                 // TODO: if this is the player, lose some coins and bounce back or whatever, if enemy, then die or whatever
                 if (entity instanceof Player) {
-                    entity.getHurt();
+                    entity.getHurt(tempRect);
                 } else {
                     entity.stun();
                 }

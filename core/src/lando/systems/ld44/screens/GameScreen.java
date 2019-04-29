@@ -132,9 +132,8 @@ public class GameScreen extends BaseScreen {
                 if (player.hurtTime <= 0 &&
                         player.jumpState != GameEntity.JumpState.POUND &&
                         player.groundPoundDelay <= 0) {
-                    player.getHurt();
+                    player.getHurt(tempRect);
                     ge.changeDirection();
-                    particleManager.addBlood(tempRect);
                 }
             }
         }

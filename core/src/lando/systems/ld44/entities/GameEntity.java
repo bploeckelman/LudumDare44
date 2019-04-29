@@ -140,7 +140,7 @@ public class GameEntity {
         dyingTime = 2;
     }
 
-    public void getHurt() {
+    public void getHurt(Rectangle damageRect) {
         // TODO: override in Player to bounce back and lose some coins
 //        float centerX = position.x + width / 2f;
 //        float centerY = position.y;

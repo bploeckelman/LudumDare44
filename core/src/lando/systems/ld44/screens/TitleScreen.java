@@ -37,8 +37,8 @@ public class TitleScreen extends BaseScreen {
     private State state = State.intro;
     private boolean stateTweening = false;
 
-    private final String storyText = "Hello [YELLOW]Pursey[],\n\nI'm [CORAL]King Sofa[]\nof the [ORANGE]Sofa Kingdom[].\n\nSomeone has stuffed their grubby hands down in our cushions\nin flagrant violation of the\n'No Touchy Act'\nof 1997.\n....\n\nNow get inside me, [YELLOW]Pursey[], and collect coins to fight your way to the hands!";
-    private final String storyShadowText = "Hello Pursey,\n\nI'm King Sofa\nof the Sofa Kingdom.\n\nSomeone has stuffed their grubby hands down in our cushions\nin flagrant violation of the\n'No Touchy Act'\nof 1997.\n....\n\nNow get inside me, Pursey, and collect coins to fight your way to the hand!";
+    private final String storyText = "Hello [YELLOW]Pursey[],\n\nI'm [CORAL]King Sofa[]\nof the [ORANGE]Sofa Kingdom[].\n\nSomeone has stuffed their grubby hands down in our cushions in\nflagrant violation of the\n[RED]No Touchy Act[]\nof 1997.\n\n....\n\nNow get inside me, [YELLOW]Pursey[], and collect coins to fight your way to the hands!";
+    private final String storyShadowText = "Hello Pursey,\n\nI'm King Sofa\nof the Sofa Kingdom.\n\nSomeone has stuffed their grubby hands down in our cushions in\nflagrant violation of the\nNo Touchy Act\nof 1997.\n\n....\n\nNow get inside me, Pursey, and collect coins to fight your way to the hand!";
     private final String controlsText = "CONTROLS:\n\n\n\n([GREEN]MOVE[])\n\n\n\n\n\n([YELLOW]JUMP[]/[ORANGE]POUND[])\n\nPress once\nto ([YELLOW]JUMP[])\n\nPress in air\nto ([ORANGE]POUND[])\n\n\n\n\n\n\n([MAGENTA]SHOOT COINS[])";
     private final String controlsShadowText = "CONTROLS:\n\n\n\n(MOVE)\n\n\n\n\n\n(JUMP/POUND)\n\nPress once\nto (JUMP)\n\nPress in air\nto (POUND)\n\n\n\n\n\n\n(SHOOT COINS)";
 
@@ -124,7 +124,7 @@ public class TitleScreen extends BaseScreen {
         subtitleBoundsEnd = new Rectangle(halfScreenWidth - subtitle.getWidth() / 2f - 5f, 10f + couchKeyFrame.getHeight() - 35f, subtitle.getWidth(), subtitle.getHeight());
         couchBoundsEnd = new Rectangle(halfScreenWidth - couchKeyFrame.getWidth() / 2f, 10f, couchKeyFrame.getWidth(), couchKeyFrame.getHeight());
 
-        float offscreenAmount = (1f / 5f) * couchKeyFrame.getWidth();
+        float offscreenAmount = (1f / 6f) * couchKeyFrame.getWidth();
         float couchStoryWidth = hudCamera.viewportWidth + 2f * offscreenAmount;
         float couchStoryHeight = couchKeyFrame.getHeight() * (couchStoryWidth / couchKeyFrame.getWidth());
         couchBoundsStory = new Rectangle(hudCamera.viewportWidth / 2f - couchStoryWidth / 2f, couchBoundsEnd.y, couchStoryWidth, couchStoryHeight);
@@ -387,7 +387,7 @@ public class TitleScreen extends BaseScreen {
                         Timeline.createParallel()
                         .push(
                                 Tween.to(coinPurseBounds, RectangleAccessor.XY, 0.5f)
-                                     .target(100f, 200f)
+                                     .target(80f, 190f)
                                      .ease(Bounce.OUT)
                         )
                 )
@@ -417,7 +417,7 @@ public class TitleScreen extends BaseScreen {
                 .push(
                         Timeline.createParallel()
                         .push(// make dialog visible
-                                Tween.to(dialogAlpha, -1, growDuration).target(1f)
+                                Tween.to(dialogAlpha, -1, growDuration).target(0.8f)
                         )
                         .push(// grow the dialog
                                 Tween.to(dialogBounds, RectangleAccessor.XYWH, growDuration)
@@ -463,7 +463,7 @@ public class TitleScreen extends BaseScreen {
                         // Show dialog
                         Timeline.createParallel()
                                 .push(// make dialog visible
-                                      Tween.to(dialogAlpha, -1, growDuration).target(1f)
+                                      Tween.to(dialogAlpha, -1, growDuration).target(0.8f)
                                 )
                                 .push(// grow the dialog
                                       Tween.to(dialogBounds, RectangleAccessor.XYWH, growDuration)

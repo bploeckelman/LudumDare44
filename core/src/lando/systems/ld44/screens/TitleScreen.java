@@ -50,6 +50,8 @@ public class TitleScreen extends BaseScreen {
     private Texture couchKeyFrame;
     private Animation<Texture> titleAnimation;
     private Animation<Texture> couchAnimation;
+    private Animation<Texture> couchWakeAnimation;
+    private Animation<Texture> couchTalkAnimation;
     private TextureRegion coinPurseKeyFrame;
     private Animation<TextureRegion> coinPurseAnimation;
     private float stateTime;
@@ -92,6 +94,7 @@ public class TitleScreen extends BaseScreen {
     private boolean controlsTweenComplete;
     private boolean outroTweenComplete;
     private boolean couchyIsTalking;
+    private boolean couchyIsWaking;
     private boolean drawDialogText;
     private boolean drawCoinPurse;
     private boolean isTransitioningToGameScreen;
@@ -107,10 +110,11 @@ public class TitleScreen extends BaseScreen {
 
         background = assets.mgr.get(assets.titleBackgroundTextureAsset);
         subtitle   = assets.mgr.get(assets.titleSubtitleTextureAsset);
-        background = assets.mgr.get(assets.titleBackgroundTextureAsset);
 
         titleAnimation = assets.titleAnimation;
         titleKeyFrame = titleAnimation.getKeyFrame(0f);
+        couchTalkAnimation = assets.couchAnimation;
+        couchWakeAnimation = assets.couchWakeAnimation;
         couchAnimation = assets.couchAnimation;
         couchKeyFrame = couchAnimation.getKeyFrame(0f);
         stateTime = 0f;
@@ -171,6 +175,7 @@ public class TitleScreen extends BaseScreen {
 
         isTransitioningToGameScreen = false;
         couchyIsTalking = false;
+        couchyIsWaking = false;
 
         startIntroTween();
     }
@@ -186,9 +191,13 @@ public class TitleScreen extends BaseScreen {
         titleKeyFrame = titleAnimation.getKeyFrame(stateTime);
         controlsShootTexture = controlsShootAnimation.getKeyFrame(stateTime);
 
-        if (couchyIsTalking) {
+        if (couchyIsTalking || couchyIsWaking) {
             couchyTalkStateTime += dt;
             couchKeyFrame = couchAnimation.getKeyFrame(couchyTalkStateTime);
+            if (couchyIsWaking && couchyTalkStateTime >= couchWakeAnimation.getAnimationDuration()) {
+                couchyIsWaking = false;
+                couchAnimation = couchTalkAnimation;
+            }
         } else {
             couchKeyFrame = couchAnimation.getKeyFrame(0f);
         }
@@ -363,6 +372,9 @@ public class TitleScreen extends BaseScreen {
         stateTweening = true;
         drawCoinPurse = true;
 
+        couchAnimation = couchWakeAnimation;
+        couchyIsWaking = true;
+
         float offscreenDuration = 0.75f;
         Timeline.createSequence()
                 .push(
@@ -396,6 +408,8 @@ public class TitleScreen extends BaseScreen {
                             @Override
                             public void onEvent(int i, BaseTween<?> baseTween) {
                                 couchyIsTalking = true;
+                                couchyIsWaking = false;
+                                couchAnimation = couchTalkAnimation;
                                 stateTweening = false;
                                 startDialogStoryTween();
                             }

@@ -20,6 +20,10 @@ public class Assets implements Disposable {
     public final AssetDescriptor<Texture> titleCouchTextureAsset = new AssetDescriptor<Texture>("images/title/title-couch.png", Texture.class);
     public final AssetDescriptor<Texture> titleCouchTalk1TextureAsset = new AssetDescriptor<Texture>("images/title/title-couch-talk_1.png", Texture.class);
     public final AssetDescriptor<Texture> titleCouchTalk2TextureAsset = new AssetDescriptor<Texture>("images/title/title-couch-talk_2.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchWake0TextureAsset = new AssetDescriptor<Texture>("images/title/couch-wake_0.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchWake1TextureAsset = new AssetDescriptor<Texture>("images/title/couch-wake_1.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchWake2TextureAsset = new AssetDescriptor<Texture>("images/title/couch-wake_2.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchWake3TextureAsset = new AssetDescriptor<Texture>("images/title/couch-wake_3.png", Texture.class);
     public final AssetDescriptor<Texture> titleSubtitleTextureAsset = new AssetDescriptor<Texture>("images/title/title-subtitle.png", Texture.class);
     public final AssetDescriptor<Texture> titleTitle0TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_0.png", Texture.class);
     public final AssetDescriptor<Texture> titleTitle1TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_1.png", Texture.class);
@@ -58,6 +62,7 @@ public class Assets implements Disposable {
     public TextureRegion playerHurt;
     public Animation<Texture> titleAnimation;
     public Animation<Texture> couchAnimation;
+    public Animation<Texture> couchWakeAnimation;
     public Animation<TextureRegion> playerAnimation;
     public Animation<TextureRegion> playerShootAnimation;
     public Animation<TextureRegion> playerOpenAnimation;
@@ -122,6 +127,10 @@ public class Assets implements Disposable {
         mgr.load(titleCouchTextureAsset);
         mgr.load(titleCouchTalk1TextureAsset);
         mgr.load(titleCouchTalk2TextureAsset);
+        mgr.load(titleCouchWake0TextureAsset);
+        mgr.load(titleCouchWake1TextureAsset);
+        mgr.load(titleCouchWake2TextureAsset);
+        mgr.load(titleCouchWake3TextureAsset);
         mgr.load(titleSubtitleTextureAsset);
         mgr.load(titleTitle0TextureAsset);
         mgr.load(titleTitle1TextureAsset);
@@ -171,6 +180,19 @@ public class Assets implements Disposable {
                 mgr.get(titleCouchTalk2TextureAsset)
         );
         couchAnimation = new Animation<Texture>(0.2f, couchFrames, Animation.PlayMode.LOOP_PINGPONG);
+
+        Array<Texture> couchWakeFrames = new Array<Texture>();
+        couchWakeFrames.addAll(
+                mgr.get(titleCouchWake0TextureAsset),
+                mgr.get(titleCouchWake0TextureAsset),
+                mgr.get(titleCouchWake1TextureAsset),
+                mgr.get(titleCouchWake2TextureAsset),
+                mgr.get(titleCouchWake3TextureAsset),
+                mgr.get(titleCouchWake3TextureAsset),
+                mgr.get(titleCouchWake3TextureAsset),
+                mgr.get(titleCouchWake3TextureAsset)
+        );
+        couchWakeAnimation = new Animation<Texture>(0.3f, couchWakeFrames, Animation.PlayMode.NORMAL);
 
         Array playerWalk = atlas.findRegions("purse-walk");
         playerAnimation = new Animation<TextureRegion>(0.1f, playerWalk, Animation.PlayMode.LOOP);
@@ -275,6 +297,10 @@ public class Assets implements Disposable {
         mgr.unload(titleTitle1TextureAsset.fileName);
         mgr.unload(titleTitle2TextureAsset.fileName);
         mgr.unload(titleTitle3TextureAsset.fileName);
+        mgr.unload(titleCouchWake0TextureAsset.fileName);
+        mgr.unload(titleCouchWake1TextureAsset.fileName);
+        mgr.unload(titleCouchWake2TextureAsset.fileName);
+        mgr.unload(titleCouchWake3TextureAsset.fileName);
         // TODO: unload couch talking frames
     }
 

@@ -197,6 +197,21 @@ public class Player extends GameEntity {
         if (hurtTime <= 0) {
             super.getHurt(damageRect);
             hurtTime = 2;
+
+            int coinsToLose = (coinPurse.size+1) / 2;
+            for (int i = 0; i < coinsToLose; i++){
+                Coin coin = coinPurse.random();
+                coinPurse.removeValue(coin, true);
+                coin.reset();
+                coin.markHit();
+                coin.position.x = MathUtils.random(bounds.x, bounds.x + bounds.width);
+                coin.position.y = bounds.y + bounds.height + 20;
+                coin.velocity.y = 700;
+                coin.velocity.x = MathUtils.random(-600, 600);
+                coin.remove = false;
+                screen.gameEntities.add(coin);
+            }
+
             screen.particleManager.addBlood(damageRect);
             if (damageRect.width < damageRect.height ||
                 damageRect.y == bounds.y){

@@ -240,6 +240,7 @@ public class Assets implements Disposable {
         ninePatch = new NinePatch(atlas.findRegion("ninepatch-screws"), 6, 6, 6, 6);
 
         fontPixel16 = mgr.get(pixelFont16Asset);
+        fontPixel16.getData().markupEnabled = true;
         font = fontPixel16;
 
         randomTransitions = new Array<ShaderProgram>();

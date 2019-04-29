@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.accessors.ColorAccessor;
 import lando.systems.ld44.accessors.RectangleAccessor;
@@ -35,6 +36,11 @@ public class TitleScreen extends BaseScreen {
     }
     private State state = State.intro;
     private boolean stateTweening = false;
+
+    private final String storyText = "Hello [YELLOW]Pursey[],\n\nI'm [CORAL]King Sofa[]\nof the [ORANGE]Sofa Kingdom[].\n\nSomeone has stuffed their grubby hands down in our cushions\nin flagrant violation of the\n'No Touchy Act'\nof 1997.\n....\n\nNow get inside me, [YELLOW]Pursey[], and collect coins to fight your way to the hands!";
+    private final String storyShadowText = "Hello Pursey,\n\nI'm King Sofa\nof the Sofa Kingdom.\n\nSomeone has stuffed their grubby hands down in our cushions\nin flagrant violation of the\n'No Touchy Act'\nof 1997.\n....\n\nNow get inside me, Pursey, and collect coins to fight your way to the hand!";
+    private final String controlsText = "CONTROLS:\n\n\n\n([GREEN]MOVE[])\n\n\n\n\n\n([YELLOW]JUMP[]/[ORANGE]POUND[])\n\nPress once\nto ([YELLOW]JUMP[])\n\nPress in air\nto ([ORANGE]POUND[])\n\n\n\n\n\n\n([MAGENTA]SHOOT COINS[])";
+    private final String controlsShadowText = "CONTROLS:\n\n\n\n(MOVE)\n\n\n\n\n\n(JUMP/POUND)\n\nPress once\nto (JUMP)\n\nPress in air\nto (POUND)\n\n\n\n\n\n\n(SHOOT COINS)";
 
     private GlyphLayout layout;
 
@@ -67,6 +73,14 @@ public class TitleScreen extends BaseScreen {
     private Rectangle dialogBoundsMin;
     private Rectangle dialogBoundsMax;
     private MutableFloat dialogAlpha;
+
+    private TextureRegion controlsMoveTexture;
+    private TextureRegion controlsJumpTexture;
+    private TextureRegion controlsShootTexture;
+    private Animation<TextureRegion> controlsShootAnimation;
+    private Rectangle controlsMoveBounds;
+    private Rectangle controlsJumpBounds;
+    private Rectangle controlsShootBounds;
 
     private Color backgroundColor;
     private MutableFloat subtitleAlpha;
@@ -102,9 +116,8 @@ public class TitleScreen extends BaseScreen {
         stateTime = 0f;
         couchyTalkStateTime = 0f;
 
-//        coinPurseAnimation = assets.coinPurseIdleAnimation;
-//        coinPurseKeyFrame = coinPurseAnimation.getKeyFrame(0f);
-        coinPurseKeyFrame = assets.player;
+        coinPurseAnimation = assets.playerAnimation;
+        coinPurseKeyFrame = coinPurseAnimation.getKeyFrame(0f);
 
         float halfScreenWidth = hudCamera.viewportWidth / 2f;
         titleBoundsEnd = new Rectangle(halfScreenWidth - titleKeyFrame.getWidth() / 2f, hudCamera.viewportHeight - titleKeyFrame.getHeight(), titleKeyFrame.getWidth(), titleKeyFrame.getHeight());
@@ -134,6 +147,21 @@ public class TitleScreen extends BaseScreen {
         dialogAlpha = new MutableFloat(0f);
         drawDialogText = false;
 
+        controlsMoveTexture  = assets.atlas.findRegion("control-icon-move");
+        controlsJumpTexture  = assets.atlas.findRegion("control-icon-jump");
+        Array shootFrames = assets.atlas.findRegions("control-icon-shoot");
+        controlsShootAnimation = new Animation<TextureRegion>(0.15f, shootFrames, Animation.PlayMode.LOOP);
+        controlsShootTexture = controlsShootAnimation.getKeyFrame(0f);
+        controlsMoveBounds  = new Rectangle(dialogBoundsMax.x + margin + dialogBoundsMax.width / 2f - controlsMoveTexture.getRegionWidth() / 2f - margin,
+                                            dialogBoundsMax.y + dialogBoundsMax.height - margin - controlsMoveTexture.getRegionHeight() - 60f,
+                                            controlsMoveTexture.getRegionWidth(), controlsMoveTexture.getRegionHeight());
+        controlsJumpBounds  = new Rectangle(dialogBoundsMax.x + margin + dialogBoundsMax.width / 2f - controlsJumpTexture.getRegionWidth() / 2f - margin,
+                                            dialogBoundsMax.y + dialogBoundsMax.height - margin - 210f,
+                                            controlsJumpTexture.getRegionWidth(), controlsJumpTexture.getRegionHeight());
+        controlsShootBounds = new Rectangle(dialogBoundsMax.x + margin + dialogBoundsMax.width / 2f - controlsShootTexture.getRegionWidth() / 2f - margin,
+                                            dialogBoundsMax.y + dialogBoundsMax.height - margin - 500f,
+                                            controlsShootTexture.getRegionWidth(), controlsShootTexture.getRegionHeight());
+
         backgroundColor = new Color();
         subtitleAlpha = new MutableFloat(0f);
 
@@ -156,6 +184,7 @@ public class TitleScreen extends BaseScreen {
 
         stateTime += dt;
         titleKeyFrame = titleAnimation.getKeyFrame(stateTime);
+        controlsShootTexture = controlsShootAnimation.getKeyFrame(stateTime);
 
         if (couchyIsTalking) {
             couchyTalkStateTime += dt;
@@ -185,7 +214,7 @@ public class TitleScreen extends BaseScreen {
             break;
             case outro: {
                 if (!stateTweening && !isTransitioningToGameScreen && outroTweenComplete && Gdx.input.justTouched()) {
-                    Gdx.app.log("STATE", "triggered gamescreen transition");
+//                    Gdx.app.log("STATE", "triggered gamescreen transition");
                     isTransitioningToGameScreen = true;
                     state = State.screen_transition;
                     game.setScreen(new GameScreen(game, assets, GameScreen.LevelIndex.Level1), assets.stereoShader, 2f,
@@ -235,17 +264,25 @@ public class TitleScreen extends BaseScreen {
                 assets.ninePatch.draw(batch, dialogBounds.x, dialogBounds.y, dialogBounds.width, dialogBounds.height);
 
                 if (drawDialogText) {
-                    String text = "wtf";
-                    if (state == State.dialog_story) {
-                        text = "This is a story, all about how, my life got flipped turned upside down and I'd like to take a minute just sitting right there to tell you how I became the prince of a town called bell aire";
-                    } else if (state == State.dialog_controls) {
-                        text = "This is how you control things, it's not that complicated, but people will still fuck it up for sure";
+                    if (state == State.dialog_controls) {
+                        batch.draw(controlsMoveTexture, controlsMoveBounds.x, controlsMoveBounds.y, controlsMoveBounds.width, controlsMoveBounds.height);
+                        batch.draw(controlsJumpTexture, controlsJumpBounds.x, controlsJumpBounds.y, controlsJumpBounds.width, controlsJumpBounds.height);
+                        batch.draw(controlsShootTexture, controlsShootBounds.x, controlsShootBounds.y, controlsShootBounds.width, controlsShootBounds.height);
                     }
+
+                    String text = "wtf";
+                    String shadowText = "wtf";
+                    float scale = 1f;
+                    int align = Align.left;
+                    if      (state == State.dialog_story)    { text = storyText;    shadowText = storyShadowText; scale = 0.9f; }
+                    else if (state == State.dialog_controls) { text = controlsText; shadowText = controlsShadowText; align = Align.center; }
                     float margin = 20f;
                     float scaleX = assets.font.getData().scaleX;
                     float scaleY = assets.font.getData().scaleY;
-                    assets.font.getData().setScale(1.1f);
-                    layout.setText(assets.font, text, Color.BLACK, dialogBounds.width - 2f * margin, Align.left, true);
+                    assets.font.getData().setScale(scale);
+                    layout.setText(assets.font, shadowText, Color.BLACK, dialogBounds.width - 2f * margin, align, true);
+                    assets.font.draw(batch, layout, dialogBounds.x + margin + 2f, dialogBounds.y + dialogBounds.height - margin - 2f);
+                    layout.setText(assets.font, text, Color.WHITE, dialogBounds.width - 2f * margin, align, true);
                     assets.font.draw(batch, layout, dialogBounds.x + margin, dialogBounds.y + dialogBounds.height - margin);
                     assets.font.getData().setScale(scaleX, scaleY);
                 }
@@ -267,7 +304,7 @@ public class TitleScreen extends BaseScreen {
     }
 
     private void startIntroTween() {
-        Gdx.app.log("STATE", "startIntroTween: prevState = '" + state.name() + "'");
+//        Gdx.app.log("STATE", "startIntroTween: prevState = '" + state.name() + "'");
         state = State.intro;
         stateTweening = true;
 
@@ -322,7 +359,7 @@ public class TitleScreen extends BaseScreen {
     }
 
     private void startStorySetupTween() {
-        Gdx.app.log("STATE", "startStorySetupTween: prevState = '" + state.name() + "'");
+//        Gdx.app.log("STATE", "startStorySetupTween: prevState = '" + state.name() + "'");
         stateTweening = true;
         drawCoinPurse = true;
 
@@ -333,7 +370,7 @@ public class TitleScreen extends BaseScreen {
                         .push(// Title moves offscreen
                                 Tween.to(titleBounds, RectangleAccessor.XYWH, offscreenDuration)
                                      .target(titleBoundsStart.x, titleBoundsStart.y, titleBoundsStart.width, titleBoundsStart.height)
-                                     .ease(Back.IN)
+                                     .ease(Quint.IN)
                         )
                         .push(// Subtitle fades offscreen
                                 Tween.to(subtitleAlpha, -1, offscreenDuration)
@@ -368,7 +405,7 @@ public class TitleScreen extends BaseScreen {
     }
 
     private void startDialogStoryTween() {
-        Gdx.app.log("STATE", "startDialogStoryTween: prevState = '" + state.name() + "'");
+//        Gdx.app.log("STATE", "startDialogStoryTween: prevState = '" + state.name() + "'");
         state = State.dialog_story;
         stateTweening = true;
         drawDialogText = false;
@@ -402,7 +439,7 @@ public class TitleScreen extends BaseScreen {
     }
 
     private void startDialogControlsTween() {
-        Gdx.app.log("STATE", "startDialogControlsTween: prevState = '" + state.name() + "'");
+//        Gdx.app.log("STATE", "startDialogControlsTween: prevState = '" + state.name() + "'");
         state = State.dialog_controls;
         stateTweening = true;
         drawDialogText = false;
@@ -445,7 +482,7 @@ public class TitleScreen extends BaseScreen {
     }
 
     private void startOutroTween() {
-        Gdx.app.log("STATE", "startOutroTween: prevState = '" + state.name() + "'");
+//        Gdx.app.log("STATE", "startOutroTween: prevState = '" + state.name() + "'");
         state = State.outro;
         stateTweening = true;
         drawDialogText = false;

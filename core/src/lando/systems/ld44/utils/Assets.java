@@ -83,6 +83,8 @@ public class Assets implements Disposable {
     public ShaderProgram crosshatchShader;
     public ShaderProgram rippleShader;
     public ShaderProgram heartShader;
+    public ShaderProgram stereoShader;
+    public ShaderProgram circleCropShader;
 
     public Assets() {
         this(Loading.SYNC);
@@ -198,6 +200,10 @@ public class Assets implements Disposable {
         crosshatchShader = loadShader("shaders/default.vert", "shaders/crosshatch.frag");
         rippleShader = loadShader("shaders/default.vert", "shaders/ripple.frag");
         heartShader = loadShader("shaders/default.vert", "shaders/heart.frag");
+        stereoShader = loadShader("shaders/default.vert", "shaders/stereo.frag");
+        circleCropShader = loadShader("shaders/default.vert", "shaders/circlecrop.frag");
+
+
 
 //        randomTransitions.add(blindsShader);
         randomTransitions.add(fadeShader);

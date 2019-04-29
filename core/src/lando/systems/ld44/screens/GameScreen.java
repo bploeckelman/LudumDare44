@@ -78,6 +78,7 @@ public class GameScreen extends BaseScreen {
     }
 
     public void nextLevel(){
+        game.audio.playSound(Audio.Sounds.ChangeLevel);
         switch (levelIndex) {
             case Level1:
                 game.setScreen(new GameScreen(game, assets, LevelIndex.Level2), assets.stereoShader, 2f, null);

@@ -27,7 +27,7 @@ public class Audio implements Disposable {
 
     public enum Sounds {
         None, // don't put sound to this - default no op
-        Shoot, Spring, GroundPound, Landing, ConsumeCoin, Stun, LoseCoins
+        Shoot, Spring, GroundPound, Landing, ConsumeCoin, Stun, LoseCoins, ChangeLevel
     }
 
     public enum Musics {
@@ -70,6 +70,8 @@ public class Audio implements Disposable {
         putSound(Sounds.Stun, Gdx.audio.newSound(Gdx.files.internal("sounds/stun3.mp3")));
 
         putSound(Sounds.LoseCoins, Gdx.audio.newSound(Gdx.files.internal("sounds/cash-register.mp3")));
+
+        putSound(Sounds.ChangeLevel, Gdx.audio.newSound(Gdx.files.internal("sounds/shaveandahaircut3.mp3")));
 //        putSound(Sounds.dog_bork, Gdx.audio.newSound(Gdx.files.internal("audio/dog.mp3")));
 //        putSound(Sounds.cat_meow, Gdx.audio.newSound(Gdx.files.internal("audio/cat.mp3")));
 //

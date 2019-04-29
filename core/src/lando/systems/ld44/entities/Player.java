@@ -3,6 +3,7 @@ package lando.systems.ld44.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.screens.GameScreen;
@@ -82,10 +83,16 @@ public class Player extends GameEntity {
         }
     }
 
+    private Rectangle consumeRect = new Rectangle();
+    private Vector2 center = new Vector2();
     private void checkConsume(Coin coin) {
-        if (!coin.consuming && (coin.velocity.y < 0) && coin.left() > left() && coin.right() < right() && coin.bottom() < top() + 100 && coin.bottom() > top() - 20) {
-            coin.consuming = true;
-            open();
+        consumeRect.set(position.x, top() - 10, width, 30);
+        if (!coin.consuming && (coin.velocity.y < 0)) {
+            coin.bounds.getCenter(center);
+            if (consumeRect.contains(center)) {
+                coin.consuming = true;
+                open();
+            }
         }
     }
 

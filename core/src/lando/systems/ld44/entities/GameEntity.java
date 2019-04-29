@@ -214,7 +214,9 @@ public class GameEntity {
         if (pounded) {
             groundPound(tempPos);
         }
-        bounds.set(position.x, position.y, width, height);
+        bounds.set(collisionBoundsOffsets);
+        bounds.x += position.x;
+        bounds.y += position.y;
     }
 
     protected void groundPound(Vector2 poundPosition) {

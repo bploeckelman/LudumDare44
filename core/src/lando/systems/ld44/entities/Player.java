@@ -86,7 +86,7 @@ public class Player extends GameEntity {
     private Rectangle consumeRect = new Rectangle();
     private Vector2 center = new Vector2();
     private void checkConsume(Coin coin) {
-        consumeRect.set(position.x, top() - 10, width, 30);
+        consumeRect.set(position.x, top() - 10, width, 70);
         if (!coin.consuming && (coin.velocity.y < 0)) {
             coin.bounds.getCenter(center);
             if (consumeRect.contains(center)) {
@@ -97,10 +97,14 @@ public class Player extends GameEntity {
     }
 
     private void consume(Coin coin) {
-        if (coin.consuming && coin.left() > left() && coin.right() < right() && coin.top() < top() - 10) {
-            playSound(Audio.Sounds.ConsumeCoin);
-            addCoin(coin);
-            close();
+        if (coin.consuming) {
+            consumeRect.set(position.x, top() - 20, width, 20);
+            coin.bounds.getCenter(center);
+            if (consumeRect.contains(center)) {
+                playSound(Audio.Sounds.ConsumeCoin);
+                addCoin(coin);
+                close();
+            }
         }
     }
 

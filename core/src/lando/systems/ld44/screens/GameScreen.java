@@ -65,6 +65,7 @@ public class GameScreen extends BaseScreen {
         for (GameEntity ge : gameEntities) {
             if (ge instanceof Projectile) {
                 Projectile projectile = (Projectile)ge;
+                if (!projectile.isActive()) { continue; }
                 for (int i = 0; i < gameEntities.size; i++) {
                     GameEntity ge2 = gameEntities.get(i);
                     if (projectile.hasHit(ge2)) {

@@ -3,7 +3,6 @@ package lando.systems.ld44.screens;
 import aurelienribon.tweenengine.*;
 import aurelienribon.tweenengine.equations.Back;
 import aurelienribon.tweenengine.equations.Bounce;
-import aurelienribon.tweenengine.equations.Elastic;
 import aurelienribon.tweenengine.equations.Quint;
 import aurelienribon.tweenengine.primitives.MutableFloat;
 import com.badlogic.gdx.Application;
@@ -26,6 +25,16 @@ import lando.systems.ld44.utils.Audio;
 import lando.systems.ld44.utils.CallbackListener;
 
 public class TitleScreen extends BaseScreen {
+
+    enum State {
+          intro
+        , dialog_story
+        , dialog_controls
+        , outro
+        , screen_transition
+    }
+    private State state = State.intro;
+    private boolean stateTweening = false;
 
     private GlyphLayout layout;
 
@@ -54,14 +63,24 @@ public class TitleScreen extends BaseScreen {
     private Rectangle couchBounds;
     private Rectangle coinPurseBounds;
 
+    private Rectangle dialogBounds;
+    private Rectangle dialogBoundsMin;
+    private Rectangle dialogBoundsMax;
+    private MutableFloat dialogAlpha;
+
     private Color backgroundColor;
     private MutableFloat subtitleAlpha;
     private MutableFloat clickTextBounceY;
+    private MutableFloat coinPurseAlpha;
 
-    private boolean startupTweenComplete;
+    private boolean introTweenComplete;
     private boolean storyTweenComplete;
+    private boolean controlsTweenComplete;
+    private boolean outroTweenComplete;
     private boolean couchyIsTalking;
-    private boolean isTransitioning;
+    private boolean drawDialogText;
+    private boolean drawCoinPurse;
+    private boolean isTransitioningToGameScreen;
 
     private float clickToPlayYBaseline;
     private String clickToPlay = "Click to Play";
@@ -106,16 +125,26 @@ public class TitleScreen extends BaseScreen {
         couchBounds = new Rectangle();
         coinPurseBounds = new Rectangle(100f, -coinPurseKeyFrame.getRegionHeight() - 10f, coinPurseKeyFrame.getRegionWidth(), coinPurseKeyFrame.getRegionHeight());
 
+        float margin = 10f;
+        float dialogWidth = (1f / 3f) * hudCamera.viewportWidth - 2f * margin;
+        float dialogHeight = hudCamera.viewportHeight - 2f * margin;
+        dialogBoundsMax = new Rectangle(hudCamera.viewportWidth - margin - dialogWidth, margin, dialogWidth, dialogHeight);
+        dialogBoundsMin = new Rectangle(dialogBoundsMax.x + dialogWidth / 2f, dialogBoundsMax.y + dialogHeight / 2f, 0f, 0f);
+        dialogBounds = new Rectangle(dialogBoundsMin);
+        dialogAlpha = new MutableFloat(0f);
+        drawDialogText = false;
+
         backgroundColor = new Color();
         subtitleAlpha = new MutableFloat(0f);
 
         clickToPlayYBaseline = hudCamera.viewportHeight / 2f - 50f;
         clickTextBounceY = new MutableFloat(clickToPlayYBaseline);
+        coinPurseAlpha = new MutableFloat(1f);
 
-        isTransitioning = false;
+        isTransitioningToGameScreen = false;
         couchyIsTalking = false;
 
-        startStartupTween();
+        startIntroTween();
     }
 
     @Override
@@ -131,25 +160,45 @@ public class TitleScreen extends BaseScreen {
         if (couchyIsTalking) {
             couchyTalkStateTime += dt;
             couchKeyFrame = couchAnimation.getKeyFrame(couchyTalkStateTime);
-
-            if (storyTweenComplete) {
-                couchKeyFrame = couchAnimation.getKeyFrame(0f);
-            }
+        } else {
+            couchKeyFrame = couchAnimation.getKeyFrame(0f);
         }
 
-        if (startupTweenComplete && Gdx.input.justTouched()) {
-            startStoryTween();
-
-            if (storyTweenComplete && !isTransitioning) {
-                isTransitioning = true;
-                game.setScreen(new GameScreen(game, assets, GameScreen.LevelIndex.Level1), assets.stereoShader, 2f,
-                               new CallbackListener() {
-                                   @Override
-                                   public void callback() {
-                                       assets.unloadTitleAssets();
-                                   }
-                               });
+        switch (state) {
+            case intro: {
+                if (!stateTweening && introTweenComplete && Gdx.input.justTouched()) {
+                    startStorySetupTween();
+                }
             }
+            break;
+            case dialog_story: {
+                if (!stateTweening && storyTweenComplete && Gdx.input.justTouched()) {
+                    startDialogControlsTween();
+                }
+            }
+            break;
+            case dialog_controls: {
+                if (!stateTweening && controlsTweenComplete && Gdx.input.justTouched()) {
+                    startOutroTween();
+                }
+            }
+            break;
+            case outro: {
+                if (!stateTweening && !isTransitioningToGameScreen && outroTweenComplete && Gdx.input.justTouched()) {
+                    Gdx.app.log("STATE", "triggered gamescreen transition");
+                    isTransitioningToGameScreen = true;
+                    state = State.screen_transition;
+                    game.setScreen(new GameScreen(game, assets, GameScreen.LevelIndex.Level1), assets.stereoShader, 2f,
+                                   new CallbackListener() {
+                                       @Override
+                                       public void callback() {
+                                           assets.unloadTitleAssets();
+                                       }
+                                   });
+                }
+            }
+            break;
+            case screen_transition: {/*nop*/} break;
         }
     }
 
@@ -172,11 +221,38 @@ public class TitleScreen extends BaseScreen {
 
             batch.draw(couchKeyFrame, couchBounds.x, couchBounds.y, couchBounds.width, couchBounds.height);
 
-            if (startupTweenComplete) {
+            if (drawCoinPurse) {
+                batch.setColor(1f, 1f, 1f, coinPurseAlpha.floatValue());
                 batch.draw(coinPurseKeyFrame, coinPurseBounds.x, coinPurseBounds.y, coinPurseBounds.width, coinPurseBounds.height);
+                batch.setColor(Color.WHITE);
             }
 
-            if (storyTweenComplete) {
+            // Draw dialog panel and (optionally) text
+            if (state == State.dialog_controls || state == State.dialog_story) {
+                batch.setColor(0.4f, 0.4f, 0.4f, dialogAlpha.floatValue());
+                batch.draw(assets.whitePixel, dialogBounds.x, dialogBounds.y, dialogBounds.width, dialogBounds.height);
+                batch.setColor(Color.WHITE);
+                assets.ninePatch.draw(batch, dialogBounds.x, dialogBounds.y, dialogBounds.width, dialogBounds.height);
+
+                if (drawDialogText) {
+                    String text = "wtf";
+                    if (state == State.dialog_story) {
+                        text = "This is a story, all about how, my life got flipped turned upside down and I'd like to take a minute just sitting right there to tell you how I became the prince of a town called bell aire";
+                    } else if (state == State.dialog_controls) {
+                        text = "This is how you control things, it's not that complicated, but people will still fuck it up for sure";
+                    }
+                    float margin = 20f;
+                    float scaleX = assets.font.getData().scaleX;
+                    float scaleY = assets.font.getData().scaleY;
+                    assets.font.getData().setScale(1.1f);
+                    layout.setText(assets.font, text, Color.BLACK, dialogBounds.width - 2f * margin, Align.left, true);
+                    assets.font.draw(batch, layout, dialogBounds.x + margin, dialogBounds.y + dialogBounds.height - margin);
+                    assets.font.getData().setScale(scaleX, scaleY);
+                }
+            }
+
+            // Draw 'Click to Play' text
+            if (outroTweenComplete) {
                 float scaleX = assets.font.getData().scaleX;
                 float scaleY = assets.font.getData().scaleY;
                 assets.font.getData().setScale(3.5f);
@@ -190,28 +266,22 @@ public class TitleScreen extends BaseScreen {
         batch.end();
     }
 
-    private void startStartupTween() {
-        Timeline.createSequence()
-                .push(
-                        Tween.to(clickTextBounceY, -1, 0.5f)
-                             .target(clickToPlayYBaseline + 200f)
-                             .ease(Quint.OUT)
-                )
-                .push(
-                        Tween.to(clickTextBounceY, -1, 0.5f)
-                             .target(clickToPlayYBaseline)
-                             .ease(Bounce.OUT)
-                )
-                .repeat(-1, 0.5f)
-                .start(game.tween);
+    private void startIntroTween() {
+        Gdx.app.log("STATE", "startIntroTween: prevState = '" + state.name() + "'");
+        state = State.intro;
+        stateTweening = true;
 
-        startupTweenComplete = false;
+        introTweenComplete = false;
         storyTweenComplete = false;
+        controlsTweenComplete = false;
+        outroTweenComplete = false;
+        drawCoinPurse = false;
+        drawDialogText = false;
 
+        // Set initial values for things we're tweening here
         titleBounds.set(titleBoundsStart);
         subtitleBounds.set(subtitleBoundsStart);
         couchBounds.set(couchBoundsStart);
-
         backgroundColor.set(0f, 0f, 0f, 1f);
         subtitleAlpha.setValue(0f);
 
@@ -244,37 +314,42 @@ public class TitleScreen extends BaseScreen {
                 .setCallback(new TweenCallback() {
                     @Override
                     public void onEvent(int i, BaseTween<?> baseTween) {
-                        startupTweenComplete = true;
+                        stateTweening = false;
+                        introTweenComplete = true;
                     }
                 })
                 .start(game.tween);
     }
 
-    private void startStoryTween() {
+    private void startStorySetupTween() {
+        Gdx.app.log("STATE", "startStorySetupTween: prevState = '" + state.name() + "'");
+        stateTweening = true;
+        drawCoinPurse = true;
+
         float offscreenDuration = 0.75f;
         Timeline.createSequence()
                 .push(
                         Timeline.createParallel()
-                        .push(// Title offscreen (bounce in)
+                        .push(// Title moves offscreen
                                 Tween.to(titleBounds, RectangleAccessor.XYWH, offscreenDuration)
                                      .target(titleBoundsStart.x, titleBoundsStart.y, titleBoundsStart.width, titleBoundsStart.height)
                                      .ease(Back.IN)
                         )
-                        .push(// Subtitle offscreen (fade alpha)
+                        .push(// Subtitle fades offscreen
                                 Tween.to(subtitleAlpha, -1, offscreenDuration)
                                      .target(0f)
                         )
                 )
                 .push(
-                        // Expand couch
+                        // Couch expands to fill viewport
                         Tween.to(couchBounds, RectangleAccessor.XYWH, 1.5f)
                              .target(couchBoundsStory.x, couchBoundsStory.y, couchBoundsStory.width, couchBoundsStory.height)
                 )
                 .push(
-                        // Start bouncing characters and showing text
+                        // Character bounces onto the couch
                         Timeline.createParallel()
                         .push(
-                                Tween.to(coinPurseBounds, RectangleAccessor.XY, 0.2f)
+                                Tween.to(coinPurseBounds, RectangleAccessor.XY, 0.5f)
                                      .target(100f, 200f)
                                      .ease(Bounce.OUT)
                         )
@@ -284,34 +359,154 @@ public class TitleScreen extends BaseScreen {
                             @Override
                             public void onEvent(int i, BaseTween<?> baseTween) {
                                 couchyIsTalking = true;
+                                stateTweening = false;
+                                startDialogStoryTween();
                             }
                         })
                 )
-                // TODO: might have to split this out into a before-text tween and an after-text tween
-                .pushPause(3f)
+                .start(game.tween);
+    }
+
+    private void startDialogStoryTween() {
+        Gdx.app.log("STATE", "startDialogStoryTween: prevState = '" + state.name() + "'");
+        state = State.dialog_story;
+        stateTweening = true;
+        drawDialogText = false;
+        drawCoinPurse = true;
+        dialogBounds.set(dialogBoundsMin);
+
+        float growDuration = 0.2f;
+        Timeline.createSequence()
                 .push(
+                        Timeline.createParallel()
+                        .push(// make dialog visible
+                                Tween.to(dialogAlpha, -1, growDuration).target(1f)
+                        )
+                        .push(// grow the dialog
+                                Tween.to(dialogBounds, RectangleAccessor.XYWH, growDuration)
+                                     .target(dialogBoundsMax.x, dialogBoundsMax.y, dialogBoundsMax.width, dialogBoundsMax.height)
+                        )
+                )
+                .push(
+                        // set the 'draw text now' flag
                         Tween.call(new TweenCallback() {
                             @Override
                             public void onEvent(int i, BaseTween<?> baseTween) {
-                                couchyIsTalking = false;
+                                stateTweening = false;
+                                drawDialogText = true;
+                                storyTweenComplete = true;
                             }
                         })
                 )
-                .push(// Pursey: "I'm going in"
-                        Tween.to(coinPurseBounds, RectangleAccessor.XYWH, 1.5f)
-                             .waypoint(hudCamera.viewportWidth / 2f - coinPurseBounds.width / 2f, couchBounds.y + couchBounds.height, coinPurseBounds.width, coinPurseBounds.height)
-                             .waypoint(hudCamera.viewportWidth / 2f - coinPurseBounds.width / 2f, couchBounds.y + couchBounds.height * (1f / 3f), 0f, 0f)
-                             .path(TweenPaths.catmullRom)
+                .start(game.tween);
+    }
 
+    private void startDialogControlsTween() {
+        Gdx.app.log("STATE", "startDialogControlsTween: prevState = '" + state.name() + "'");
+        state = State.dialog_controls;
+        stateTweening = true;
+        drawDialogText = false;
+        drawCoinPurse = true;
+
+        float shrinkDuration = 0.1f;
+        float growDuration = 0.2f;
+        Timeline.createSequence()
+                .push(
+                        // Hide dialog
+                        Timeline.createParallel()
+                                .push(// make dialog invisible
+                                      Tween.to(dialogAlpha, -1, shrinkDuration).target(0f)
+                                )
+                                .push(// shrink the dialog
+                                      Tween.to(dialogBounds, RectangleAccessor.XYWH, shrinkDuration)
+                                           .target(dialogBoundsMin.x, dialogBoundsMin.y, dialogBoundsMin.width, dialogBoundsMin.height)
+                                )
+                )
+                .push(
+                        // Show dialog
+                        Timeline.createParallel()
+                                .push(// make dialog visible
+                                      Tween.to(dialogAlpha, -1, growDuration).target(1f)
+                                )
+                                .push(// grow the dialog
+                                      Tween.to(dialogBounds, RectangleAccessor.XYWH, growDuration)
+                                           .target(dialogBoundsMax.x, dialogBoundsMax.y, dialogBoundsMax.width, dialogBoundsMax.height)
+                                )
                 )
                 .setCallback(new TweenCallback() {
                     @Override
                     public void onEvent(int i, BaseTween<?> baseTween) {
-                        storyTweenComplete = true;
+                        stateTweening = false;
+                        drawDialogText = true;
+                        controlsTweenComplete = true;
                     }
                 })
                 .start(game.tween);
+    }
 
+    private void startOutroTween() {
+        Gdx.app.log("STATE", "startOutroTween: prevState = '" + state.name() + "'");
+        state = State.outro;
+        stateTweening = true;
+        drawDialogText = false;
+        couchyIsTalking = false;
+        coinPurseAlpha.setValue(1f);
+
+        Timeline.createSequence()
+                .push(
+                        Tween.to(clickTextBounceY, -1, 0.5f)
+                             .target(clickToPlayYBaseline + 200f)
+                             .ease(Quint.OUT)
+                )
+                .push(
+                        Tween.to(clickTextBounceY, -1, 0.5f)
+                             .target(clickToPlayYBaseline)
+                             .ease(Bounce.OUT)
+                )
+                .repeat(-1, 0.5f)
+                .start(game.tween);
+
+        float shrinkDuration = 0.1f;
+        Timeline.createSequence()
+                .push( // Hide dialog
+                        Timeline.createParallel()
+                                .push(// make dialog invisible
+                                      Tween.to(dialogAlpha, -1, shrinkDuration).target(0f)
+                                )
+                                .push(// shrink the dialog
+                                      Tween.to(dialogBounds, RectangleAccessor.XYWH, shrinkDuration)
+                                           .target(dialogBoundsMin.x, dialogBoundsMin.y, dialogBoundsMin.width, dialogBoundsMin.height)
+                                )
+                )
+                .pushPause(0.2f)
+                .push(// Character dives into couch
+                        Timeline.createSequence()
+                        .push(
+                                // Move up to top of arc
+                                Tween.to(coinPurseBounds, RectangleAccessor.XY, 1.0f)
+                                     .target(hudCamera.viewportWidth / 2f - coinPurseBounds.width / 2f, couchBounds.y + couchBounds.height)
+                        )
+                        .push(// Character disappears
+                                Timeline.createParallel()
+                                .push(// Character fades out
+                                        Tween.to(coinPurseAlpha, -1, 0.5f).target(0f).ease(Quint.IN)
+                                )
+                                .push(// Squanch into the couch
+                                        Tween.to(coinPurseBounds, RectangleAccessor.XYWH, 0.5f)
+                                             .target(hudCamera.viewportWidth / 2f, couchBounds.y + couchBounds.height * (1f / 3f), 0f, 0f)
+                                )
+                        )
+                )
+                .setCallback(new TweenCallback() {
+                    @Override
+                    public void onEvent(int i, BaseTween<?> baseTween) {
+                        stateTweening = false;
+                        storyTweenComplete = true;
+                        outroTweenComplete = true;
+                        drawCoinPurse = false;
+                    }
+                })
+                .start(game.tween);
     }
 
 }

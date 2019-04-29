@@ -3,6 +3,7 @@ package lando.systems.ld44.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -11,6 +12,7 @@ import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.Audio;
 import lando.systems.ld44.utils.Config;
+import lando.systems.ld44.world.Level;
 import lando.systems.ld44.world.Spring;
 
 public class GameEntity {
@@ -140,8 +142,7 @@ public class GameEntity {
         dyingTime = 2;
     }
 
-    public void getHurt() {
-        // TODO: override in Player to bounce back and lose some coins
+    public void getHurt(Rectangle damageRect) {
 //        float centerX = position.x + width / 2f;
 //        float centerY = position.y;
 //        screen.particleManager.addGroundPoundDust(centerX, centerY, centerX - 100f, centerX + 100f);
@@ -270,6 +271,29 @@ public class GameEntity {
 
     public void updateEntity(float dt) { }
 
+    public void keepOnPlatform(float dt) {
+        // Check for about to fall off a platform
+        if (grounded && Math.abs(velocity.x) > 0f) {
+            Level level = screen.level;
+
+            // get cells in front of and under entity
+            int y = (int) (position.y / level.collisionLayer.getTileHeight()) - 1;
+            int x = 0;
+            float sign = Math.signum(velocity.x);
+            if (sign == -1f) { // moving left
+                float centerX = position.x + collisionBoundsOffsets.x + collisionBoundsOffsets.width / 2f;
+                x = (int) (centerX / level.collisionLayer.getTileWidth()) - 1;
+            } else if (sign == 1f) { // moving right
+                float centerX = position.x + collisionBoundsOffsets.x + collisionBoundsOffsets.width / 2f;
+                x = (int) (centerX / level.collisionLayer.getTileWidth()) + 1;
+            }
+            TiledMapTileLayer.Cell cell = level.collisionLayer.getCell(x, y);
+            if (cell == null) {
+                changeDirection();
+            }
+        }
+    }
+
     protected void groundPound(Vector2 poundPosition) { }
 
     public void render(SpriteBatch batch) {
@@ -311,7 +335,11 @@ public class GameEntity {
     }
 
     protected void renderStunned(SpriteBatch batch, float scaleX, float scaleY) {
+        Color stunColor = (stunTime % 0.4f > 0.2f) ? Color.RED : Color.WHITE;
+
+        batch.setColor(stunColor);
         batch.draw(image, position.x, position.y, width / 2, height / 2, width, height, scaleX, scaleY, 0);
+        batch.setColor(Color.WHITE);
         batch.draw(assets.stunStarsAnimation.getKeyFrame(stunTime), position.x, position.y + collisionBoundsOffsets.height, width, 10);
     }
 

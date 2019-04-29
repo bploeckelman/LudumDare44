@@ -66,7 +66,7 @@ public class GameScreen extends BaseScreen {
                 break;
             case Level2:
                 level = new Level("maps/level2.tmx", assets, this);
-                audio.playMusic(Audio.Musics.Level1);
+                audio.playMusic(Audio.Musics.Level2);
                 break;
             case Boss:
                 level = new Level("maps/boss-arena.tmx", assets, this);
@@ -96,11 +96,22 @@ public class GameScreen extends BaseScreen {
          && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }
+
+        //TODO REMOVE THIS
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop &&
+        Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            nextLevel();
+            return;
+        }
+
         handleCameraConstraints();
         shaker.update(dt);
 
         if (!firstRun && !allowInput) return;
         firstRun = false;
+
+        game.stats.secondsToWin += dt;
+
         player.update(dt);
         // Find Exits
         for (Exit exit : level.exits){
@@ -132,9 +143,8 @@ public class GameScreen extends BaseScreen {
                 if (player.hurtTime <= 0 &&
                         player.jumpState != GameEntity.JumpState.POUND &&
                         player.groundPoundDelay <= 0) {
-                    player.getHurt();
+                    player.getHurt(tempRect);
                     ge.changeDirection();
-                    particleManager.addBlood(tempRect);
                 }
             }
         }

@@ -3,6 +3,7 @@ package lando.systems.ld44.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -24,6 +25,7 @@ public class Boss {
     public boolean actionCompleted;
     public float direction;
     public Color tint;
+    public Rectangle tempRectangle;
 
     public Boss(GameScreen gameScreen){
         this.gameScreen = gameScreen;
@@ -33,6 +35,7 @@ public class Boss {
         tookDamage = false;
         direction = -1;
         bounds = new Rectangle();
+        tempRectangle = new Rectangle();
         tint = new Color(1f, 1f, 1f, 1f);
         initializeStateMachine();
     }
@@ -90,6 +93,15 @@ public class Boss {
                 }
             }
         }
+
+        if (Intersector.intersectRectangles(gameScreen.player.bounds, bounds, tempRectangle)){
+            if (gameScreen.player.hurtTime <= 0 &&
+                    gameScreen.player.jumpState != GameEntity.JumpState.POUND &&
+                    gameScreen.player.groundPoundDelay <= 0){
+                gameScreen.player.getHurt(tempRectangle);
+            }
+        }
+
     }
 
     public void render(SpriteBatch batch) {

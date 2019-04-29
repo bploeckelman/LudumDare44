@@ -12,6 +12,10 @@ public class Coin extends Projectile {
         this.value = value;
 
         setInitialVelocity(value);
+
+        width*=1.5f;
+        height*=1.5f;
+        this.collisionBoundsOffsets.set(0,0, width, height);
     }
 
     private void setInitialVelocity(float value) {
@@ -33,6 +37,11 @@ public class Coin extends Projectile {
             vy = 500;
         }
         this.initialVelocity.set(vx, vy);
+    }
+
+    @Override
+    public void stun() {
+        // no op
     }
 
     @Override

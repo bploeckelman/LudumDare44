@@ -55,8 +55,10 @@ public class Assets implements Disposable {
     public TextureRegion handPointer;
 
     public TextureRegion player;
+    public TextureRegion playerHurt;
     public Animation<Texture> titleAnimation;
     public Animation<Texture> couchAnimation;
+    public Animation<TextureRegion> playerAnimation;
     public Animation<TextureRegion> playerShootAnimation;
     public Animation<TextureRegion> playerOpenAnimation;
     public Animation<TextureRegion> pennyAnimation;
@@ -169,6 +171,11 @@ public class Assets implements Disposable {
                 mgr.get(titleCouchTalk2TextureAsset)
         );
         couchAnimation = new Animation<Texture>(0.2f, couchFrames, Animation.PlayMode.LOOP_PINGPONG);
+
+        Array playerWalk = atlas.findRegions("purse-walk");
+        playerAnimation = new Animation<TextureRegion>(0.1f, playerWalk, Animation.PlayMode.LOOP);
+
+        playerHurt = atlas.findRegion("purse_hurt");
 
         Array playerShoot = atlas.findRegions("purse_spit");
         playerShootAnimation = new Animation<TextureRegion>(0.3f, playerShoot, Animation.PlayMode.NORMAL);

@@ -25,7 +25,7 @@ public class GameEntity {
 
     public Vector2 position = new Vector2();
     private Vector2 tempPos = new Vector2();
-    public Vector2 velocity = new Vector2();
+    protected Vector2 velocity = new Vector2();
 
     public Direction direction = Direction.RIGHT;
     public JumpState jumpState = JumpState.NONE;

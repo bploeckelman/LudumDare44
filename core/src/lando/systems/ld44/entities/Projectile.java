@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld44.screens.GameScreen;
+import lando.systems.ld44.world.Spring;
 
 public class Projectile extends AnimationGameEntity {
 
@@ -35,7 +36,8 @@ public class Projectile extends AnimationGameEntity {
     }
 
     public void markHit() {
-        pound(); // or remove
+        velocity.set(0, 300);
+        active = false;
     }
 
     public void shoot(float x, float y, float vx, float vy) {
@@ -73,5 +75,13 @@ public class Projectile extends AnimationGameEntity {
     public void changeDirection() {
         velocity.x = 0;
         active = false;
+    }
+
+    @Override
+    public void bounce(float multiplier, Spring.Orientation springOrientation) {
+        super.bounce(multiplier, springOrientation);
+        if (springOrientation == Spring.Orientation.DOWN) {
+            initialVelocity.y = velocity.y;
+        }
     }
 }

@@ -44,6 +44,8 @@ public class GameEntity {
     public Rectangle bounds = new Rectangle();
 
     private float stunTime = 0;
+    private boolean isDying;
+    private float dyingTime = 0;
     private float preStunnedVelocity;
 
     // sound customizations
@@ -63,9 +65,8 @@ public class GameEntity {
         height = image.getRegionHeight();
     }
 
-    public boolean isStunned() {
-        return stunTime > 0;
-    }
+    public boolean isStunned() { return stunTime > 0; }
+    public boolean isDying() { return isDying; }
 
     public void playSound(Audio.Sounds sound) {
         screen.audio.playSound(sound);
@@ -119,7 +120,8 @@ public class GameEntity {
     }
 
     public void stun() {
-        if (stunTime > 0) { return; }
+        if (isStunned() || isDying()) return;
+
         screen.audio.playSound(Audio.Sounds.Stun, position, screen.player.position);
         stunTime = 4;
         preStunnedVelocity = velocity.x;
@@ -128,8 +130,13 @@ public class GameEntity {
     }
 
     public void kill() {
+        if (isDying()) return;
+
+        velocity.x = 0;
         playSound(killSound);
-        remove = true;
+        stunTime = 0;
+        isDying = true;
+        dyingTime = 2;
     }
 
     public void getHurt() {
@@ -143,6 +150,38 @@ public class GameEntity {
     }
 
     public void update(float dt) {
+        updatePosition(dt);
+        if (isDying()) {
+            handleDying(dt);
+        } else if (isStunned()) {
+            handleStunned(dt);
+        } else {
+            updateEntity(dt);
+        }
+    }
+
+    protected void handleDying(float dt) {
+        if (dyingTime > 0) {
+            dyingTime -= dt;
+            if (dyingTime < 0) {
+                onDeath();
+            }
+        }
+    }
+
+    protected void onDeath() {
+        remove = true;
+    }
+
+    protected void handleStunned(float dt) {
+        stunTime -= dt;
+        if (stunTime <= 0) {
+            stunTime = 0;
+            velocity.x = preStunnedVelocity;
+        }
+    }
+
+    public void updatePosition(float dt) {
         groundPoundDelay = Math.max(groundPoundDelay -dt, 0);
         velocity.y -= gravity * dt;
 
@@ -210,8 +249,6 @@ public class GameEntity {
             }
         }
 
-        handleStun(dt);
-
         screen.level.handleObjectInteractions(this);
 
         screen.level.rectPool.free(entityRect);
@@ -224,19 +261,9 @@ public class GameEntity {
         bounds.y += position.y;
     }
 
-    protected void groundPound(Vector2 poundPosition) {
+    public void updateEntity(float dt) { }
 
-    }
-
-    private void handleStun(float dt) {
-        if (stunTime > 0) {
-            stunTime -= dt;
-            if (stunTime <= 0) {
-                stunTime = 0;
-                velocity.x = preStunnedVelocity;
-            }
-        }
-    }
+    protected void groundPound(Vector2 poundPosition) { }
 
     public void render(SpriteBatch batch) {
         if (image != null) {

@@ -109,7 +109,7 @@ public class GameScreen extends BaseScreen {
                 if (!projectile.isActive()) { continue; }
                 for (int i = 0; i < gameEntities.size; i++) {
                     GameEntity ge2 = gameEntities.get(i);
-                    if (projectile.hasHit(ge2)) {
+                    if (!ge2.isDying() && projectile.hasHit(ge2)) {
                         if (ge2.isStunned()) {
                             ge2.kill();
                         } else {

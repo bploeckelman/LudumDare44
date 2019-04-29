@@ -22,31 +22,31 @@ public class GroundPound extends GameEntity {
 
         position = new Vector2(x, y);
         this.distance = distance;
-        min = max = 0;
+        min = max = -1;
 
         Array<Rectangle> tiles = new Array<Rectangle>();
         screen.level.getTiles(x, y - 2, x + distance, y - 2, tiles);
         for (Rectangle r : tiles) {
-            if (max == 0 || r.x == max) {
+            if (max == -1 || r.x == max) {
                 max = r.x + r.width;
             } else {
                 break;
             }
         }
-        if (max == 0) {
+        if (max == -1) {
             max = x;
         }
 
         screen.level.getTiles(x - distance, y - 2, x, y - 2, tiles);
           for (int i = tiles.size; i > 0; i--) {
             Rectangle r = tiles.get(i - 1);
-            if (min == 0 || (r.x + r.width) == min) {
+            if (min == -1 || (r.x + r.width) == min) {
                 min = r.x;
             } else {
                 break;
             }
         }
-        if (min == 0) {
+        if (min == -1) {
             min = x;
         }
         screen.particleManager.addGroundPoundDust(x, y, min, max);

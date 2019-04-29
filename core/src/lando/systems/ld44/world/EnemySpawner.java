@@ -19,6 +19,12 @@ public class EnemySpawner {
     }
 
     public void spawnEnemy(GameScreen screen) {
+
+
+
+
+
+
         Enemy entity;
         switch (enemyType) {
             default: entity = null; break;

@@ -143,7 +143,7 @@ public class Player extends GameEntity {
             playSound(Audio.Sounds.Shoot);
             stateManager.transition(PlayerStates.Shoot);
 
-            Coin coin = getRandomCoin();
+            Coin coin = popFirstCoin();
 
             float speed = 200;
             float x = position.x + width/2;
@@ -165,10 +165,22 @@ public class Player extends GameEntity {
         screen.add(c);
     }
 
-    private Coin getRandomCoin() {
+    private Coin popRandomCoin() {
         Coin coin = coinPurse.random();
         coinPurse.removeValue(coin, true);
         return coin;
+    }
+
+    private Coin popFirstCoin() {
+        if (coinPurse.isEmpty()) return null;
+        Coin coin = coinPurse.first();
+        coinPurse.removeIndex(0);
+        return coin;
+    }
+
+    private Coin popLastCoin() {
+        if (coinPurse.isEmpty()) return null;
+        return coinPurse.pop();
     }
 
     @Override

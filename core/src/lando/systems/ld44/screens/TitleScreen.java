@@ -30,7 +30,7 @@ public class TitleScreen extends BaseScreen {
         }
 
         if (Gdx.input.justTouched()) {
-            game.setScreen(new GameScreen(game, assets), assets.heartShader, 1f);
+            game.setScreen(new GameScreen(game, assets), assets.stereoShader, 2f);
         }
 
         mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0f);

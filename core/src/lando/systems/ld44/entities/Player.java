@@ -62,7 +62,7 @@ public class Player extends AnimationGameEntity {
                 direction = Direction.RIGHT;
             }
         }
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_RIGHT)) {
             shoot();
         }
 

@@ -16,7 +16,6 @@ import lando.systems.ld44.entities.AnimationGameEntity;
 public class Assets implements Disposable {
 
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
-//    private final AssetDescriptor<Texture> titleTextureAsset = new AssetDescriptor<Texture>("images/title.png", Texture.class);
     public final AssetDescriptor<Texture> titleBackgroundTextureAsset = new AssetDescriptor<Texture>("images/title/title-background.png", Texture.class);
     public final AssetDescriptor<Texture> titleCouchTextureAsset = new AssetDescriptor<Texture>("images/title/title-couch.png", Texture.class);
     public final AssetDescriptor<Texture> titleSubtitleTextureAsset = new AssetDescriptor<Texture>("images/title/title-subtitle.png", Texture.class);
@@ -42,7 +41,6 @@ public class Assets implements Disposable {
     public AssetManager mgr;
 
     public TextureAtlas atlas;
-    public Texture titleTexture;
     public Texture arcadeTexture;
     public Texture couchTexture;
     public Texture pixelTexture;
@@ -111,7 +109,6 @@ public class Assets implements Disposable {
 
         mgr = new AssetManager();
         mgr.load(atlasAsset);
-//        mgr.load(titleTextureAsset);
         mgr.load(titleBackgroundTextureAsset);
         mgr.load(titleCouchTextureAsset);
         mgr.load(titleSubtitleTextureAsset);
@@ -150,7 +147,7 @@ public class Assets implements Disposable {
                 mgr.get(titleTitle2TextureAsset),
                 mgr.get(titleTitle3TextureAsset)
         );
-        titleAnimation = new Animation<Texture>(0.33f, titleFrames, Animation.PlayMode.LOOP_PINGPONG);
+        titleAnimation = new Animation<Texture>(0.15f, titleFrames, Animation.PlayMode.LOOP_PINGPONG);
 
         Array playerShoot = atlas.findRegions("purse_spit");
         playerShootAnimation = new Animation<TextureRegion>(0.3f, playerShoot, Animation.PlayMode.NORMAL);
@@ -203,7 +200,6 @@ public class Assets implements Disposable {
         Array stunStars = atlas.findRegions("stars");
         stunStarsAnimation = new Animation<TextureRegion>(.1f, stunStars, Animation.PlayMode.LOOP);
 
-//        titleTexture = mgr.get(titleTextureAsset);
         arcadeTexture = mgr.get(arcadeTextureAsset);
         arcadeTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         couchTexture = mgr.get(couchTextureAsset);

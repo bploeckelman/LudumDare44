@@ -44,7 +44,8 @@ public class GameScreen extends BaseScreen {
         level = new Level("maps/demo.tmx", assets, this);
         player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
         this.particleManager = new ParticleManager(assets);
-        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.arcadeTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
+//        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.arcadeTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
+        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.couchTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
         background = new ParallaxBackground(layer);
         audio.playMusic(Audio.Musics.Level1);
     }

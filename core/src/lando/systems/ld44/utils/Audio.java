@@ -27,11 +27,11 @@ public class Audio implements Disposable {
 
     public enum Sounds {
         None, // don't put sound to this - default no op
-        Shoot, Spring, GroundPound, Landing, ConsumeCoin, Stun
+        Shoot, Spring, GroundPound, Landing, ConsumeCoin, Stun, LoseCoins
     }
 
     public enum Musics {
-        Title, Level1, Level2, Level3, Boss
+        Title, Level1, Level2, Level3, Boss, EndScreen
     }
 
     public HashMap<Sounds, SoundContainer> sounds = new HashMap<Sounds, SoundContainer>();
@@ -68,6 +68,8 @@ public class Audio implements Disposable {
 
         putSound(Sounds.Stun, Gdx.audio.newSound(Gdx.files.internal("sounds/stun2.mp3")));
         putSound(Sounds.Stun, Gdx.audio.newSound(Gdx.files.internal("sounds/stun3.mp3")));
+
+        putSound(Sounds.LoseCoins, Gdx.audio.newSound(Gdx.files.internal("sounds/cash-register.mp3")));
 //        putSound(Sounds.dog_bork, Gdx.audio.newSound(Gdx.files.internal("audio/dog.mp3")));
 //        putSound(Sounds.cat_meow, Gdx.audio.newSound(Gdx.files.internal("audio/cat.mp3")));
 //
@@ -82,6 +84,7 @@ public class Audio implements Disposable {
         musics.put(Musics.Level2, Gdx.audio.newMusic(Gdx.files.internal("sounds/level2.mp3")));
         musics.put(Musics.Level3, Gdx.audio.newMusic(Gdx.files.internal("sounds/level3.mp3")));
         musics.put(Musics.Boss, Gdx.audio.newMusic(Gdx.files.internal("sounds/boss_fight.mp3")));
+        musics.put(Musics.EndScreen, Gdx.audio.newMusic(Gdx.files.internal("sounds/end_credit_music.mp3")));
 
         musicVolume = new MutableFloat(MUSIC_VOLUME);
         if (playMusic) {

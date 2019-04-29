@@ -69,7 +69,7 @@ public class Player extends GameEntity {
 
         stateManager.update(dt);
 
-        handleRandos();
+        updateHurt(dt);
     }
 
     private void handleConsumables() {
@@ -120,20 +120,6 @@ public class Player extends GameEntity {
 
         addValue(coin.value);
         */
-    }
-
-    public void handleRandos() {
-        // delete me
-        // temp
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
-            for (GameEntity ge : screen.gameEntities) {
-                if (ge instanceof Enemy) {
-                    ((Enemy)ge).kill();
-                    break;
-                }
-            }
-        }
     }
 
     public void open() {
@@ -213,4 +199,18 @@ public class Player extends GameEntity {
         // noop so it doesn't flip rapidly when pushing against a wall.
     }
 
+    public float hurtTime = 0;
+    @Override
+    public void getHurt() {
+        if (hurtTime <= 0) {
+            super.getHurt();
+            hurtTime = 2;
+        }
+    }
+
+    public void updateHurt(float dt) {
+        if (hurtTime > 0) {
+            hurtTime -= dt;
+        }
+    }
 }

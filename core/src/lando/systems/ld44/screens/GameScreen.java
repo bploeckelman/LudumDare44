@@ -64,18 +64,26 @@ public class GameScreen extends BaseScreen {
         player.update(dt);
 
         for (GameEntity ge : gameEntities) {
-            if (!ge.projecttile) continue;
-            for (int i = 0; i < gameEntities.size; i++) {
-                GameEntity ge2 = gameEntities.get(i);
-                if (ge2 instanceof Coin) continue;
+            if (ge.projecttile) {
+                for (int i = 0; i < gameEntities.size; i++) {
+                    GameEntity ge2 = gameEntities.get(i);
+                    if (ge2 instanceof Coin) continue;
 
-                if (ge.bounds.overlaps(ge2.bounds)) {
-                    if (ge2.stunTime > 0) {
-                        ge2.kill();
-                    } else {
-                        ge2.stun();
+                    if (ge.bounds.overlaps(ge2.bounds)) {
+                        if (ge2.stunTime > 0) {
+                            ge2.kill();
+                        } else {
+                            ge2.stun();
+                        }
+                        ge.remove = true;
                     }
-                    ge.remove = true;
+                }
+            } else {
+                if (ge.bounds.overlaps(player.bounds)) {
+                    if (player.hurtTime <= 0) {
+                        player.getHurt();
+                        ge.changeDirection();
+                    }
                 }
             }
         }

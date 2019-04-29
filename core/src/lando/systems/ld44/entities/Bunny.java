@@ -22,26 +22,7 @@ public class Bunny extends Enemy {
 
     @Override
     public void updateEntity(float dt) {
-        // Check for about to fall off a platform
-        if (grounded && Math.abs(velocity.x) > 0f) {
-            Level level = screen.level;
-
-            // get cells in front of and under entity
-            int y = (int) (position.y / level.collisionLayer.getTileHeight()) - 1;
-            int x = 0;
-            float sign = Math.signum(velocity.x);
-            if (sign == -1f) { // moving left
-                float centerX = position.x + collisionBoundsOffsets.x + collisionBoundsOffsets.width / 2f;
-                x = (int) (centerX / level.collisionLayer.getTileWidth()) - 1;
-            } else if (sign == 1f) { // moving right
-                float centerX = position.x + collisionBoundsOffsets.x + collisionBoundsOffsets.width / 2f;
-                x = (int) (centerX / level.collisionLayer.getTileWidth()) + 1;
-            }
-            TiledMapTileLayer.Cell cell = level.collisionLayer.getCell(x, y);
-            if (cell == null) {
-                changeDirection();
-            }
-        }
+        keepOnPlatform(dt);
 
         randomizeTimer += dt;
         if (randomizeTimer >= randomizeThreshold) {

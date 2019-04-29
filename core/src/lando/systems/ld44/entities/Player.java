@@ -38,6 +38,10 @@ public class Player extends AnimationGameEntity {
 
     public void update(float dt) {
         super.update(dt);
+
+        image = (hurtTime > 0) ? assets.playerHurt : image;
+
+
         if (groundPoundDelay > 0) return;
         if (jumpState != JumpState.POUND) {
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {

@@ -178,10 +178,10 @@ public class GameScreen extends BaseScreen {
                 background.draw(shaker.getViewCamera(), batch);
             }
 
-            player.render(batch);
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
             }
+            player.render(batch);
             if (boss != null){
                 boss.render(batch);
             }

@@ -12,12 +12,10 @@ import lando.systems.ld44.utils.Audio;
 public class Player extends AnimationGameEntity {
     public float horizontalSpeed = 100;
 
-    // TODO: change to maximum number of coins
-    public float maxValue = 2f;
-    public float value;
-
     private float timeWithoutCoins;
     public Array<Coin> coinPurse = new Array<Coin>();
+
+    public int maxCoins = 20;
 
     private PlayerStateManager stateManager;
 
@@ -29,13 +27,10 @@ public class Player extends AnimationGameEntity {
         stateManager = new PlayerStateManager(this);
         this.position.set(x, y);
 
-        // start with 5 pennies
-        while (coinPurse.size < 5) {
+        // start with 4 pennies
+        for (int i = 0; i < 4; i++) {
             addCoin(new Coin(screen, assets.pennyPickupAnimation, 0.01f));
         }
-//        addCoin(new Coin(screen, assets.nickelPickupAnimation, 0.05f));
-//        addCoin(new Coin(screen, assets.dimePickupAnimation, 0.10f));
-//        addCoin(new Coin(screen, assets.quarterPickupAnimation, 0.25f));
         this.collisionBoundsOffsets.set(4, 0, 64, 60);
     }
 
@@ -133,15 +128,10 @@ public class Player extends AnimationGameEntity {
     private void addCoin(Coin coin) {
         coinPurse.add(coin);
         coin.remove = true;
-        /*
-        value = MathUtils.clamp(value + value, 0, maxValue);
 
-        float invWeightRatio = 1 - getWeightRatio();
-        horizontalSpeed = 30 + (170 * invWeightRatio);
-        jumpVelocity = 600 + (400 * invWeightRatio);
-
-        addValue(coin.value);
-        */
+        if (coinPurse.size >= maxCoins) {
+            shoot();
+        }
     }
 
     public void open() {
@@ -150,11 +140,6 @@ public class Player extends AnimationGameEntity {
 
     public void close() {
         stateManager.transition(PlayerStates.Close);
-    }
-
-    // 0 is empty - 1 is full - fatty
-    private float getWeightRatio() {
-        return this.value / this.maxValue;
     }
 
     public void shoot() {
@@ -199,10 +184,12 @@ public class Player extends AnimationGameEntity {
     @Override
     protected void groundPound(Vector2 poundPosition) {
         screen.game.stats.groundPounds++;
-        float weightRatio = getWeightRatio();
-        float shake = 0.5f + (0.4f * weightRatio);
 
-        float distance = width/2 * (3 + (2 * weightRatio));
+        float fullPercent = (float)coinPurse.size / maxCoins;
+        float shake = 0.5f + (0.4f * fullPercent);
+
+        float half = width/2;
+        float distance = half * 2 + (half * 2 * fullPercent);
         playSound(Audio.Sounds.GroundPound);
         screen.groundPound(poundPosition.x + width/2, poundPosition.y, width/2, distance);
         screen.shaker.addDamage(shake);

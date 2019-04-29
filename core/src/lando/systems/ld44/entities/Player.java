@@ -11,10 +11,11 @@ import lando.systems.ld44.utils.Audio;
 public class Player extends GameEntity {
     public float horizontalSpeed = 100;
 
+    // TODO: change to maximum number of coins
     public float maxValue = 2f;
     public float value;
 
-    private Array<Coin> coinPurse = new Array<Coin>();
+    public Array<Coin> coinPurse = new Array<Coin>();
 
     private PlayerStateManager stateManager;
 
@@ -28,8 +29,10 @@ public class Player extends GameEntity {
         while (coinPurse.size < 5) {
             addCoin(new Coin(screen, assets.pennyPickupAnimation, 0.01f));
         }
+        addCoin(new Coin(screen, assets.nickelPickupAnimation, 0.05f));
+        addCoin(new Coin(screen, assets.dimePickupAnimation, 0.10f));
+        addCoin(new Coin(screen, assets.quarterPickupAnimation, 0.25f));
         this.collisionBoundsOffsets.set(4, 0, 64, 60);
-
     }
 
     public void update(float dt) {
@@ -176,12 +179,14 @@ public class Player extends GameEntity {
         float distance = width/2 * (3 + (2 * weightRatio));
         playSound(Audio.Sounds.GroundPound);
         screen.groundPound(poundPosition.x + width/2, poundPosition.y, width/2, distance);
-
         screen.shaker.addDamage(shake);
+
+        screen.hud.triggerCoinShuffle();
     }
 
     @Override
     public void changeDirection() {
         // noop so it doesn't flip rapidly when pushing against a wall.
     }
+
 }

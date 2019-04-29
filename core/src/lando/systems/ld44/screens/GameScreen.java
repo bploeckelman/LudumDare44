@@ -15,6 +15,7 @@ import lando.systems.ld44.entities.GameEntity;
 import lando.systems.ld44.entities.GroundPound;
 import lando.systems.ld44.entities.Player;
 import lando.systems.ld44.particles.ParticleManager;
+import lando.systems.ld44.ui.Hud;
 import lando.systems.ld44.utils.Assets;
 import lando.systems.ld44.utils.Audio;
 import lando.systems.ld44.utils.Utils;
@@ -31,6 +32,7 @@ public class GameScreen extends BaseScreen {
     public ScreenShakeCameraController shaker;
     public ParticleManager particleManager;
     public ParallaxBackground background;
+    public Hud hud;
 
     private float cameraHorMargins = 100;
     private float cameraVertMargins = 20;
@@ -41,13 +43,16 @@ public class GameScreen extends BaseScreen {
     public GameScreen(Game game, Assets assets) {
         super(game, assets);
         shaker = new ScreenShakeCameraController(worldCamera);
-        level = new Level("maps/level1.tmx", assets, this);
+        level = new Level("maps/demo.tmx", assets, this);
+//        level = new Level("maps/boss-arena.tmx", assets, this);
+//        level = new Level("maps/level1.tmx", assets, this);
         player = new Player(this, level.spawnPlayer.pos.x, level.spawnPlayer.pos.y);
         this.particleManager = new ParticleManager(assets);
 //        TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.arcadeTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
         TextureRegionParallaxLayer layer = new TextureRegionParallaxLayer(new TextureRegion(assets.couchTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
         background = new ParallaxBackground(layer);
         audio.playMusic(Audio.Musics.Level1);
+        hud = new Hud(this);
     }
 
     @Override
@@ -67,6 +72,7 @@ public class GameScreen extends BaseScreen {
         shaker.update(dt);
         level.update(dt);
         particleManager.update(dt);
+        hud.update(dt);
 
         handleCameraConstraints();
 
@@ -80,7 +86,9 @@ public class GameScreen extends BaseScreen {
         batch.setProjectionMatrix(shaker.getCombinedMatrix());
         batch.begin();
         {
-            background.draw(shaker.getViewCamera(), batch);
+            if (!level.isBossLevel) {
+                background.draw(shaker.getViewCamera(), batch);
+            }
             player.render(batch);
             for(GameEntity ge : gameEntities) {
                 ge.render(batch);
@@ -94,6 +102,13 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             level.renderObjects(batch, shaker.getViewCamera());
+        }
+        batch.end();
+
+        batch.setProjectionMatrix(hudCamera.combined);
+        batch.begin();
+        {
+            hud.render(batch, hudCamera);
         }
         batch.end();
     }

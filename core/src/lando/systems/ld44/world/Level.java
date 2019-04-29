@@ -40,9 +40,11 @@ public class Level {
     public Array<Spring> springs;
     public Array<Rectangle> tileRects;
     public Pool<Rectangle> rectPool;
+    public boolean isBossLevel;
 
     public Level(String mapFileName, Assets assets, GameScreen screen) {
         Gdx.app.log("Map", "Loading map: '" + mapFileName + "'");
+        this.isBossLevel = mapFileName.contains("boss-arena");
 
         this.assets = assets;
         this.screen = screen;
@@ -147,9 +149,12 @@ public class Level {
         // Validate that we have at least a start and goal object
         if (spawnPlayer == null) {
             throw new GdxRuntimeException("Missing required map object: 'spawnPlayer'");
-        } else if (exit == null) {
-            throw new GdxRuntimeException("Missing required map object: 'exit'");
         }
+
+        // exit not required in the boss level
+//        else if (exit == null) {
+//            throw new GdxRuntimeException("Missing required map object: 'exit'");
+//        }
     }
 
     public void update(float dt) {

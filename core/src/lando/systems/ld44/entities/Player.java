@@ -30,9 +30,9 @@ public class Player extends GameEntity {
         while (coinPurse.size < 5) {
             addCoin(new Coin(screen, assets.pennyPickupAnimation, 0.01f));
         }
-        addCoin(new Coin(screen, assets.nickelPickupAnimation, 0.05f));
-        addCoin(new Coin(screen, assets.dimePickupAnimation, 0.10f));
-        addCoin(new Coin(screen, assets.quarterPickupAnimation, 0.25f));
+//        addCoin(new Coin(screen, assets.nickelPickupAnimation, 0.05f));
+//        addCoin(new Coin(screen, assets.dimePickupAnimation, 0.10f));
+//        addCoin(new Coin(screen, assets.quarterPickupAnimation, 0.25f));
         this.collisionBoundsOffsets.set(4, 0, 64, 60);
     }
 

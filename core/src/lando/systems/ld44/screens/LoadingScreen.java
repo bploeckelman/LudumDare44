@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import lando.systems.ld44.Game;
 import lando.systems.ld44.utils.Assets;
+import lando.systems.ld44.utils.CallbackListener;
 
 /**
  * Even though this will be a web game and assets are loaded before the game
@@ -43,7 +44,7 @@ public class LoadingScreen extends BaseScreen {
             touchPos.set(mousePos);
 
             if (startGameButton.contains(touchPos.x, touchPos.y)) {
-                game.setScreen(new TitleScreen(game, assets));
+                game.setScreen(new TitleScreen(game, assets), assets.circleCropShader, 1f, null);
             }
         }
     }

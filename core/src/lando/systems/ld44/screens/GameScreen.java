@@ -118,7 +118,7 @@ public class GameScreen extends BaseScreen {
                         projectile.markHit();
                     }
                 }
-            } else if (ge.bounds.overlaps(player.bounds)) {
+            } else if (ge.hasHit(player)) {
                 if (player.hurtTime <= 0) {
                     player.getHurt();
                     ge.changeDirection();

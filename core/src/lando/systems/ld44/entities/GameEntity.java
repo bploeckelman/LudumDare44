@@ -160,6 +160,13 @@ public class GameEntity {
         }
     }
 
+    // used to collide with player
+    public boolean hasHit(GameEntity entity) {
+        if (isStunned() || isDying() || entity.isStunned() || entity.isDying()) return false;
+
+        return bounds.overlaps(entity.bounds);
+    }
+
     protected void handleDying(float dt) {
         if (dyingTime > 0) {
             dyingTime -= dt;

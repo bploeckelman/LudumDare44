@@ -2,6 +2,7 @@ package lando.systems.ld44.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -212,6 +213,7 @@ public class Player extends AnimationGameEntity {
             screen.game.stats.timesHit++;
 
             int coinsToLose = (coinPurse.size+1) / 2;
+            if (coinsToLose > 0) screen.game.audio.playSound(Audio.Sounds.LoseCoins);
             for (int i = 0; i < coinsToLose; i++){
                 Coin coin = coinPurse.random();
                 coinPurse.removeValue(coin, true);

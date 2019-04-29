@@ -165,7 +165,7 @@ public class Level {
         for (Spring spring : springs) {
             if (spring.springing) continue;
 
-            entityBounds.set(entity.position.x, entity.position.y, entity.width, entity.height);
+            entityBounds.set(entity.position.x + entity.collisionBoundsOffsets.x, entity.position.y + entity.collisionBoundsOffsets.y, entity.collisionBoundsOffsets.width, entity.collisionBoundsOffsets.height);
             if (spring.bounds.overlaps(entityBounds)) {
                 spring.trigger();
                 float multiplier = 1.5f;
@@ -178,7 +178,7 @@ public class Level {
             }
         }
         for (Tack tack : tacks) {
-            entityBounds.set(entity.position.x, entity.position.y, entity.width, entity.height);
+            entityBounds.set(entity.position.x + entity.collisionBoundsOffsets.x, entity.position.y + entity.collisionBoundsOffsets.y, entity.collisionBoundsOffsets.width, entity.collisionBoundsOffsets.height);
             if (tack.bounds.overlaps(entityBounds)) {
                 // TODO: if this is the player, lose some coins and bounce back or whatever, if enemy, then die or whatever
                 if (entity instanceof Player) {

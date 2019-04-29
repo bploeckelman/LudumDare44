@@ -15,6 +15,7 @@ public class Coin extends AnimationGameEntity {
 
         poundable = true;
         this.value = value;
+        this.collisionBoundsOffsets.set(0,0, width, height);
     }
 
     @Override

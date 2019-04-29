@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import lando.systems.ld44.screens.GameScreen;
 import lando.systems.ld44.utils.Audio;
 
@@ -13,6 +14,8 @@ public class Player extends GameEntity {
     public float maxValue = 2f;
     public float value;
 
+    private Array<Coin> coinPurse = new Array<Coin>();
+
     private PlayerStateManager stateManager;
 
     public Player(GameScreen screen, float x, float y) {
@@ -20,6 +23,13 @@ public class Player extends GameEntity {
 
         stateManager = new PlayerStateManager(this);
         this.position.set(x, y);
+
+        // start with 5 pennies
+        while (coinPurse.size < 5) {
+            addCoin(new Coin(screen, assets.pennyPickupAnimation, 0.01f));
+        }
+        this.collisionBoundsOffsets.set(4, 0, 64, 60);
+
     }
 
     public void update(float dt) {
@@ -79,21 +89,28 @@ public class Player extends GameEntity {
     private void consume(Coin coin) {
         if (coin.consuming && coin.left() > left() && coin.right() < right() && coin.top() < top() - 10) {
             playSound(Audio.Sounds.ConsumeCoin);
-            coin.remove = true;
-            addValue(coin.value);
+            addCoin(coin);
             close();
         }
+    }
+
+    private void addCoin(Coin coin) {
+        coinPurse.add(coin);
+        coin.remove = true;
+        /*
+        value = MathUtils.clamp(value + value, 0, maxValue);
+
+        float invWeightRatio = 1 - getWeightRatio();
+        horizontalSpeed = 30 + (170 * invWeightRatio);
+        jumpVelocity = 600 + (400 * invWeightRatio);
+
+        addValue(coin.value);
+        */
     }
 
     public void handleRandos() {
         // delete me
         // temp
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-            addValue(0.2f);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
-            addValue(-0.2f);
-        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             for (GameEntity ge : screen.gameEntities) {
@@ -118,19 +135,37 @@ public class Player extends GameEntity {
         return this.value / this.maxValue;
     }
 
-    public void addValue(float value) {
-        this.value = MathUtils.clamp(this.value + value, 0, this.maxValue);
+    public void shoot() {
+        if (coinPurse.size > 0) {
+            playSound(Audio.Sounds.Shoot);
+            stateManager.transition(PlayerStates.Shoot);
 
-        float invWeightRatio = 1 - getWeightRatio();
-        horizontalSpeed = 30 + (170 * invWeightRatio);
-        jumpVelocity = 600 + (400 * invWeightRatio);
+            Coin coin = getRandomCoin();
+
+            float speed = 200;
+            float x = position.x + width/2;
+            if (direction == Direction.LEFT) {
+                x -= coin.width;
+                speed = -speed;
+            }
+            speed += velocity.x;
+            float y = position.y + 5;
+            shootCoin(coin, x, y, speed);
+        }
     }
 
-    public void shoot() {
+    private void shootCoin(Coin c, float x, float y, float speed) {
+        c.remove = false;
+        c.consuming = false;
+        c.position.set(x, y);
+        c.velocity.set(speed, 200);
+        screen.add(c);
+    }
 
-        // todo: check if there is inventory to shoot
-        playSound(Audio.Sounds.Shoot);
-        stateManager.transition(PlayerStates.Shoot);
+    private Coin getRandomCoin() {
+        Coin coin = coinPurse.random();
+        coinPurse.removeValue(coin, true);
+        return coin;
     }
 
     @Override

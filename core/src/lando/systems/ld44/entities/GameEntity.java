@@ -218,7 +218,7 @@ public class GameEntity {
     }
 
     protected void groundPound(Vector2 poundPosition) {
-        screen.shaker.addDamage(.5f);
+
     }
 
     private void handleStun(float dt) {

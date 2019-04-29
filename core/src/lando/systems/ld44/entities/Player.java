@@ -142,15 +142,16 @@ public class Player extends GameEntity {
 
             Coin coin = popFirstCoin();
 
-            float speed = 500;
             float x = position.x + width/2;
             if (direction == Direction.LEFT) {
                 x -= coin.width;
-                speed = -speed;
             }
-            speed += velocity.x;
             float y = position.y + 5;
-            coin.shoot(x, y, speed, 400);
+            float speed = velocity.x;
+            if (speed == 0) {
+                speed = (direction == Direction.LEFT) ? -0.01f : 0.01f;
+            }
+            coin.shoot(x, y, speed);
         }
     }
 

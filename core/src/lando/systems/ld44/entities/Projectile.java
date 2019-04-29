@@ -14,7 +14,8 @@ public class Projectile extends AnimationGameEntity {
     private float animTimer;
     private boolean active;
 
-    private Vector2 initialVelocity = new Vector2();
+    protected Vector2 initialVelocity = new Vector2(400, 500);
+    private float initialYVelocity;
 
     public Projectile(GameScreen screen, Animation<TextureRegion> animation) {
         super(screen, animation);
@@ -40,11 +41,14 @@ public class Projectile extends AnimationGameEntity {
         active = false;
     }
 
-    public void shoot(float x, float y, float vx, float vy) {
+    public void shoot(float x, float y, float speedX) {
         reset();
         position.set(x, y);
-        initialVelocity.set(vx, vy);
-        velocity.set(initialVelocity);
+
+        float vx = ((speedX > 0) ? initialVelocity.x : -initialVelocity.x) + speedX;
+        initialYVelocity = initialVelocity.y;
+
+        velocity.set(vx, initialYVelocity);
         screen.add(this);
     }
 
@@ -55,7 +59,8 @@ public class Projectile extends AnimationGameEntity {
         image = animation.getKeyFrame(animTimer, true);
 
         if (velocity.y == 0 && Math.abs(velocity.x) > 0) {
-            velocity.y = initialVelocity.y *= 0.75f;
+            initialYVelocity *= 0.75f;
+            velocity.y = initialYVelocity;
         }
         // Slow the coin down
         velocity.x *= 0.98f;
@@ -81,7 +86,7 @@ public class Projectile extends AnimationGameEntity {
     public void bounce(float multiplier, Spring.Orientation springOrientation) {
         super.bounce(multiplier, springOrientation);
         if (springOrientation == Spring.Orientation.DOWN) {
-            initialVelocity.y = velocity.y;
+            initialYVelocity = velocity.y;
         }
     }
 }

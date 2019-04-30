@@ -50,7 +50,7 @@ public class EndScreen extends BaseScreen {
     public EndScreen(Game game, Assets assets) {
         super(game, assets);
 
-        //game.audio.playMusic(Audio.Musics.EndScreen);
+        game.audio.playMusic(Audio.Musics.EndScreen);
 
         layout = new GlyphLayout();
         Gdx.input.setInputProcessor(this);

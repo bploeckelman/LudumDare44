@@ -58,7 +58,7 @@
     <property name="orientation" value="down"/>
    </properties>
   </object>
-  <object id="12" type="exit" gid="184" x="2592" y="1728" width="32" height="32"/>
+  <object id="12" type="exit" gid="184" x="2592" y="1536" width="32" height="32"/>
   <object id="14" name="nickel" type="spawnEnemy" gid="185" x="864" y="3008" width="32" height="32"/>
   <object id="17" name="bunny" type="spawnEnemy" gid="185" x="1024" y="2944" width="32" height="32"/>
   <object id="18" name="bunny" type="spawnEnemy" gid="185" x="512" y="3152" width="32" height="32"/>
@@ -690,8 +690,8 @@
    </properties>
   </object>
   <object id="173" name="quarter" type="spawnEnemy" gid="185" x="2272" y="160" width="32" height="32"/>
-  <object id="175" type="exit" gid="184" x="2560" y="1728" width="32" height="32"/>
-  <object id="176" type="exit" gid="184" x="2528" y="1728" width="32" height="32"/>
+  <object id="175" type="exit" gid="184" x="2560" y="1536" width="32" height="32"/>
+  <object id="176" type="exit" gid="184" x="2528" y="1536" width="32" height="32"/>
   <object id="177" name="bunny" type="spawnEnemy" gid="185" x="2080" y="1824" width="32" height="32"/>
   <object id="178" name="bunny" type="spawnEnemy" gid="185" x="2368" y="1824" width="32" height="32"/>
   <object id="179" name="dime" type="spawnEnemy" gid="185" x="2208" y="1856" width="32" height="32"/>

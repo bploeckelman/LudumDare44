@@ -18,8 +18,14 @@ public class Assets implements Disposable {
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
     public final AssetDescriptor<Texture> titleBackgroundTextureAsset = new AssetDescriptor<Texture>("images/title/title-background.png", Texture.class);
     public final AssetDescriptor<Texture> titleCouchTextureAsset = new AssetDescriptor<Texture>("images/title/title-couch.png", Texture.class);
-    public final AssetDescriptor<Texture> titleCouchTalk1TextureAsset = new AssetDescriptor<Texture>("images/title/title-couch-talk_1.png", Texture.class);
-    public final AssetDescriptor<Texture> titleCouchTalk2TextureAsset = new AssetDescriptor<Texture>("images/title/title-couch-talk_2.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk0TextureAsset = new AssetDescriptor<Texture>("images/title/couch-talk_0.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk1TextureAsset = new AssetDescriptor<Texture>("images/title/couch-talk_1.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk2TextureAsset = new AssetDescriptor<Texture>("images/title/couch-talk_2.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk3TextureAsset = new AssetDescriptor<Texture>("images/title/couch-talk_3.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk4TextureAsset = new AssetDescriptor<Texture>("images/title/couch-talk_4.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk5TextureAsset = new AssetDescriptor<Texture>("images/title/couch-talk_5.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk6TextureAsset = new AssetDescriptor<Texture>("images/title/couch-talk_6.png", Texture.class);
+    public final AssetDescriptor<Texture> titleCouchTalk7TextureAsset = new AssetDescriptor<Texture>("images/title/couch-talk_7.png", Texture.class);
     public final AssetDescriptor<Texture> titleCouchWake0TextureAsset = new AssetDescriptor<Texture>("images/title/couch-wake_0.png", Texture.class);
     public final AssetDescriptor<Texture> titleCouchWake1TextureAsset = new AssetDescriptor<Texture>("images/title/couch-wake_1.png", Texture.class);
     public final AssetDescriptor<Texture> titleCouchWake2TextureAsset = new AssetDescriptor<Texture>("images/title/couch-wake_2.png", Texture.class);
@@ -125,8 +131,14 @@ public class Assets implements Disposable {
         mgr.load(atlasAsset);
         mgr.load(titleBackgroundTextureAsset);
         mgr.load(titleCouchTextureAsset);
+        mgr.load(titleCouchTalk0TextureAsset);
         mgr.load(titleCouchTalk1TextureAsset);
         mgr.load(titleCouchTalk2TextureAsset);
+        mgr.load(titleCouchTalk3TextureAsset);
+        mgr.load(titleCouchTalk4TextureAsset);
+        mgr.load(titleCouchTalk5TextureAsset);
+        mgr.load(titleCouchTalk6TextureAsset);
+        mgr.load(titleCouchTalk7TextureAsset);
         mgr.load(titleCouchWake0TextureAsset);
         mgr.load(titleCouchWake1TextureAsset);
         mgr.load(titleCouchWake2TextureAsset);
@@ -175,11 +187,11 @@ public class Assets implements Disposable {
 
         Array<Texture> couchFrames = new Array<Texture>();
         couchFrames.addAll(
-                mgr.get(titleCouchTextureAsset),
-                mgr.get(titleCouchTalk1TextureAsset),
-                mgr.get(titleCouchTalk2TextureAsset)
+                mgr.get(titleCouchTalk5TextureAsset),
+                mgr.get(titleCouchTalk6TextureAsset),
+                mgr.get(titleCouchTalk7TextureAsset)
         );
-        couchAnimation = new Animation<Texture>(0.2f, couchFrames, Animation.PlayMode.LOOP_PINGPONG);
+        couchAnimation = new Animation<Texture>(0.15f, couchFrames, Animation.PlayMode.LOOP_PINGPONG);
 
         Array<Texture> couchWakeFrames = new Array<Texture>();
         couchWakeFrames.addAll(
@@ -190,7 +202,12 @@ public class Assets implements Disposable {
                 mgr.get(titleCouchWake3TextureAsset),
                 mgr.get(titleCouchWake3TextureAsset),
                 mgr.get(titleCouchWake3TextureAsset),
-                mgr.get(titleCouchWake3TextureAsset)
+                mgr.get(titleCouchWake3TextureAsset),
+                mgr.get(titleCouchTalk0TextureAsset),
+                mgr.get(titleCouchTalk1TextureAsset),
+                mgr.get(titleCouchTalk2TextureAsset),
+                mgr.get(titleCouchTalk3TextureAsset),
+                mgr.get(titleCouchTalk4TextureAsset)
         );
         couchWakeAnimation = new Animation<Texture>(0.3f, couchWakeFrames, Animation.PlayMode.NORMAL);
 

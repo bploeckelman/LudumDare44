@@ -52,14 +52,12 @@ public class GameScreen extends BaseScreen {
         loadLevel();
         this.particleManager = new ParticleManager(assets);
         TextureRegionParallaxLayer layer;
+        TextureRegion region = new TextureRegion(assets.mgr.get(assets.titleCouchWake3TextureAsset));
+        layer = new TextureRegionParallaxLayer(region, level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
         if (level.isBossLevel) {
-            TextureRegion region = new TextureRegion(assets.mgr.get(assets.titleCouchWake3TextureAsset));
-            layer = new TextureRegionParallaxLayer(region, level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
             // scoot it to better fit on screen
             layer.setPadBottom(-190f);
             layer.setPadLeft(-region.getRegionWidth() / 2f - 64f);
-        } else {
-            layer = new TextureRegionParallaxLayer(new TextureRegion(assets.couchTexture), level.collisionLayer.getHeight() * level.collisionLayer.getTileHeight(), new Vector2(.5f, .9f), Utils.WH.height);
         }
         background = new ParallaxBackground(layer);
         hud = new Hud(this);

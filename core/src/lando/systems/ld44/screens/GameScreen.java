@@ -94,6 +94,7 @@ public class GameScreen extends BaseScreen {
                 game.setScreen(new GameScreen(game, assets, LevelIndex.Boss), assets.stereoShader, 2f, null);
                 break;
             case Boss:
+                game.setScreen(new EndScreen(game, assets));
                 break;
         }
     }

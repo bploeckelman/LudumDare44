@@ -35,6 +35,10 @@ public class Assets implements Disposable {
     public final AssetDescriptor<Texture> titleTitle1TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_1.png", Texture.class);
     public final AssetDescriptor<Texture> titleTitle2TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_2.png", Texture.class);
     public final AssetDescriptor<Texture> titleTitle3TextureAsset = new AssetDescriptor<Texture>("images/title/title-title_3.png", Texture.class);
+    public final AssetDescriptor<Texture> titleTitleE1TextureAsset = new AssetDescriptor<Texture>("images/title/title-faking_1.png", Texture.class);
+    public final AssetDescriptor<Texture> titleTitleE2TextureAsset = new AssetDescriptor<Texture>("images/title/title-faking_2.png", Texture.class);
+    public final AssetDescriptor<Texture> titleTitleE3TextureAsset = new AssetDescriptor<Texture>("images/title/title-faking_3.png", Texture.class);
+
 
     private final AssetDescriptor<Texture> arcadeTextureAsset = new AssetDescriptor<Texture>("images/arcade.png", Texture.class);
     private final AssetDescriptor<Texture> couchTextureAsset = new AssetDescriptor<Texture>("images/couch.png", Texture.class);
@@ -67,6 +71,7 @@ public class Assets implements Disposable {
     public TextureRegion player;
     public TextureRegion playerHurt;
     public Animation<Texture> titleAnimation;
+    public Animation<Texture> endTitleAnimation;
     public Animation<Texture> couchAnimation;
     public Animation<Texture> couchWakeAnimation;
     public Animation<TextureRegion> playerAnimation;
@@ -148,6 +153,9 @@ public class Assets implements Disposable {
         mgr.load(titleTitle1TextureAsset);
         mgr.load(titleTitle2TextureAsset);
         mgr.load(titleTitle3TextureAsset);
+        mgr.load(titleTitleE1TextureAsset);
+        mgr.load(titleTitleE2TextureAsset);
+        mgr.load(titleTitleE3TextureAsset);
         mgr.load(arcadeTextureAsset);
         mgr.load(couchTextureAsset);
         mgr.load(pixelTextureAsset);
@@ -184,6 +192,15 @@ public class Assets implements Disposable {
                 mgr.get(titleTitle3TextureAsset)
         );
         titleAnimation = new Animation<Texture>(0.15f, titleFrames, Animation.PlayMode.LOOP_PINGPONG);
+
+        Array<Texture> endTitleFrames = new Array<Texture>();
+        endTitleFrames.addAll(
+                mgr.get(titleTitle0TextureAsset),
+                mgr.get(titleTitleE1TextureAsset),
+                mgr.get(titleTitleE2TextureAsset),
+                mgr.get(titleTitleE3TextureAsset)
+        );
+        endTitleAnimation = new Animation<Texture>(0.15f, endTitleFrames, Animation.PlayMode.LOOP_PINGPONG);
 
         Array<Texture> couchFrames = new Array<Texture>();
         couchFrames.addAll(
@@ -307,13 +324,13 @@ public class Assets implements Disposable {
     }
 
     public void unloadTitleAssets() {
-        mgr.unload(titleBackgroundTextureAsset.fileName);
-        mgr.unload(titleCouchTextureAsset.fileName);
-        mgr.unload(titleSubtitleTextureAsset.fileName);
-        mgr.unload(titleTitle0TextureAsset.fileName);
-        mgr.unload(titleTitle1TextureAsset.fileName);
-        mgr.unload(titleTitle2TextureAsset.fileName);
-        mgr.unload(titleTitle3TextureAsset.fileName);
+        //mgr.unload(titleBackgroundTextureAsset.fileName);
+        //mgr.unload(titleCouchTextureAsset.fileName);
+        //mgr.unload(titleSubtitleTextureAsset.fileName);
+        //mgr.unload(titleTitle0TextureAsset.fileName);
+        //mgr.unload(titleTitle1TextureAsset.fileName);
+        //mgr.unload(titleTitle2TextureAsset.fileName);
+        //mgr.unload(titleTitle3TextureAsset.fileName);
 //        mgr.unload(titleCouchWake0TextureAsset.fileName);
 //        mgr.unload(titleCouchWake1TextureAsset.fileName);
 //        mgr.unload(titleCouchWake2TextureAsset.fileName);

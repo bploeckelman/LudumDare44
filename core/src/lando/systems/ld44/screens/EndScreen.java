@@ -21,7 +21,6 @@ public class EndScreen extends BaseScreen {
     private GlyphLayout layout;
 
     private Texture background;
-    private Texture subtitle;
     private Texture titleKeyFrame;
     private Texture couchKeyFrame;
     private Animation<Texture> titleAnimation;
@@ -56,9 +55,8 @@ public class EndScreen extends BaseScreen {
         Gdx.input.setInputProcessor(this);
 
         background = assets.mgr.get(assets.titleBackgroundTextureAsset);
-        subtitle = assets.mgr.get(assets.titleSubtitleTextureAsset);
 
-        titleAnimation = assets.titleAnimation;
+        titleAnimation = assets.endTitleAnimation;
         titleKeyFrame = titleAnimation.getKeyFrame(0f);
         couchAnimation = assets.couchWakeAnimation;
         couchKeyFrame = couchAnimation.getKeyFrame(0f);
@@ -67,7 +65,6 @@ public class EndScreen extends BaseScreen {
 
         float halfScreenWidth = hudCamera.viewportWidth / 2f;
         titleBounds = new Rectangle(halfScreenWidth - titleKeyFrame.getWidth() / 2f, hudCamera.viewportHeight - titleKeyFrame.getHeight(), titleKeyFrame.getWidth(), titleKeyFrame.getHeight());
-        subtitleBounds = new Rectangle(halfScreenWidth - subtitle.getWidth() / 2f - 5f, 10f + couchKeyFrame.getHeight() - 35f, subtitle.getWidth(), subtitle.getHeight());
         couchBounds = new Rectangle(halfScreenWidth - couchKeyFrame.getWidth() / 2f, 10f, couchKeyFrame.getWidth(), couchKeyFrame.getHeight());
 
         String colorTag = "[RED]";
@@ -178,7 +175,7 @@ public class EndScreen extends BaseScreen {
 
             if (next) {
                 float tyY = dialogBounds.y + dialogBounds.height - margin;
-                float devY = tyY - 50;
+                float devY = tyY - 60;
 
                 assets.font.getData().setScale(scale);
                 layout.setText(assets.font, thanks, Color.BLACK, dialogBounds.width - 2f * margin, Align.center, true);

@@ -44,8 +44,8 @@ public class TitleScreen extends BaseScreen {
     private final String storyShadowText = "Hello Pursey,\n\nI'm King Sofa\nof the Sofa Kingdom.\n\nSomeone has stuffed their grubby hands down in our cushions in\nflagrant violation of the\nNo Touchy Act\nof 1997.\n\n....\n\nNow get inside me, Pursey, and collect coins to fight your way to the hand!";
     private final String controlsText = "CONTROLS:\n\n\n\n([GREEN]MOVE[])\n\n\n\n\n\n([YELLOW]JUMP[]/[ORANGE]POUND[])\n\nPress once\nto ([YELLOW]JUMP[])\n\nPress in air\nto ([ORANGE]POUND[])\n\n\n\n\n\n\n([MAGENTA]SHOOT COINS[])";
     private final String controlsShadowText = "CONTROLS:\n\n\n\n(MOVE)\n\n\n\n\n\n(JUMP/POUND)\n\nPress once\nto (JUMP)\n\nPress in air\nto (POUND)\n\n\n\n\n\n\n(SHOOT COINS)";
-    private final String gameplayText = "GAMEPLAY:\n\n\n[PINK]kill enemies[]:\n\n[ORANGE]POUND[] nearby\nor [RED]SHOOT[] to\n[PINK]stun enemies[]\n\n[RED]SHOOT[] to\nkill stunned enemies\n\n\n\n[YELLOW]collect coins[]:\n\n[ORANGE]POUND[] to launch coins in the air,\n\nthen [GREEN]MOVE[] underneath to [YELLOW]collect bouncing coins[]";
-    private final String gameplayShadowText = "GAMEPLAY:\n\n\nkill enemies:\n\nPOUND nearby\nor SHOOT to\nstun enemies\n\nSHOOT to\nkill stunned enemies\n\n\n\ncollect coins:\n\nPOUND to launch coins in the air,\n\nthen MOVE underneath to collect bouncing coins";
+    private final String gameplayText = "GAMEPLAY:\n\n\n[PINK]stun enemies[]:\n\n[ORANGE]POUND[] nearby\nor [RED]SHOOT[] to\n[PINK]stun enemies[]\n\n\n[RED]kill enemies[]:\n\n[RED]SHOOT[] to\nkill [PINK]stunned enemies[]\n\n\n[YELLOW]collect coins[]:\n\n[ORANGE]POUND[] to launch coins in the air,\n\nthen [GREEN]MOVE[] underneath to [YELLOW]collect bouncing coins[]";
+    private final String gameplayShadowText = "GAMEPLAY:\n\n\nstun enemies:\n\nPOUND nearby\nor SHOOT to\nstun enemies\n\n\nkill enemies:\n\nSHOOT to\nkill stunned enemies\n\n\ncollect coins:\n\nPOUND to launch coins in the air,\n\nthen MOVE underneath to collect bouncing coins";
 
     private GlyphLayout layout;
 
